@@ -7,7 +7,7 @@ const defaultCards = [
   {
     icon: <CreditCard className="size-4 text-blue-300" />,
     title: "First Claim",
-    description: "Enter bank details once",
+    description: "Enter account details once",
     date: "Step 1",
     iconClassName: "text-blue-500",
     titleClassName: "text-blue-500",

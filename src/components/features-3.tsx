@@ -53,7 +53,12 @@ export default function Features() {
 
                         <CardContent className="text-center px-4 sm:px-6 md:px-12 lg:px-20 pt-[0.5em] pb-[2.5em]">
                             <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">Pay without leaving chat</h3>
-                            <p className="text-sm sm:text-base mt-0">Open the bank’s Magic keyboard inside WhatsApp, Instagram, Telegram or Messages and send a payment link directly in the conversation.</p>
+                            <p className="text-sm sm:text-base mt-0">
+                                Open the bank’s{' '}
+                                <span className="inline-block text-base sm:text-lg md:text-xl leading-none align-[-0.1em]">*</span>
+                                <span className="font-medium lowercase">magic keyboard</span>
+                                {' '}inside WhatsApp, Instagram, Telegram or Messages and send a payment link directly in the conversation.
+                            </p>
                         </CardContent>
                     </Card>
 
@@ -149,7 +154,7 @@ export default function Features() {
 
                         <CardContent className="text-center px-4 sm:px-6 md:px-12 lg:px-20 pt-[0.5em] pb-[2.5em]">
                             <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">Instant claim — enter once</h3>
-                            <p className="text-sm sm:text-base mt-0">Recipients save bank details on first claim; subsequent claims are one click and settle fast.</p>
+                            <p className="text-sm sm:text-base mt-0">Recipients save account details on first claim; subsequent claims are one click and settle fast.</p>
                         </CardContent>
                     </Card>
 
