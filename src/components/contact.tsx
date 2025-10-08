@@ -9,14 +9,217 @@ import { AuroraText } from '@/components/ui/aurora-text'
 import { RequestDemoButton } from '@/components/ui/request-demo-button'
 import { TextEffect } from '@/components/ui/text-effect'
 import Image from 'next/image'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+
+const COUNTRIES = [
+    "Afghanistan",
+    "Albania",
+    "Algeria",
+    "Andorra",
+    "Angola",
+    "Antigua and Barbuda",
+    "Argentina",
+    "Armenia",
+    "Australia",
+    "Austria",
+    "Azerbaijan",
+    "Bahamas",
+    "Bahrain",
+    "Bangladesh",
+    "Barbados",
+    "Belarus",
+    "Belgium",
+    "Belize",
+    "Benin",
+    "Bhutan",
+    "Bolivia",
+    "Bosnia and Herzegovina",
+    "Botswana",
+    "Brazil",
+    "Brunei",
+    "Bulgaria",
+    "Burkina Faso",
+    "Burundi",
+    "Cabo Verde",
+    "Cambodia",
+    "Cameroon",
+    "Canada",
+    "Central African Republic",
+    "Chad",
+    "Chile",
+    "China",
+    "Colombia",
+    "Comoros",
+    "Congo",
+    "Costa Rica",
+    "Cote d'Ivoire",
+    "Croatia",
+    "Cuba",
+    "Cyprus",
+    "Czechia",
+    "Democratic Republic of the Congo",
+    "Denmark",
+    "Djibouti",
+    "Dominica",
+    "Dominican Republic",
+    "Ecuador",
+    "Egypt",
+    "El Salvador",
+    "Equatorial Guinea",
+    "Eritrea",
+    "Estonia",
+    "Eswatini",
+    "Ethiopia",
+    "Fiji",
+    "Finland",
+    "France",
+    "Gabon",
+    "Gambia",
+    "Georgia",
+    "Germany",
+    "Ghana",
+    "Greece",
+    "Grenada",
+    "Guatemala",
+    "Guinea",
+    "Guinea-Bissau",
+    "Guyana",
+    "Haiti",
+    "Holy See",
+    "Honduras",
+    "Hungary",
+    "Iceland",
+    "India",
+    "Indonesia",
+    "Iran",
+    "Iraq",
+    "Ireland",
+    "Israel",
+    "Italy",
+    "Jamaica",
+    "Japan",
+    "Jordan",
+    "Kazakhstan",
+    "Kenya",
+    "Kiribati",
+    "Kuwait",
+    "Kyrgyzstan",
+    "Laos",
+    "Latvia",
+    "Lebanon",
+    "Lesotho",
+    "Liberia",
+    "Libya",
+    "Liechtenstein",
+    "Lithuania",
+    "Luxembourg",
+    "Madagascar",
+    "Malawi",
+    "Malaysia",
+    "Maldives",
+    "Mali",
+    "Malta",
+    "Marshall Islands",
+    "Mauritania",
+    "Mauritius",
+    "Mexico",
+    "Micronesia",
+    "Moldova",
+    "Monaco",
+    "Mongolia",
+    "Montenegro",
+    "Morocco",
+    "Mozambique",
+    "Myanmar",
+    "Namibia",
+    "Nauru",
+    "Nepal",
+    "Netherlands",
+    "New Zealand",
+    "Nicaragua",
+    "Niger",
+    "Nigeria",
+    "North Korea",
+    "North Macedonia",
+    "Norway",
+    "Oman",
+    "Pakistan",
+    "Palau",
+    "Panama",
+    "Papua New Guinea",
+    "Paraguay",
+    "Peru",
+    "Philippines",
+    "Poland",
+    "Portugal",
+    "Qatar",
+    "Romania",
+    "Russia",
+    "Rwanda",
+    "Saint Kitts and Nevis",
+    "Saint Lucia",
+    "Saint Vincent and the Grenadines",
+    "Samoa",
+    "San Marino",
+    "Sao Tome and Principe",
+    "Saudi Arabia",
+    "Senegal",
+    "Serbia",
+    "Seychelles",
+    "Sierra Leone",
+    "Singapore",
+    "Slovakia",
+    "Slovenia",
+    "Solomon Islands",
+    "Somalia",
+    "South Africa",
+    "South Korea",
+    "South Sudan",
+    "Spain",
+    "Sri Lanka",
+    "Sudan",
+    "Suriname",
+    "Sweden",
+    "Switzerland",
+    "Syria",
+    "Taiwan",
+    "Tajikistan",
+    "Tanzania",
+    "Thailand",
+    "Timor-Leste",
+    "Togo",
+    "Tonga",
+    "Trinidad and Tobago",
+    "Tunisia",
+    "Turkey",
+    "Turkmenistan",
+    "Tuvalu",
+    "Uganda",
+    "Ukraine",
+    "United Arab Emirates",
+    "United Kingdom",
+    "United States",
+    "Uruguay",
+    "Uzbekistan",
+    "Vanuatu",
+    "Venezuela",
+    "Vietnam",
+    "Yemen",
+    "Zambia",
+    "Zimbabwe"
+]
 
 export default function ContactSection() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
+    const [company, setCompany] = useState('')
+    const [country, setCountry] = useState('')
     const [message, setMessage] = useState('')
     const [errors, setErrors] = useState({
         name: false,
         email: false,
+        company: false,
+        country: false,
         message: false
     })
     const [showErrors, setShowErrors] = useState(false)
@@ -31,6 +234,8 @@ export default function ContactSection() {
         const newErrors = {
             name: name.trim() === '',
             email: email.trim() === '' || !validateEmail(email.trim()),
+            company: company.trim() === '',
+            country: country.trim() === '',
             message: message.trim() === ''
         }
         setErrors(newErrors)
@@ -48,6 +253,8 @@ export default function ContactSection() {
         const newErrors = {
             name: name.trim() === '',
             email: email.trim() === '' || !validateEmail(email.trim()),
+            company: company.trim() === '',
+            country: country.trim() === '',
             message: message.trim() === ''
         }
         setErrors(newErrors)
@@ -55,7 +262,7 @@ export default function ContactSection() {
         // Only proceed if form is valid
         const isValid = !Object.values(newErrors).some(error => error)
         if (isValid) {
-            console.log('Form submitted:', { name, email, message })
+            console.log('Form submitted:', { name, email, company, country, message })
             // Show thank you message
             setIsSubmitted(true)
         }
@@ -65,9 +272,11 @@ export default function ContactSection() {
         setIsSubmitted(false)
         setName('')
         setEmail('')
+        setCompany('')
+        setCountry('')
         setMessage('')
         setShowErrors(false)
-        setErrors({ name: false, email: false, message: false })
+        setErrors({ name: false, email: false, company: false, country: false, message: false })
     }
 
     return (
@@ -172,6 +381,40 @@ export default function ContactSection() {
                                     <p className="text-red-500 text-sm mt-1">
                                         {email.trim() === '' ? 'Email is required' : 'Please enter a valid email address'}
                                     </p>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="company">Company Name</Label>
+                                <Input
+                                    type="text"
+                                    id="company"
+                                    name="company"
+                                    value={company}
+                                    onChange={(e) => setCompany(e.target.value)}
+                                    aria-invalid={showErrors && errors.company}
+                                    className={showErrors && errors.company ? 'border-red-500 bg-red-50' : ''}
+                                    style={{ fontSize: '1em' }}
+                                />
+                                {showErrors && errors.company && (
+                                    <p className="text-red-500 text-sm mt-1">Company name is required</p>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="country">Country</Label>
+                                <Select value={country} onValueChange={(v) => setCountry(v)}>
+                                    <SelectTrigger aria-invalid={showErrors && errors.country} className={showErrors && errors.country ? 'w-full border-red-500 bg-red-50' : 'w-full'}>
+                                        <SelectValue placeholder="Select country" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {COUNTRIES.map((c) => (
+                                            <SelectItem key={c} value={c}>{c}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {showErrors && errors.country && (
+                                    <p className="text-red-500 text-sm mt-1">Country is required</p>
                                 )}
                             </div>
 
