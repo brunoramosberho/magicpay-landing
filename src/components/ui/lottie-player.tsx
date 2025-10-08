@@ -14,7 +14,7 @@ type LottiePlayerProps = {
 }
 
 export default function LottiePlayer({ src, loop = true, autoplay = true, className, ariaLabel }: LottiePlayerProps) {
-    const [animationData, setAnimationData] = React.useState<any | null>(null)
+    const [animationData, setAnimationData] = React.useState<unknown | null>(null)
     const [error, setError] = React.useState<string | null>(null)
 
     React.useEffect(() => {
@@ -47,7 +47,7 @@ export default function LottiePlayer({ src, loop = true, autoplay = true, classN
 
     return (
         <Lottie
-            animationData={animationData}
+            animationData={animationData as object}
             loop={loop}
             autoplay={autoplay}
             className={className}

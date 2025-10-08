@@ -182,7 +182,7 @@ export default function Features() {
 
                         <CardContent className="text-center px-[2em] md:px-[8em] pt-[0.5em] pb-[2.5em]">
                             <h3 className="text-[1.5em] font-normal leading-none mb-3">Brand-customizable</h3>
-                            <p className="text-base mt-0">UI adapts to your bank's colors and tone while keeping Magic's UX patterns and trust signals. Available SDKs: iOS, Android, and React Native.</p>
+                            <p className="text-base mt-0">UI adapts to your bank&apos;s colors and tone while keeping Magic&apos;s UX patterns and trust signals. Available SDKs: iOS, Android, and React Native.</p>
                         </CardContent>
                     </Card>
 
