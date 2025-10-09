@@ -8,6 +8,25 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.svg",
   },
+  openGraph: {
+    title: "MagicPay",
+    description: "Digital payments made simple",
+    images: [
+      {
+        url: "/placeholder-1.png", // 1200x630 recommended; replace this file to change preview
+        width: 1200,
+        height: 630,
+        alt: "MagicPay preview",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MagicPay",
+    description: "Digital payments made simple",
+    images: ["/placeholder-1.png"],
+  },
 };
 
 export default function RootLayout({
