@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
         destination: 'https://main.d2hklxelx6kl7w.amplifyapp.com/?id=:uuid',
         permanent: false,
       },
+      {
+        source: '/d/:uuid',
+        destination: 'https://magicdemo.b4a.app/p/:uuid',
+        permanent: false,
+      },
     ];
   },
 };
