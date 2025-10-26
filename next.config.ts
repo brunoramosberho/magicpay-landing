@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/p/:uuid',
+        destination: 'https://main.d2hklxelx6kl7w.amplifyapp.com/?id=:uuid',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
