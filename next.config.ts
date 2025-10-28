@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/p/:uuid',
-        destination: 'https://main.d2hklxelx6kl7w.amplifyapp.com/?id=:uuid',
+        destination: 'https://finsus.mgic.me/?id=:uuid',
         permanent: false,
       },
       {
