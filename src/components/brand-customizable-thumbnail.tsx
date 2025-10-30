@@ -94,10 +94,10 @@ function SwingingMaskAnimation() {
 
   // Define keyboard paths
   const keyboards: { [key: number]: string } = {
-    0: "/customization-animation/Keyboard-0.png?v=11", // Light theme - Blue button
-    1: "/customization-animation/Keyboard-1.png?v=11", // Dark theme - Green button
-    3: "/customization-animation/Keyboard-3.png?v=11", // Light theme - Black button
-    4: "/customization-animation/Keyboard-4.png?v=11"  // Dark theme - Orange button
+    0: "/customization-animation/Keyboard-0.png", // Light theme - Blue button
+    1: "/customization-animation/Keyboard-1.png", // Dark theme - Green button
+    3: "/customization-animation/Keyboard-3.png", // Light theme - Black button
+    4: "/customization-animation/Keyboard-4.png"  // Dark theme - Orange button
   }
 
   // Determine base and reveal based on current state

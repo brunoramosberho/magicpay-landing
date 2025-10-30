@@ -1,12 +1,29 @@
 "use client"
 
 import { CustomWordRotate } from "@/components/custom-word-rotate"
+import { useTranslations } from "next-intl"
+import { ReactNode } from "react"
 
 export default function RotatingSubheader() {
+    const t = useTranslations('rotatingSubheader')
+
+    const highlight = (chunks: ReactNode) => (
+        <span style={{ color: '#306FF6' }}>{chunks}</span>
+    )
+
     const rotatingPhrases = [
-        <>①<br />Create a <span style={{ color: '#306FF6' }}>payment</span> link</>,
-        <>②<br />Share it <span style={{ color: '#306FF6' }}>anywhere</span></>, 
-        <>③<br />Recipient <span style={{ color: '#306FF6' }}>claims</span> in seconds</>
+        t.rich('step1', {
+            highlight,
+            br: () => <br />
+        }),
+        t.rich('step2', {
+            highlight,
+            br: () => <br />
+        }),
+        t.rich('step3', {
+            highlight,
+            br: () => <br />
+        })
     ]
 
     return (
@@ -27,7 +44,7 @@ export default function RotatingSubheader() {
                         />
                     </div>
                     <p className="mt-2 font-normal" style={{ fontSize: '0.875em' }}>
-                        ∗ magic generates payment links only
+                        {t('footnote')}
                     </p>
                 </div>
             </div>

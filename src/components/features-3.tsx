@@ -1,5 +1,7 @@
 "use client"
 
+import React from 'react'
+import { useTranslations } from 'next-intl'
 import { Card, CardContent } from '@/components/ui/card'
 import Image from 'next/image'
 import { InfiniteSlider } from '@/components/ui/infinite-slider'
@@ -11,6 +13,8 @@ import { CustomizableCodexAnimation } from '@/components/ui/customizable-codex-a
 import DisplayCards from '@/components/ui/display-cards'
 
 export default function Features() {
+    const t = useTranslations('features')
+    
     return (
         <section className="pt-16 pb-8 md:pt-32 md:pb-16">
             <div className="@container mx-auto max-w-7xl px-6">
@@ -20,7 +24,7 @@ export default function Features() {
                             fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif", 
                             fontWeight: 450,
                         }}>
-                        Features
+                        {t('title')}
                     </h2>
                 </div>
                 <div className="mx-auto mt-8 grid w-full grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:mt-16">
@@ -52,12 +56,12 @@ export default function Features() {
                         </div>
 
                         <CardContent className="text-center px-4 sm:px-6 md:px-12 lg:px-20 pt-[0.5em] pb-[2.5em]">
-                            <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">Pay without leaving chat</h3>
+                            <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">{t('payWithoutLeavingChat.title')}</h3>
                             <p className="text-sm sm:text-base mt-0">
-                                Open the bank’s{' '}
+                                {t('payWithoutLeavingChat.descriptionPart1')}{' '}
                                 <span className="inline-block text-base sm:text-lg md:text-xl leading-none align-[-0.1em]">*</span>
-                                <span className="font-medium lowercase">magic keyboard</span>
-                                {' '}inside WhatsApp, Instagram, Telegram or Messages and send a payment link directly in the conversation.
+                                <span className="font-medium lowercase">{t('payWithoutLeavingChat.magicKeyboard')}</span>
+                                {' '}{t('payWithoutLeavingChat.descriptionPart2')}
                             </p>
                         </CardContent>
                     </Card>
@@ -86,7 +90,7 @@ export default function Features() {
                                         src="/lottie-tap-to-card.json"
                                         loop
                                         autoplay
-                                        ariaLabel="Tap To Send animation"
+                                        ariaLabel={t('tapToSend.ariaLabel')}
                                         className="w-[85%] h-[85%]"
                                     />
                                 </div>
@@ -94,8 +98,8 @@ export default function Features() {
                         </div>
 
                         <CardContent className="text-center px-4 sm:px-6 md:px-12 lg:px-20 pt-[0.5em] pb-[2.5em]">
-                            <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">Tap To Send & QR — in-person, instant</h3>
-                            <p className="text-sm sm:text-base mt-0">Generate a Tap or QR from your bank app and transfer to any nearby device.</p>
+                            <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">{t('tapToSend.title')}</h3>
+                            <p className="text-sm sm:text-base mt-0">{t('tapToSend.description')}</p>
                         </CardContent>
                     </Card>
 
@@ -153,8 +157,8 @@ export default function Features() {
                         </div>
 
                         <CardContent className="text-center px-4 sm:px-6 md:px-12 lg:px-20 pt-[0.5em] pb-[2.5em]">
-                            <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">Instant claim — enter once</h3>
-                            <p className="text-sm sm:text-base mt-0">Recipients save account details on first claim; subsequent claims are one click and settle fast.</p>
+                            <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">{t('instantClaim.title')}</h3>
+                            <p className="text-sm sm:text-base mt-0">{t('instantClaim.description')}</p>
                         </CardContent>
                     </Card>
 
@@ -186,8 +190,8 @@ export default function Features() {
                         </div>
 
                         <CardContent className="text-center px-[2em] md:px-[8em] pt-[0.5em] pb-[2.5em]">
-                            <h3 className="text-[1.5em] font-normal leading-none mb-3">Brand-customizable</h3>
-                            <p className="text-base mt-0">UI adapts to your bank&apos;s colors and tone while keeping Magic&apos;s UX patterns and trust signals. Available SDKs: iOS, Android, and React Native.</p>
+                            <h3 className="text-[1.5em] font-normal leading-none mb-3">{t('brandCustomizable.title')}</h3>
+                            <p className="text-base mt-0">{t('brandCustomizable.description')}</p>
                         </CardContent>
                     </Card>
 
@@ -319,8 +323,8 @@ export default function Features() {
                         </div>
 
                         <CardContent className="text-center px-4 sm:px-6 md:px-12 lg:px-20 pt-[0.5em] pb-[2.5em]">
-                            <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">Local rails, global reach</h3>
-                            <p className="text-sm sm:text-base mt-0">Settles via the fastest local rail (SPEI, SEPA Instant, Pix, RTP / FedNow, Faster Payments, UPI, Bizum, Blik, etc.).</p>
+                            <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">{t('localRails.title')}</h3>
+                            <p className="text-sm sm:text-base mt-0">{t('localRails.description')}</p>
                         </CardContent>
                     </Card>
 
@@ -397,8 +401,8 @@ export default function Features() {
                         </div>
 
                         <CardContent className="text-center px-4 sm:px-6 md:px-12 lg:px-20 pt-[0.5em] pb-[2.5em]">
-                            <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">Trust line</h3>
-                            <p className="text-sm sm:text-base mt-0">Secure, encrypted, compliant — built to integrate with your KYC/AML and data-residency requirements.</p>
+                            <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">{t('trustLine.title')}</h3>
+                            <p className="text-sm sm:text-base mt-0">{t('trustLine.description')}</p>
                         </CardContent>
                     </Card>
                 </div>

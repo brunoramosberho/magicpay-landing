@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -210,6 +211,12 @@ const COUNTRIES = [
 ]
 
 export default function ContactSection() {
+    const t = useTranslations('contact')
+    const tForm = useTranslations('contact.form')
+    const tErrors = useTranslations('contact.form.errors')
+    const tSuccess = useTranslations('contact.form.success')
+    const tCommon = useTranslations('common')
+    
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [company, setCompany] = useState('')
@@ -224,6 +231,8 @@ export default function ContactSection() {
     })
     const [showErrors, setShowErrors] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [submitError, setSubmitError] = useState<string | null>(null)
 
     const validateEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -243,11 +252,12 @@ export default function ContactSection() {
     }
 
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         
         // Show errors after button click
         setShowErrors(true)
+        setSubmitError(null)
         
         // Validate and update errors immediately
         const newErrors = {
@@ -262,9 +272,36 @@ export default function ContactSection() {
         // Only proceed if form is valid
         const isValid = !Object.values(newErrors).some(error => error)
         if (isValid) {
-            console.log('Form submitted:', { name, email, company, country, message })
-            // Show thank you message
-            setIsSubmitted(true)
+            setIsSubmitting(true)
+            try {
+                const response = await fetch('/api/send-demo-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name.trim(),
+                        email: email.trim(),
+                        company: company.trim(),
+                        country: country.trim(),
+                        message: message.trim(),
+                    }),
+                })
+
+                const data = await response.json()
+
+                if (!response.ok) {
+                    throw new Error(data.error || tErrors('submitError'))
+                }
+
+                // Show thank you message
+                setIsSubmitted(true)
+            } catch (error) {
+                console.error('Error submitting form:', error)
+                setSubmitError(error instanceof Error ? error.message : tErrors('submitErrorRetry'))
+            } finally {
+                setIsSubmitting(false)
+            }
         }
     }
 
@@ -276,6 +313,7 @@ export default function ContactSection() {
         setCountry('')
         setMessage('')
         setShowErrors(false)
+        setSubmitError(null)
         setErrors({ name: false, email: false, company: false, country: false, message: false })
     }
 
@@ -289,13 +327,13 @@ export default function ContactSection() {
                         fontSize: '88pt',
                         lineHeight: 1.0
                     }}>
-                    See{' '}
+                    {t('title')}{' '}
                     <AuroraText 
                         colors={["#306FF6", "#B7E9FC", "#306FF6", "#123888"]}
                         speed={1.5}>
-                        magic
+                        {t('magic')}
                     </AuroraText>
-                    {' '}live
+                    {' '}{t('live')}
                 </h2>
 
                 <TextEffect
@@ -306,7 +344,7 @@ export default function ContactSection() {
                     as="p"
                     className="mx-auto mt-8 max-w-2xl text-balance text-center"
                     style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif", fontWeight: 400, fontSize: '1.375em' }}>
-                    Experience our payment solution in action. Schedule your personalized demo today.
+                    {t('subtitle')}
                 </TextEffect>
 
                 <Card className="mx-auto mt-8 md:mt-16 max-w-xl p-0 rounded-[1.6875em] relative z-20" style={{
@@ -337,11 +375,11 @@ export default function ContactSection() {
                                         fontSize: '1.5em',
                                         lineHeight: 1.0
                                     }}>
-                                    Thank you, {name}!
+                                    {tSuccess('title', { name })}
                                 </h3>
                                 <p className="text-base text-black max-w-md mx-auto"
                                    style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif", fontSize: '1em' }}>
-                                    Your demo request has been received. Our team will reach out to you within 24 hours to schedule your personalized demonstration.
+                                    {tSuccess('message')}
                                 </p>
                             </div>
                         </div>
@@ -349,7 +387,7 @@ export default function ContactSection() {
                         // Contact Form
                         <form onSubmit={handleSubmit} noValidate className="space-y-6 relative z-30 px-6 pt-6 pb-4 sm:px-10 sm:pt-10 sm:pb-6">
                             <div className="space-y-2">
-                                <Label htmlFor="name">Full name</Label>
+                                <Label htmlFor="name">{tForm('fullName')}</Label>
                                 <Input
                                     type="text"
                                     id="name"
@@ -361,12 +399,12 @@ export default function ContactSection() {
                                     style={{ fontSize: '1em' }}
                                 />
                                 {showErrors && errors.name && (
-                                    <p className="text-red-500 text-sm mt-1">Full name is required</p>
+                                    <p className="text-red-500 text-sm mt-1">{tErrors('nameRequired')}</p>
                                 )}
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="email">Your email</Label>
+                                <Label htmlFor="email">{tForm('email')}</Label>
                                 <Input
                                     type="email"
                                     id="email"
@@ -379,13 +417,13 @@ export default function ContactSection() {
                                 />
                                 {showErrors && errors.email && (
                                     <p className="text-red-500 text-sm mt-1">
-                                        {email.trim() === '' ? 'Email is required' : 'Please enter a valid email address'}
+                                        {email.trim() === '' ? tErrors('emailRequired') : tErrors('emailInvalid')}
                                     </p>
                                 )}
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="company">Company Name</Label>
+                                <Label htmlFor="company">{tForm('company')}</Label>
                                 <Input
                                     type="text"
                                     id="company"
@@ -397,15 +435,15 @@ export default function ContactSection() {
                                     style={{ fontSize: '1em' }}
                                 />
                                 {showErrors && errors.company && (
-                                    <p className="text-red-500 text-sm mt-1">Company name is required</p>
+                                    <p className="text-red-500 text-sm mt-1">{tErrors('companyRequired')}</p>
                                 )}
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="country">Country</Label>
+                                <Label htmlFor="country">{tForm('country')}</Label>
                                 <Select value={country} onValueChange={(v) => setCountry(v)}>
                                     <SelectTrigger aria-invalid={showErrors && errors.country} className={showErrors && errors.country ? 'w-full border-red-500 bg-red-50' : 'w-full'}>
-                                        <SelectValue placeholder="Select country" />
+                                        <SelectValue placeholder={tForm('selectCountry')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {COUNTRIES.map((c) => (
@@ -414,12 +452,12 @@ export default function ContactSection() {
                                     </SelectContent>
                                 </Select>
                                 {showErrors && errors.country && (
-                                    <p className="text-red-500 text-sm mt-1">Country is required</p>
+                                    <p className="text-red-500 text-sm mt-1">{tErrors('countryRequired')}</p>
                                 )}
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="message">Message</Label>
+                                <Label htmlFor="message">{tForm('message')}</Label>
                                 <Textarea
                                     id="message"
                                     name="message"
@@ -431,12 +469,23 @@ export default function ContactSection() {
                                     style={{ fontSize: '1em' }}
                                 />
                                 {showErrors && errors.message && (
-                                    <p className="text-red-500 text-sm mt-1">Message is required</p>
+                                    <p className="text-red-500 text-sm mt-1">{tErrors('messageRequired')}</p>
                                 )}
                             </div>
 
+                            {submitError && (
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                                    <p className="text-red-600 text-sm">{submitError}</p>
+                                </div>
+                            )}
+
                             <div className="flex justify-center">
-                                <RequestDemoButton type="submit" />
+                                <RequestDemoButton 
+                                    type="submit" 
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? tCommon('sending') : tForm('submit')}
+                                </RequestDemoButton>
                             </div>
                         </form>
                     )}

@@ -1,0 +1,101 @@
+{
+  "common": {
+    "requestDemo": "Request demo",
+    "sending": "Sending...",
+    "magic": "magic"
+  },
+  "hero": {
+    "title": "Send money like",
+    "magic": "magic",
+    "subtitle": "From any chat. One tap. Instant claim.",
+    "description": "Embed one-tap payments inside your bank's mobile app — iOS & Android SDK."
+  },
+  "contact": {
+    "title": "See",
+    "magic": "magic",
+    "live": "live",
+    "subtitle": "Experience our payment solution in action. Schedule your personalized demo today.",
+    "form": {
+      "fullName": "Full name",
+      "email": "Your email",
+      "company": "Company Name",
+      "country": "Country",
+      "selectCountry": "Select country",
+      "message": "Message",
+      "submit": "Request demo",
+      "errors": {
+        "nameRequired": "Full name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "companyRequired": "Company name is required",
+        "countryRequired": "Country is required",
+        "messageRequired": "Message is required",
+        "submitError": "Error sending the form",
+        "submitErrorRetry": "Error sending the form. Please try again."
+      },
+      "success": {
+        "title": "Thank you, {name}!",
+        "message": "Your demo request has been received. Our team will reach out to you within 24 hours to schedule your personalized demonstration."
+      }
+    }
+  },
+  "features": {
+    "title": "Features",
+    "payWithoutLeavingChat": {
+      "title": "Pay without leaving chat",
+      "description": "Open the bank's *magic keyboard inside WhatsApp, Instagram, Telegram or Messages and send a payment link directly in the conversation.",
+      "descriptionPart1": "Open the bank's",
+      "descriptionPart2": "inside WhatsApp, Instagram, Telegram or Messages and send a payment link directly in the conversation.",
+      "magicKeyboard": "magic keyboard"
+    },
+    "tapToSend": {
+      "title": "Tap To Send & QR — in-person, instant",
+      "description": "Generate a Tap or QR from your bank app and transfer to any nearby device.",
+      "ariaLabel": "Tap To Send animation"
+    },
+    "instantClaim": {
+      "title": "Instant claim — enter once",
+      "description": "Recipients save account details on first claim; subsequent claims are one click and settle fast."
+    },
+    "brandCustomizable": {
+      "title": "Brand-customizable",
+      "description": "UI adapts to your bank's colors and tone while keeping Magic's UX patterns and trust signals. Available SDKs: iOS, Android, and React Native."
+    },
+    "localRails": {
+      "title": "Local rails, global reach",
+      "description": "Settles via the fastest local rail (SPEI, SEPA Instant, Pix, RTP / FedNow, Faster Payments, UPI, Bizum, Blik, etc.)."
+    },
+    "trustLine": {
+      "title": "Trust line",
+      "description": "Secure, encrypted, compliant — built to integrate with your KYC/AML and data-residency requirements."
+    }
+  },
+  "subheader": {
+    "headline": "Create a payment link → share it anywhere → recipient claims in seconds.",
+    "footnote": "∗ magic generates payment links only."
+  },
+  "rotatingSubheader": {
+    "step1": "①<br />Create a <highlight>payment</highlight> link",
+    "step2": "②<br />Share it <highlight>anywhere</highlight>",
+    "step3": "③<br />Recipient <highlight>claims</highlight> in seconds",
+    "footnote": "∗ magic generates payment links only"
+  },
+  "integrations": {
+    "title": "Local rails, global reach",
+    "description": "Settles via the fastest local rail (SPEI, SEPA Instant, Pix, RTP / FedNow, Faster Payments, UPI, Bizum, Blik, etc.).",
+    "cta": "Get Started"
+  },
+  "footer": {
+    "copyright": "© {year} Developed by {brand} (registered trademark)",
+    "privacyNotice": "Privacy Notice",
+    "termsConditions": "Terms and Conditions",
+    "termsOfUse": "Terms of Use",
+    "dataProtection": "Personal Data Protection",
+    "legalText": "{brand} is a registered trademark. All rights reserved. This website complies with the Federal Law on Protection of Personal Data Held by Private Parties (LFPDPPP) of Mexico."
+  },
+  "metadata": {
+    "title": "MagicPay",
+    "description": "Digital payments made simple"
+  }
+}
+

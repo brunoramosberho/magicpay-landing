@@ -1,14 +1,14 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-// Removed Menu, X imports - no longer needed
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import React from 'react'
 import { cn } from '@/lib/utils'
-
-// Removed menu items - keeping only logo and Request demo button
+import { LanguageSwitcher } from './language-switcher'
 
 export const HeroHeader = () => {
+    const t = useTranslations('common')
     const [isScrolled, setIsScrolled] = React.useState(false)
 
     React.useEffect(() => {
@@ -42,14 +42,17 @@ export const HeroHeader = () => {
                                 />
                             </Link>
 
-                            <Link href="#contact" className="cursor-pointer">
-                                <Button
-                                    variant={isScrolled ? "default" : "outline"}
-                                    size="sm"
-                                    className="hover:cursor-pointer hover:opacity-66 hover:border-opacity-66 transition-all duration-100">
-                                    <span>Request demo</span>
-                                </Button>
-                            </Link>
+                            <div className="flex items-center gap-4">
+                                <LanguageSwitcher />
+                                <Link href="#contact" className="cursor-pointer">
+                                    <Button
+                                        variant={isScrolled ? "default" : "outline"}
+                                        size="sm"
+                                        className="hover:cursor-pointer hover:opacity-66 hover:border-opacity-66 transition-all duration-100">
+                                        <span>{t('requestDemo')}</span>
+                                    </Button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

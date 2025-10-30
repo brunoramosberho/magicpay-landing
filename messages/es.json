@@ -1,0 +1,101 @@
+{
+  "common": {
+    "requestDemo": "Agenda una demo",
+    "sending": "Enviando...",
+    "magic": "magic"
+  },
+  "hero": {
+    "title": "Envía dinero como si fuera",
+    "magic": "magia",
+    "subtitle": "Desde cualquier chat. Un toque. Cobro al instante.",
+    "description": "Integra pagos con un toque en la app móvil de tu banco — SDK para iOS y Android."
+  },
+  "contact": {
+    "title": "Mira",
+    "magic": "magic",
+    "live": "en vivo",
+    "subtitle": "Conoce nuestra solución de pagos en acción. Agenda tu demo personalizada hoy mismo.",
+    "form": {
+      "fullName": "Nombre completo",
+      "email": "Tu correo electrónico",
+      "company": "Nombre de la empresa",
+      "country": "País",
+      "selectCountry": "Selecciona un país",
+      "message": "Mensaje",
+      "submit": "Agenda una demo",
+      "errors": {
+        "nameRequired": "Ingresa tu nombre completo",
+        "emailRequired": "Ingresa tu correo electrónico",
+        "emailInvalid": "Ingresa un correo válido",
+        "companyRequired": "Ingresa el nombre de tu empresa",
+        "countryRequired": "Selecciona tu país",
+        "messageRequired": "Cuéntanos qué necesitas",
+        "submitError": "Hubo un error al enviar el formulario",
+        "submitErrorRetry": "No pudimos enviar el formulario. Intenta de nuevo, por favor."
+      },
+      "success": {
+        "title": "¡Gracias, {name}!",
+        "message": "Recibimos tu solicitud. Nuestro equipo te contacta en menos de 24 horas para agendar tu demo personalizada."
+      }
+    }
+  },
+  "features": {
+    "title": "Funcionalidades clave",
+    "payWithoutLeavingChat": {
+      "title": "Paga sin salir del chat",
+      "description": "Abre el *teclado magic del banco dentro de WhatsApp, Instagram, Telegram o Mensajes y envía una liga de pago directamente en la conversación.",
+      "descriptionPart1": "Abre el",
+      "descriptionPart2": "del banco dentro de WhatsApp, Instagram, Telegram o Mensajes y envía una liga de pago directamente en la conversación.",
+      "magicKeyboard": "teclado magic"
+    },
+    "tapToSend": {
+      "title": "Tap para enviar y QR — en persona, al instante",
+      "description": "Genera un Tap o un QR desde la app de tu banco y cobra en cualquier dispositivo cercano.",
+      "ariaLabel": "Animación de Tap para Enviar"
+    },
+    "instantClaim": {
+      "title": "Cobro instantáneo — captura una sola vez",
+      "description": "La persona guardará sus datos bancarios en el primer cobro; los siguientes se completan con un toque."
+    },
+    "brandCustomizable": {
+      "title": "Personalizable con tu marca",
+      "description": "La interfaz adopta los colores y tono de tu banco sin perder la experiencia magic ni sus señales de confianza. SDKs disponibles: iOS, Android y React Native."
+    },
+    "localRails": {
+      "title": "Rieles locales, alcance global",
+      "description": "Liquidamos por el riel local más rápido (SPEI, SEPA Instant, Pix, RTP / FedNow, Faster Payments, UPI, Bizum, Blik, etc.)."
+    },
+    "trustLine": {
+      "title": "Seguro como siempre, más fácil que nunca",
+      "description": "Seguro, cifrado y compliant — listo para integrarse con tus procesos de KYC/AML y residencia de datos."
+    }
+  },
+  "subheader": {
+    "headline": "Crea una liga de pago → compártela donde quieras → la cobran en segundos.",
+    "footnote": "∗ magic genera únicamente ligas de pago."
+  },
+  "rotatingSubheader": {
+    "step1": "①<br />Crea una <highlight>liga</highlight> de pago",
+    "step2": "②<br />Compártela <highlight>donde quieras</highlight>",
+    "step3": "③<br />La persona la <highlight>cobra</highlight> en segundos",
+    "footnote": "∗ magic genera únicamente ligas de pago"
+  },
+  "integrations": {
+    "title": "Rieles locales, alcance global",
+    "description": "Liquidamos por el riel local más rápido (SPEI, SEPA Instant, Pix, RTP / FedNow, Faster Payments, UPI, Bizum, Blik, etc.).",
+    "cta": "Conoce más"
+  },
+  "footer": {
+    "copyright": "© {year} Desarrollado por {brand} (marca registrada)",
+    "privacyNotice": "Aviso de privacidad",
+    "termsConditions": "Términos y condiciones",
+    "termsOfUse": "Condiciones de uso",
+    "dataProtection": "Protección de datos personales",
+    "legalText": "{brand} es una marca registrada. Todos los derechos reservados. Este sitio cumple con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) de México."
+  },
+  "metadata": {
+    "title": "MagicPay",
+    "description": "Pagos digitales sin complicaciones"
+  }
+}
+

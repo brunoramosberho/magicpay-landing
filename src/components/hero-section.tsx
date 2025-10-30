@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { AuroraText } from '@/components/ui/aurora-text'
 import Image from 'next/image'
 import { RequestDemoButton } from '@/components/ui/request-demo-button'
@@ -8,6 +9,9 @@ import { HeroHeader } from './header'
 
 
 export default function HeroSection() {
+    const t = useTranslations('hero')
+    const tCommon = useTranslations('common')
+    
     return (
         <>
             <HeroHeader />
@@ -51,20 +55,20 @@ export default function HeroSection() {
                                         fontSize: '88pt',
                                         lineHeight: 1.0
                                     }}>
-                                    Send money like{' '}
+                                    {t('title')}{' '}
                                     <AuroraText 
                                         colors={["#306FF6", "#B7E9FC", "#306FF6", "#123888"]}
                                         speed={1.5}>
-                                        magic
+                                        {t('magic')}
                                     </AuroraText>
                                 </h1>
                                 <p className="mx-auto mt-8 max-w-2xl text-balance"
                                    style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif", fontWeight: 400, fontSize: '1.375em' }}>
-                                    From any chat. One tap. Instant claim.
+                                    {t('subtitle')}
                                 </p>
                                 <p className="mx-auto mt-3 max-w-2xl text-balance"
                                    style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif", fontWeight: 400, fontSize: '1.125em' }}>
-                                    Embed one-tap payments inside your bank’s mobile app — iOS & Android SDK.
+                                    {t('description')}
                                 </p>
 
                                 <div className="mt-12 flex flex-col items-center justify-center">

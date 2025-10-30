@@ -1,11 +1,16 @@
+"use client"
+
 import { Gemini, Replit, MagicUI, VSCodium, MediaWiki, GooglePaLM } from '@/components/logos'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
 import { InfiniteSlider } from '@/components/ui/infinite-slider'
+import { useTranslations } from 'next-intl'
 
 export default function IntegrationsSection() {
+    const t = useTranslations('integrations')
+
     return (
         <section>
             <div className="bg-muted dark:bg-background py-24 md:py-32">
@@ -106,14 +111,14 @@ export default function IntegrationsSection() {
                         </div> */}
                     </div>
                     <div className="mx-auto mt-12 max-w-2xl space-y-6 text-center">
-                        <h2 className="text-balance text-3xl font-semibold md:text-4xl">Local rails, global reach</h2>
-                        <p className="text-muted-foreground">Settles via the fastest local rail (SPEI, SEPA Instant, Pix, RTP / FedNow, Faster Payments, UPI, Bizum, Blik, etc.).</p>
+                        <h2 className="text-balance text-3xl font-semibold md:text-4xl">{t('title')}</h2>
+                        <p className="text-muted-foreground">{t('description')}</p>
 
                         <Button
                             variant="outline"
                             size="sm"
                             asChild>
-                            <Link href="#">Get Started</Link>
+                            <Link href="#">{t('cta')}</Link>
                         </Button>
                     </div>
                 </div>
