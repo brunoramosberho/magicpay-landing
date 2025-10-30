@@ -5,6 +5,7 @@ import RotatingSubheader from "@/components/rotating-subheader";
 import IntegrationsSection from "@/components/integrations-7";
 import Features from "@/components/features-3";
 import ContactSection from "@/components/contact";
+import Footer from "@/components/footer";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       {/* <IntegrationsSection /> */}
       <Features />
       <ContactSection />
+      <Footer />
     </>
   );
 }
