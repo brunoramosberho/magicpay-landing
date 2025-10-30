@@ -224,6 +224,8 @@ export default function ContactSection() {
     })
     const [showErrors, setShowErrors] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [submitError, setSubmitError] = useState<string | null>(null)
 
     const validateEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -243,11 +245,12 @@ export default function ContactSection() {
     }
 
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         
         // Show errors after button click
         setShowErrors(true)
+        setSubmitError(null)
         
         // Validate and update errors immediately
         const newErrors = {
@@ -262,9 +265,36 @@ export default function ContactSection() {
         // Only proceed if form is valid
         const isValid = !Object.values(newErrors).some(error => error)
         if (isValid) {
-            console.log('Form submitted:', { name, email, company, country, message })
-            // Show thank you message
-            setIsSubmitted(true)
+            setIsSubmitting(true)
+            try {
+                const response = await fetch('/api/send-demo-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name.trim(),
+                        email: email.trim(),
+                        company: company.trim(),
+                        country: country.trim(),
+                        message: message.trim(),
+                    }),
+                })
+
+                const data = await response.json()
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error al enviar el formulario')
+                }
+
+                // Show thank you message
+                setIsSubmitted(true)
+            } catch (error) {
+                console.error('Error submitting form:', error)
+                setSubmitError(error instanceof Error ? error.message : 'Error al enviar el formulario. Por favor intenta de nuevo.')
+            } finally {
+                setIsSubmitting(false)
+            }
         }
     }
 
@@ -276,6 +306,7 @@ export default function ContactSection() {
         setCountry('')
         setMessage('')
         setShowErrors(false)
+        setSubmitError(null)
         setErrors({ name: false, email: false, company: false, country: false, message: false })
     }
 
@@ -435,8 +466,19 @@ export default function ContactSection() {
                                 )}
                             </div>
 
+                            {submitError && (
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                                    <p className="text-red-600 text-sm">{submitError}</p>
+                                </div>
+                            )}
+
                             <div className="flex justify-center">
-                                <RequestDemoButton type="submit" />
+                                <RequestDemoButton 
+                                    type="submit" 
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? 'Enviando...' : 'Request demo'}
+                                </RequestDemoButton>
                             </div>
                         </form>
                     )}
