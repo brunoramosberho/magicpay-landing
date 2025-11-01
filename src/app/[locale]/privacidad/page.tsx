@@ -2,6 +2,21 @@ import { HeroHeader } from "@/components/header";
 import Footer from "@/components/footer";
 import type { Metadata } from "next";
 
+type Section = {
+  title: string;
+  paragraphs?: string[];
+  items?: string[];
+  closing?: string;
+  linkText?: string;
+  linkHref?: string;
+};
+
+type LocaleContent = {
+  pageTitle: string;
+  intro: string;
+  sections: Section[];
+};
+
 const metadataByLocale: Record<string, Metadata> = {
   es: {
     title: "Aviso de privacidad | magicPay",
@@ -15,7 +30,7 @@ const metadataByLocale: Record<string, Metadata> = {
   },
 };
 
-const content = {
+const content: Record<"en" | "es", LocaleContent> = {
   es: {
     pageTitle: "Aviso de privacidad",
     intro:
@@ -69,7 +84,7 @@ const content = {
       {
         title: "Modificaciones al Aviso",
         paragraphs: [
-          "Cualquier actualización será publicada en: ",
+          "Cualquier actualización será publicada en:",
         ],
         linkText: "https://mgic.me/privacidad",
         linkHref: "https://mgic.me/privacidad",
@@ -129,7 +144,7 @@ const content = {
       {
         title: "Notice Updates",
         paragraphs: [
-          "Any updates will be published at: ",
+          "Any updates will be published at:",
         ],
         linkText: "https://mgic.me/privacidad",
         linkHref: "https://mgic.me/privacidad",
@@ -153,7 +168,8 @@ export default async function PrivacyNoticePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const copy = (content as Record<string, (typeof content)["en"]>)[locale] ?? content.en;
+  const normalizedLocale = (locale in content ? locale : "en") as keyof typeof content;
+  const copy = content[normalizedLocale];
 
   return (
     <>
@@ -178,41 +194,34 @@ export default async function PrivacyNoticePage({
                 <h2 className="text-xl font-semibold text-foreground">
                   {section.title}
                 </h2>
-                {section.paragraphs?.map((paragraph) => (
+                {section.paragraphs?.map((paragraph, index) => (
                   <p
-                    key={paragraph}
+                    key={`${section.title}-paragraph-${index}`}
                     className="text-base leading-7 text-foreground/80"
                   >
                     {paragraph}
-                    {section.linkText && section.paragraphs[section.paragraphs.length - 1] === paragraph ? (
-                      <>
-                        {" "}
-                        <a
-                          className="font-medium text-foreground underline decoration-foreground/40 underline-offset-2 hover:text-foreground/90"
-                          href={section.linkHref}
-                        >
-                          {section.linkText}
-                        </a>
-                      </>
-                    ) : null}
-                    {section.linkText && !section.paragraphs ? (
-                      <a
-                        className="font-medium text-foreground underline decoration-foreground/40 underline-offset-2 hover:text-foreground/90"
-                        href={section.linkHref}
-                      >
-                        {section.linkText}
-                      </a>
-                    ) : null}
+                    {section.linkText && section.linkHref &&
+                      index === section.paragraphs.length - 1 && (
+                        <>
+                          {" "}
+                          <a
+                            className="font-medium text-foreground underline decoration-foreground/40 underline-offset-2 hover:text-foreground/90"
+                            href={section.linkHref}
+                          >
+                            {section.linkText}
+                          </a>
+                        </>
+                      )}
                   </p>
                 ))}
                 {section.items ? (
                   <ul className="list-disc space-y-2 pl-5 text-base leading-7 text-foreground/80">
-                    {section.items.map((item) => (
-                      <li key={item}>{item}</li>
+                    {section.items.map((item, index) => (
+                      <li key={`${section.title}-item-${index}`}>{item}</li>
                     ))}
                   </ul>
                 ) : null}
-                {section.linkText && !section.paragraphs?.length ? (
+                {section.linkText && section.linkHref && !section.paragraphs?.length ? (
                   <a
                     className="inline-flex items-center text-base font-medium text-foreground underline decoration-foreground/40 underline-offset-2 hover:text-foreground/90"
                     href={section.linkHref}
