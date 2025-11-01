@@ -201,7 +201,7 @@ export default async function PrivacyNoticePage({
                   >
                     {paragraph}
                     {section.linkText && section.linkHref &&
-                      index === section.paragraphs.length - 1 && (
+                      index === (section.paragraphs?.length ?? 0) - 1 && (
                         <>
                           {" "}
                           <a
