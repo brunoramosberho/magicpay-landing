@@ -1,8 +1,10 @@
 'use client'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import Link from 'next/link'
 
 export default function Footer() {
     const t = useTranslations('footer')
+    const locale = useLocale()
     const currentYear = new Date().getFullYear();
 
     return (
@@ -19,12 +21,12 @@ export default function Footer() {
 
                     {/* Legal Links */}
                     <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6">
-                        <a 
-                            href="#aviso-privacidad" 
+                        <Link 
+                            href={`/${locale}/privacidad`} 
                             className="text-sm text-foreground/70 hover:text-foreground transition-colors"
                            style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif" }}>
                             {t('privacyNotice')}
-                        </a>
+                        </Link>
                         <a 
                             href="#terminos-condiciones" 
                             className="text-sm text-foreground/70 hover:text-foreground transition-colors"
