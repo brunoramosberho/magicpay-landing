@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -58,19 +57,6 @@ export default function ContactSection() {
         return emailRegex.test(email)
     }
 
-    const validateForm = () => {
-        const newErrors = {
-            name: name.trim() === '',
-            email: email.trim() === '' || !validateEmail(email.trim()),
-            company: company.trim() === '',
-            country: country.trim() === '',
-            message: message.trim() === ''
-        }
-        setErrors(newErrors)
-        return !Object.values(newErrors).some(error => error)
-    }
-
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         
@@ -122,18 +108,6 @@ export default function ContactSection() {
                 setIsSubmitting(false)
             }
         }
-    }
-
-    const handleReset = () => {
-        setIsSubmitted(false)
-        setName('')
-        setEmail('')
-        setCompany('')
-        setCountry('')
-        setMessage('')
-        setShowErrors(false)
-        setSubmitError(null)
-        setErrors({ name: false, email: false, company: false, country: false, message: false })
     }
 
     return (

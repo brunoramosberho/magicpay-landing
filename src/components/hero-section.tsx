@@ -100,7 +100,6 @@ export default async function HeroSection() {
                                         loop
                                         muted
                                         playsInline
-                                        loading="lazy"
                                         preload="none"
                                         poster="/placeholder-1.png"
                                         className="rounded-[1.6875em] w-full h-full object-cover object-center"
