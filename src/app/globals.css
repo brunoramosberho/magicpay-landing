@@ -5,7 +5,8 @@
 /* Apercu Pro Font Definitions */
 @font-face {
   font-family: 'Apercu Pro';
-  src: url('/apercu-pro/apercu_regular_pro.otf') format('opentype');
+  src: url('/apercu-pro/webFonts/ApercuRegular/font.woff2') format('woff2'),
+       url('/apercu-pro/webFonts/ApercuRegular/font.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -13,41 +14,10 @@
 
 @font-face {
   font-family: 'Apercu Pro';
-  src: url('/apercu-pro/apercu_regular_italic_pro.otf') format('opentype');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Apercu Pro';
-  src: url('/apercu-pro/apercu_medium_pro.otf') format('opentype');
+  src: url('/apercu-pro/webFonts/ApercuMedium/font.woff2') format('woff2'),
+       url('/apercu-pro/webFonts/ApercuMedium/font.woff') format('woff');
   font-weight: 450;
   font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Apercu Pro';
-  src: url('/apercu-pro/apercu_medium_italic_pro.otf') format('opentype');
-  font-weight: 450;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Apercu Pro';
-  src: url('/apercu-pro/apercu_bold_pro.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Apercu Pro';
-  src: url('/apercu-pro/apercu_bold_italic_pro.otf') format('opentype');
-  font-weight: 700;
-  font-style: italic;
   font-display: swap;
 }
 

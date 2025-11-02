@@ -68,16 +68,16 @@ export default async function LocaleLayout({
       <head>
         <link
           rel="preload"
-          href="/apercu-pro/apercu_regular_pro.otf"
+          href="/apercu-pro/webFonts/ApercuRegular/font.woff2"
           as="font"
-          type="font/otf"
+          type="font/woff2"
           crossOrigin=""
         />
         <link
           rel="preload"
-          href="/apercu-pro/apercu_medium_pro.otf"
+          href="/apercu-pro/webFonts/ApercuMedium/font.woff2"
           as="font"
-          type="font/otf"
+          type="font/woff2"
           crossOrigin=""
         />
       </head>
