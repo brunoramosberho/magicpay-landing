@@ -20,26 +20,26 @@ export function LanguageSwitcher() {
     router.replace(pathname, { locale: newLocale })
   }
 
+  const localeLabel = locale === 'es' ? 'ES' : 'EN'
+
   return (
     <Select value={locale} onValueChange={handleLanguageChange}>
-      <SelectTrigger className="w-[150px] h-10 px-3">
-        <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-          <Globe2 className="size-4 text-primary" aria-hidden />
-          <SelectValue />
+      <SelectTrigger
+        size="sm"
+        aria-label="Language selector"
+        className="w-[68px] px-2 justify-center"
+      >
+        <span className="flex items-center gap-1 text-sm font-medium text-foreground">
+          <Globe2 className="size-3.5 text-primary" aria-hidden />
+          <span aria-hidden>{localeLabel}</span>
         </span>
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="en">
-          <span className="flex flex-col leading-tight">
-            <span className="text-sm font-medium">English</span>
-            <span className="text-xs text-muted-foreground">Global</span>
-          </span>
+      <SelectContent align="end" className="min-w-[4.5rem]">
+        <SelectItem value="en" aria-label="English">
+          <span className="text-sm font-medium">EN</span>
         </SelectItem>
-        <SelectItem value="es">
-          <span className="flex flex-col leading-tight">
-            <span className="text-sm font-medium">Español (MX)</span>
-            <span className="text-xs text-muted-foreground">Latinoamérica</span>
-          </span>
+        <SelectItem value="es" aria-label="Español">
+          <span className="text-sm font-medium">ES</span>
         </SelectItem>
       </SelectContent>
     </Select>
