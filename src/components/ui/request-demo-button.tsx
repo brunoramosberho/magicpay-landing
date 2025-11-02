@@ -1,6 +1,4 @@
-'use client'
 import React from 'react'
-import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 interface RequestDemoButtonProps {
@@ -9,6 +7,7 @@ interface RequestDemoButtonProps {
   className?: string
   disabled?: boolean
   children?: React.ReactNode
+  label?: string
 }
 
 export const RequestDemoButton: React.FC<RequestDemoButtonProps> = ({ 
@@ -16,10 +15,11 @@ export const RequestDemoButton: React.FC<RequestDemoButtonProps> = ({
   onClick,
   className = '',
   disabled = false,
-  children
+  children,
+  label,
 }) => {
-  const t = useTranslations('common')
-  
+  const content = children ?? label ?? 'Request demo'
+
   return (
     <button
       type={type}
@@ -36,7 +36,7 @@ export const RequestDemoButton: React.FC<RequestDemoButtonProps> = ({
         className="w-6 h-6"
         style={{ filter: 'brightness(0) invert(1)' }}
       />
-      {children || t('requestDemo')}
+      {content}
     </button>
   )
 }

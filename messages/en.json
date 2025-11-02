@@ -21,6 +21,7 @@
       "company": "Company Name",
       "country": "Country",
       "selectCountry": "Select country",
+      "loadingCountries": "Loading countries...",
       "message": "Message",
       "submit": "Request demo",
       "errors": {

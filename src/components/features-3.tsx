@@ -1,7 +1,5 @@
-"use client"
-
 import React from 'react'
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import { Card, CardContent } from '@/components/ui/card'
 import Image from 'next/image'
 import { InfiniteSlider } from '@/components/ui/infinite-slider'
@@ -12,9 +10,9 @@ import { AnimatedBeamDemo, BrandCustomizableThumbnail } from '@/components/brand
 import { CustomizableCodexAnimation } from '@/components/ui/customizable-codex-animation'
 import DisplayCards from '@/components/ui/display-cards'
 
-export default function Features() {
-    const t = useTranslations('features')
-    
+export default async function Features() {
+    const t = await getTranslations('features')
+
     return (
         <section className="pt-16 pb-8 md:pt-32 md:pb-16">
             <div className="@container mx-auto max-w-7xl px-6">
@@ -41,7 +39,6 @@ export default function Features() {
                                 alt="Feature placeholder"
                                 fill
                                 className="object-cover opacity-10"
-                                unoptimized
                             />
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="relative w-full h-full [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]">
@@ -79,7 +76,6 @@ export default function Features() {
                                 alt="Feature placeholder"
                                 fill
                                 className="object-cover opacity-10"
-                                unoptimized
                             />
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="relative w-full h-full flex items-center justify-center [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]">
@@ -116,7 +112,6 @@ export default function Features() {
                                 alt="Feature placeholder"
                                 fill
                                 className="object-cover opacity-10"
-                                unoptimized
                             />
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="relative w-full h-full [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]">
@@ -175,7 +170,6 @@ export default function Features() {
                                 alt="Feature placeholder"
                                 fill
                                 className="object-cover opacity-10"
-                                unoptimized
                             />
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="relative w-full h-full flex items-center justify-center [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]">
@@ -208,7 +202,6 @@ export default function Features() {
                                 alt="Feature placeholder"
                                 fill
                                 className="object-cover opacity-10"
-                                unoptimized
                             />
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="relative w-full h-full [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]">

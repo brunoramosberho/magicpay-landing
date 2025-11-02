@@ -1,17 +1,15 @@
-'use client'
 import React from 'react'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import { AuroraText } from '@/components/ui/aurora-text'
-import Image from 'next/image'
 import { RequestDemoButton } from '@/components/ui/request-demo-button'
 import { HeroHeader } from './header'
 
 
-export default function HeroSection() {
-    const t = useTranslations('hero')
-    const tCommon = useTranslations('common')
-    
+export default async function HeroSection() {
+    const t = await getTranslations('hero')
+    const tCommon = await getTranslations('common')
+
     return (
         <>
             <HeroHeader />
@@ -73,7 +71,7 @@ export default function HeroSection() {
 
                                 <div className="mt-12 flex flex-col items-center justify-center">
                                     <Link href="#contact">
-                                        <RequestDemoButton />
+                                        <RequestDemoButton label={tCommon('requestDemo')} />
                                     </Link>
                                 </div>
                             </div>
@@ -102,7 +100,11 @@ export default function HeroSection() {
                                         loop
                                         muted
                                         playsInline
+                                        loading="lazy"
+                                        preload="none"
+                                        poster="/placeholder-1.png"
                                         className="rounded-[1.6875em] w-full h-full object-cover object-center"
+                                        controls={false}
                                     />
                                 </div>
                                 
