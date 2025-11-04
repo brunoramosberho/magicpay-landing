@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/p/:uuid',
-        destination: 'https://finsus.mgic.me/?id=:uuid',
+        destination: 'https://magic.finsus.mx/?id=:uuid',
         permanent: false,
       },
       {
