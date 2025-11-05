@@ -87,12 +87,9 @@
     "cta": "Get Started"
   },
   "footer": {
-    "copyright": "© {year} Developed by {brand} (registered trademark)",
+    "copyright": "© {year} Developed by {brand}",
     "privacyNotice": "Privacy Notice",
-    "termsConditions": "Terms and Conditions",
-    "termsOfUse": "Terms of Use",
-    "dataProtection": "Personal Data Protection",
-    "legalText": "{brand} is a registered trademark. All rights reserved. This website complies with the Federal Law on Protection of Personal Data Held by Private Parties (LFPDPPP) of Mexico."
+    "legalText": "This site complies with the Federal Law on Protection of Personal Data Held by Private Parties (LFPDPPP) of Mexico."
   },
   "metadata": {
     "title": "MagicPay",

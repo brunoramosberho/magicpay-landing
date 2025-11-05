@@ -15,7 +15,7 @@ export default function Footer() {
                     <div className="text-center md:text-left">
                         <p className="text-sm text-foreground/70"
                            style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif" }}>
-                            {t('copyright', { year: currentYear, brand: 'magicPay®' })}
+                            {t('copyright', { year: currentYear, brand: 'magicPay' })}
                         </p>
                     </div>
 
@@ -27,24 +27,6 @@ export default function Footer() {
                            style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif" }}>
                             {t('privacyNotice')}
                         </Link>
-                        <a 
-                            href="#terminos-condiciones" 
-                            className="text-sm text-foreground/70 hover:text-foreground transition-colors"
-                           style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif" }}>
-                            {t('termsConditions')}
-                        </a>
-                        <a 
-                            href="#terminos-uso" 
-                            className="text-sm text-foreground/70 hover:text-foreground transition-colors"
-                           style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif" }}>
-                            {t('termsOfUse')}
-                        </a>
-                        <a 
-                            href="#proteccion-datos" 
-                            className="text-sm text-foreground/70 hover:text-foreground transition-colors"
-                           style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif" }}>
-                            {t('dataProtection')}
-                        </a>
                     </div>
                 </div>
 
@@ -52,7 +34,7 @@ export default function Footer() {
                 <div className="mt-6 pt-6 border-t border-gray-200">
                     <p className="text-xs text-foreground/60 text-center"
                        style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif" }}>
-                        {t('legalText', { brand: 'magicPay®' })}
+                        {t('legalText', { brand: 'magicPay' })}
                     </p>
                 </div>
             </div>

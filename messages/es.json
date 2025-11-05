@@ -87,12 +87,9 @@
     "cta": "Conoce más"
   },
   "footer": {
-    "copyright": "© {year} Desarrollado por {brand} (marca registrada)",
+    "copyright": "© {year} Desarrollado por {brand}",
     "privacyNotice": "Aviso de privacidad",
-    "termsConditions": "Términos y condiciones",
-    "termsOfUse": "Condiciones de uso",
-    "dataProtection": "Protección de datos personales",
-    "legalText": "{brand} es una marca registrada. Todos los derechos reservados. Este sitio cumple con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) de México."
+    "legalText": "Este sitio cumple con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) de México."
   },
   "metadata": {
     "title": "MagicPay",
