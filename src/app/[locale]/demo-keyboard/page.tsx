@@ -45,24 +45,64 @@ type LocaleContent = {
 
 const metadataByLocale: Record<string, Metadata> = {
   es: {
-    title: "Cómo funciona el teclado ∗ magic | magicPay Ayuda",
+    title: "Demo teclado ∗ magic | magicPay",
     description:
-      "Aprende en minutos cómo opera el teclado ∗ magic, por qué ves ligas de demostración y cómo activar Acceso Completo para enviar pagos reales.",
+      "Descubre cómo ∗ magic genera ligas de pago desde cualquier chat y aprende a habilitar Acceso Completo para enviar dinero real.",
+    openGraph: {
+      title: "Demo teclado ∗ magic",
+      description:
+        "Así funciona el teclado de tu banco que envía ligas de pago sin salir de WhatsApp. Activa Acceso Completo y comparte dinero en segundos.",
+      images: [
+        {
+          url: "/placeholder-1.png",
+          width: 1200,
+          height: 630,
+          alt: "Demo ∗ magic",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Demo teclado ∗ magic",
+      description:
+        "Genera ligas de pago desde cualquier chat. Ve la demo y activa Acceso Completo para enviar dinero real.",
+      images: ["/placeholder-1.png"],
+    },
   },
   en: {
-    title: "How the ∗ magic keyboard works | magicPay Help",
+    title: "∗ magic keyboard demo | magicPay",
     description:
-      "Understand the ∗ magic keyboard, why you might see demo links, and how to enable Full Access to send real payment links.",
+      "See how the ∗ magic keyboard creates payment links from any chat and enable Full Access to send real money.",
+    openGraph: {
+      title: "∗ magic keyboard demo",
+      description:
+        "The keyboard inside your banking app that sends payment links without leaving WhatsApp. Enable Full Access and share money instantly.",
+      images: [
+        {
+          url: "/placeholder-1.png",
+          width: 1200,
+          height: 630,
+          alt: "∗ magic demo",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "∗ magic keyboard demo",
+      description:
+        "Create payment links from any chat. Watch the demo and turn on Full Access to send real payments.",
+      images: ["/placeholder-1.png"],
+    },
   },
 };
 
 const content: Record<"en" | "es", LocaleContent> = {
   es: {
     heroBadge: "Centro de ayuda",
-    heroTitle: "¿Cómo funciona el teclado ∗ magic?",
+    heroTitle: "Teclado ∗ magic: demo rápida",
     heroIntro: (
       <>
-        Si ves una liga de demostración es porque iOS todavía no dio <span className="font-medium">Acceso Completo</span> al teclado. Aquí te contamos qué hace <span className="font-medium">∗ magic</span> y cómo habilitarlo.
+        Si ves una liga de demostración es porque iOS todavía no dio <span className="font-medium">Acceso Completo</span>. Aquí ves cómo funciona <span className="font-medium">∗ magic</span> y por qué activarlo.
       </>
     ),
     overview: {
@@ -70,32 +110,32 @@ const content: Record<"en" | "es", LocaleContent> = {
       bullets: [
         (
           <>
-            <span className="font-medium">∗ magic</span> vive dentro de la app de tu banco y genera ligas de pago sin salir del chat.
+            <span className="font-medium">∗ magic</span> vive dentro de tu app bancaria y crea ligas de pago sin salir del chat.
           </>
         ),
         (
           <>
-            Las ligas reales se autentican igual que una transferencia hecha desde tu banca móvil.
+            Las ligas reales se autentican igual que una transferencia normal y el dinero se mueve cuando la persona la cobra.
           </>
         ),
         (
           <>
-            El dinero se mueve cuando la otra persona reclama la liga, no antes.
+            Cada liga dura <span className="font-medium">24 horas</span>, puedes cancelarla cuando quieras y solo quien la tiene puede cobrarla.
           </>
         ),
       ],
     },
     sections: [
       {
-        title: "Cuando envías una liga real",
-        description: "Así luce el flujo completo con Acceso Completo activado:",
+        title: "Así se ve una liga real",
+        description: "En tres pasos, sin salir de WhatsApp:",
         steps: [
           {
             label: "1",
             title: "Elige el monto en ∗ magic",
             description: (
               <>
-                Abre el teclado, selecciona <span className="font-medium">Enviar</span> y define el monto sin salir de la conversación.
+                Abre el teclado, toca <span className="font-medium">Enviar</span> y define el monto desde la conversación.
               </>
             ),
           },
@@ -104,7 +144,7 @@ const content: Record<"en" | "es", LocaleContent> = {
             title: "Comparte la liga",
             description: (
               <>
-                El mensaje incluye una <span className="font-medium">liga de pago</span> lista para que tu contacto la abra.
+                El chat recibe una <span className="font-medium">liga de pago</span> segura lista para abrirse.
               </>
             ),
           },
@@ -113,53 +153,44 @@ const content: Record<"en" | "es", LocaleContent> = {
             title: "La otra persona cobra",
             description: (
               <>
-                Introduce los datos de su cuenta y la transferencia se ejecuta al instante.
+                Introduce su cuenta y la transferencia se ejecuta al instante con las validaciones de tu banco.
               </>
             ),
           },
         ],
       },
       {
-        title: "Si ves una liga de demostración",
+        title: "¿Por qué ves una demo?",
         items: [
           (
             <>
-              iOS no ha permitido <span className="font-medium">Acceso Completo</span>, por eso ∗ magic solo envía un ejemplo.
+              Sin <span className="font-medium">Acceso Completo</span>, ∗ magic solo muestra un ejemplo para que conozcas el flujo.
             </>
           ),
-          "El mensaje describe cómo funcionaría, pero no mueve dinero real.",
-          "Puedes usarlo para mostrar el flujo a otra persona antes de habilitarlo.",
+          "Puedes simular montos, pero no sale dinero real.",
+          "Activa Acceso Completo una vez y las ligas volverán a ser reales.",
         ],
       },
       {
-        title: "Seguridad siempre encendida",
+        title: "Seguridad garantizada",
         items: [
           (
             <>
-              Generar la liga requiere las mismas <span className="font-medium">autenticaciones</span> que tu app bancaria.
+              La liga requiere las mismas <span className="font-medium">autenticaciones</span> que en tu banca móvil.
             </>
           ),
+          "El dinero permanece en tu cuenta hasta que alguien cobra la liga.",
           (
             <>
-              El dinero sale cuando alguien reclama la liga; hasta entonces permanece en tu cuenta.
-            </>
-          ),
-          (
-            <>
-              Cada liga dura <span className="font-medium">24 horas</span> y puedes cancelarla en cualquier momento.
-            </>
-          ),
-          (
-            <>
-              Dar <span className="font-medium">Acceso Completo</span> no permite que ∗ magic lea tus conversaciones; solo habilita la creación de ligas.
+              Dar <span className="font-medium">Acceso Completo</span> no permite que ∗ magic lea tus conversaciones; solo habilita crear ligas.
             </>
           ),
         ],
       },
     ],
     tip: {
-      title: "Activa Acceso Completo en iOS",
-      description: "Solo lo haces una vez y listo.",
+      title: "Activa Acceso Completo",
+      description: "Solo toma unos segundos:",
       steps: [
         (
           <>
@@ -168,58 +199,58 @@ const content: Record<"en" | "es", LocaleContent> = {
         ),
         (
           <>
-            Toca <span className="font-medium">∗ magic</span> y activa <span className="font-medium">Permitir acceso completo</span>.
+            Toca <span className="font-medium">∗ magic</span> y habilita <span className="font-medium">Permitir acceso completo</span>.
           </>
         ),
-        "Confirma el aviso de iOS. Vuelve al chat y envía una liga real.",
+        "Acepta el aviso de iOS y vuelve al chat para enviar una liga real.",
       ],
     },
     support: {
-      title: "¿Necesitas ayuda extra?",
-      description: "Nuestro equipo puede acompañarte paso a paso mientras lo habilitas.",
+      title: "¿Necesitas ayuda?",
+      description: "Nuestro equipo puede guiarte en vivo para activarlo.",
       ctaLabel: "Escríbenos a soporte@mgic.me",
       ctaHref: "mailto:soporte@mgic.me",
     },
   },
   en: {
     heroBadge: "Help Center",
-    heroTitle: "How the ∗ magic keyboard works",
+    heroTitle: "∗ magic keyboard demo",
     heroIntro: (
       <>
-        If you’re seeing a demo link, iOS hasn’t granted <span className="font-medium">Full Access</span> yet. Here’s what <span className="font-medium">∗ magic</span> does and how to enable it.
+        Seeing a demo link means iOS hasn’t granted <span className="font-medium">Full Access</span> yet. Check how <span className="font-medium">∗ magic</span> works and why it’s worth enabling.
       </>
     ),
     overview: {
-      title: "Key points",
+      title: "What to know",
       bullets: [
         (
           <>
-            <span className="font-medium">∗ magic</span> lives inside your bank’s app and creates payment links without leaving the chat.
+            <span className="font-medium">∗ magic</span> lives inside your bank’s app and builds payment links without leaving the chat.
           </>
         ),
         (
           <>
-            Real links follow the same authentication steps as sending money inside your banking app.
+            Real links go through the same security and the money moves once the recipient claims it.
           </>
         ),
         (
           <>
-            Funds move only after the recipient claims the link.
+            Each link lasts <span className="font-medium">24 hours</span>, you can cancel anytime, and whoever has it can cash it.
           </>
         ),
       ],
     },
     sections: [
       {
-        title: "When you send a real link",
-        description: "Once Full Access is on, the flow looks like this:",
+        title: "What a real link looks like",
+        description: "Three steps, all inside WhatsApp:",
         steps: [
           {
             label: "1",
             title: "Pick the amount in ∗ magic",
             description: (
               <>
-                Open the keyboard, tap <span className="font-medium">Send</span>, and choose the amount without leaving the chat.
+                Open the keyboard, tap <span className="font-medium">Send</span>, and choose the amount right in the chat.
               </>
             ),
           },
@@ -228,31 +259,31 @@ const content: Record<"en" | "es", LocaleContent> = {
             title: "Share the link",
             description: (
               <>
-                Your message includes a ready-to-open <span className="font-medium">payment link</span>.
+                Your message delivers a secure <span className="font-medium">payment link</span> people can open instantly.
               </>
             ),
           },
           {
             label: "3",
-            title: "The other person claims it",
+            title: "They cash it",
             description: (
               <>
-                They enter their account info and the transfer completes instantly.
+                They enter their account info and the transfer runs with your bank’s security checks.
               </>
             ),
           },
         ],
       },
       {
-        title: "When you see a demo link",
+        title: "Why you’re seeing a demo",
         items: [
           (
             <>
-              iOS hasn’t allowed <span className="font-medium">Full Access</span>, so ∗ magic sends a preview instead.
+              Without <span className="font-medium">Full Access</span>, ∗ magic shows a preview so you know how it works.
             </>
           ),
-          "The message shows what would happen, but it doesn’t move real money.",
-          "Use it to explain the flow before you enable it.",
+          "You can play with amounts, but no real money moves.",
+          "Enable Full Access once and real links are back.",
         ],
       },
       {
@@ -260,30 +291,21 @@ const content: Record<"en" | "es", LocaleContent> = {
         items: [
           (
             <>
-              Creating a link requires the same <span className="font-medium">auth checks</span> as your banking app.
+              Links require the same <span className="font-medium">auth checks</span> as your mobile banking app.
             </>
           ),
+          "Funds stay in your account until someone claims the link.",
           (
             <>
-              Funds remain in your account until someone claims the link.
-            </>
-          ),
-          (
-            <>
-              Each link lasts <span className="font-medium">24 hours</span> and you can cancel it anytime.
-            </>
-          ),
-          (
-            <>
-              Granting <span className="font-medium">Full Access</span> doesn’t let ∗ magic read what you type; it only enables link creation.
+              Granting <span className="font-medium">Full Access</span> never lets ∗ magic read your messages; it only enables link creation.
             </>
           ),
         ],
       },
     ],
     tip: {
-      title: "Enable Full Access on iOS",
-      description: "Do it once and you’re set.",
+      title: "Turn on Full Access",
+      description: "Just a quick toggle:",
       steps: [
         (
           <>
@@ -292,15 +314,15 @@ const content: Record<"en" | "es", LocaleContent> = {
         ),
         (
           <>
-            Tap <span className="font-medium">∗ magic</span> and toggle <span className="font-medium">Allow Full Access</span>.
+            Tap <span className="font-medium">∗ magic</span> and switch on <span className="font-medium">Allow Full Access</span>.
           </>
         ),
-        "Accept the iOS prompt. Return to the chat and send a real link.",
+        "Accept the iOS prompt and head back to the chat to send a real link.",
       ],
     },
     support: {
-      title: "Need a hand?",
-      description: "We can walk you through the setup live if you’d like.",
+      title: "Need support?",
+      description: "We can walk you through the setup live.",
       ctaLabel: "Email support@mgic.me",
       ctaHref: "mailto:support@mgic.me",
     },
@@ -316,7 +338,7 @@ export async function generateMetadata({
   return metadataByLocale[locale] ?? metadataByLocale.en;
 }
 
-export default async function MagicKeyboardHelpPage({
+export default async function DemoKeyboardPage({
   params,
 }: {
   params: Promise<{locale: string}>;
