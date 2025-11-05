@@ -2,39 +2,40 @@ import {HeroHeader} from "@/components/header";
 import Footer from "@/components/footer";
 import {Button} from "@/components/ui/button";
 import type {Metadata} from "next";
+import type {ReactNode} from "react";
 
 type Step = {
   label: string;
   title: string;
-  description: string;
-  bullets?: string[];
-  footnote?: string;
+  description: ReactNode;
+  bullets?: ReactNode[];
+  footnote?: ReactNode;
 };
 
 type Highlight = {
   title: string;
-  description: string;
+  description: ReactNode;
 };
 
 type Section = {
   eyebrow?: string;
   title: string;
-  description?: string;
+  description?: ReactNode;
   steps?: Step[];
   highlights?: Highlight[];
-  checklist?: string[];
-  note?: string;
+  checklist?: ReactNode[];
+  note?: ReactNode;
 };
 
 type Attachment = {
   title: string;
-  description: string;
+  description: ReactNode;
   suggestions: string[];
 };
 
 type SupportBlock = {
   title: string;
-  description: string;
+  description: ReactNode;
   ctaLabel: string;
   ctaHref: string;
 };
@@ -42,13 +43,13 @@ type SupportBlock = {
 type LocaleContent = {
   heroBadge: string;
   pageTitle: string;
-  intro: string;
+  intro: ReactNode;
   overview: {
     title: string;
-    paragraphs: string[];
-    checklist: string[];
+    paragraphs: ReactNode[];
+    checklist: ReactNode[];
     quickTipTitle: string;
-    quickTipDescription: string;
+    quickTipDescription: ReactNode;
   };
   sections: Section[];
   attachments: Attachment;
@@ -72,110 +73,132 @@ const content: Record<"en" | "es", LocaleContent> = {
   es: {
     heroBadge: "Centro de ayuda",
     pageTitle: "WhatsApp cierra el teclado al pedir Face ID",
-    intro:
-      "Si el teclado de magicPay desaparece cada vez que WhatsApp pide Face ID, es porque el bloqueo con Face ID está activado dentro de la app. Aquí te guiamos para desactivarlo (sin perder seguridad) y volver a escribir con normalidad.",
+    intro: (
+      <>
+        Si el teclado se cierra es porque WhatsApp activó su bloqueo interno con Face ID. Desactívalo y deja que iOS pida Face ID solo al abrir la app.
+      </>
+    ),
     overview: {
-      title: "Identifica el problema en menos de un minuto",
+      title: "Solución de un vistazo",
       paragraphs: [
-        "WhatsApp tiene un bloqueo adicional dentro de Ajustes → Privacidad → Bloqueo de aplicación. Cuando está activo, cualquier app superpuesta (como nuestro teclado) se cierra al pedir Face ID.",
-        "La solución es desactivar ese bloqueo interno y, en su lugar, usar la protección del sistema operativo. Así mantienes Face ID al abrir WhatsApp desde iOS sin interrumpir el teclado de magicPay.",
+        (
+          <>
+            WhatsApp cierra el teclado porque tiene prendido <span className="font-medium">Privacidad → Bloqueo de aplicación → Requerir Face ID</span>.
+          </>
+        ),
+        (
+          <>
+            Apágalo y permite que el sistema iOS pida Face ID al abrir la app. El teclado se queda fijo y sigues protegido.
+          </>
+        ),
       ],
       checklist: [
-        "Asegúrate de tener tu iPhone actualizado y con Face ID configurado",
-        "Confirma que nadie más esté usando la versión beta de WhatsApp en tu dispositivo",
-        "Ten a la mano tu código de desbloqueo por si el sistema lo solicita",
+        "iPhone con Face ID funcional",
+        "WhatsApp actualizado (no beta)",
+        "Código de desbloqueo a la mano",
       ],
-      quickTipTitle: "Solución express",
-      quickTipDescription:
-        "Ve directo a WhatsApp → Ajustes → Privacidad → Bloqueo de aplicación y apaga \"Requerir Face ID\". Después regresa al home, mantén presionado el ícono de WhatsApp y elige \"Solicitar Face ID\" para que iOS lo pida solo al abrir la app.",
+      quickTipTitle: "Paso rápido",
+      quickTipDescription: (
+        <>
+          Abre <span className="font-medium">WhatsApp → Ajustes → Privacidad → Bloqueo de aplicación</span> y apaga <span className="font-medium">Requerir Face ID</span>. Luego, en el home, mantén presionado el ícono y toca <span className="font-medium">Solicitar Face ID</span> para que iOS lo gestione.
+        </>
+      ),
     },
     sections: [
       {
         eyebrow: "Paso 1",
-        title: "Desactiva el bloqueo con Face ID dentro de WhatsApp",
-        description:
-          "Este ajuste solo vive dentro de WhatsApp. Al apagarlo, tu teclado ya no se cerrará de forma inesperada.",
+        title: "Apaga Face ID dentro de WhatsApp",
+        description: (
+          <>
+            Es el detonador del cierre. Desactívalo y tu teclado deja de desaparecer.
+          </>
+        ),
         steps: [
           {
             label: "1",
-            title: "Abre WhatsApp y entra a Ajustes",
-            description:
-              "En iPhone, toca la pestaña \"Configuración\" en la parte inferior derecha. Si tu WhatsApp está en español, verás \"Configuración\"; en inglés aparece como \"Settings\".",
-            bullets: [
-              "Verifica que estás en la cuenta correcta si usas WhatsApp Business",
-              "Asegúrate de estar conectado a internet para que se guarden los cambios",
-            ],
+            title: "entra a Ajustes",
+            description: (
+              <>
+                Entra a <span className="font-medium">Configuración</span> (esquina inferior derecha).
+              </>
+            ),
           },
           {
             label: "2",
-            title: "Ingresa a Privacidad → Bloqueo de aplicación",
-            description:
-              "Busca la opción \"Privacidad\" y desliza hasta \"Bloqueo de aplicación\" (en inglés \"Privacy → App Lock\").",
+            title: "abre Privacidad → Bloqueo de aplicación",
+            description: (
+              <>
+                Baja hasta <span className="font-medium">Bloqueo de aplicación</span>.
+              </>
+            ),
           },
           {
             label: "3",
-            title: "Apaga \"Requerir Face ID\"",
-            description:
-              "Verás un interruptor que dice \"Requerir Face ID\". Desactívalo. El sistema te pedirá Face ID o tu código para confirmar.",
-            footnote:
-              "Nota: Si tenías configurado un tiempo de espera (por ejemplo, \"después de 1 minuto\"), también quedará deshabilitado.",
+            title: "apaga Requerir Face ID",
+            description: (
+              <>
+                Confirma con Face ID o código y deja el switch en <span className="font-medium">off</span>.
+              </>
+            ),
+            footnote: "Si tenías un temporizador (1 minuto, etc.), también se apaga.",
           },
         ],
-        note:
-          "Después de este paso, prueba abrir el teclado de magicPay dentro de un chat: ya no debería cerrarse al instante.",
+        note: (
+          <>
+            Vuelve a un chat: el teclado ya no debe cerrarse.
+          </>
+        ),
       },
       {
         eyebrow: "Paso 2",
-        title: "Activa Face ID desde iOS para mantener seguridad",
-        description:
-          "Seguiremos usando Face ID, pero ahora controlado por el sistema, que es compatible con el teclado de magicPay.",
+        title: "Deja que iOS pida Face ID",
+        description: (
+          <>
+            Mantienes seguridad sin que WhatsApp cierre el teclado.
+          </>
+        ),
         steps: [
           {
             label: "1",
-            title: "Regresa al home de tu iPhone",
-            description:
-              "Cierra WhatsApp o deslízala hacia arriba. No hace falta forzar el cierre en la multitarea.",
+            title: "ve al home",
+            description: "Cierra WhatsApp de forma normal (no hace falta forzarla).",
           },
           {
             label: "2",
-            title: "Mantén presionado el ícono de WhatsApp",
-            description:
-              "Al aparecer el menú contextual, selecciona \"Solicitar Face ID\". Esto activa la protección nativa de iOS al abrir la app.",
+            title: "mantén presionado el ícono",
+            description: (
+              <>
+                Elige <span className="font-medium">Solicitar Face ID</span> en el menú que aparece.
+              </>
+            ),
             bullets: [
-              "Si no ves la opción, revisa que Face ID esté configurado en Ajustes → Face ID y código",
-              "Para WhatsApp Business, asegúrate de haber actualizado a la última versión",
+              "Si no aparece, revisa Ajustes → Face ID y código.",
             ],
           },
           {
             label: "3",
-            title: "Confirma el mensaje",
-            description:
-              "iOS mostrará una confirmación. A partir de ahora, cada vez que abras WhatsApp desde el icono, pedirá Face ID antes de mostrar tus chats.",
+            title: "confirma",
+            description: "Acepta la alerta. Desde ahora Face ID aparecerá solo al abrir WhatsApp.",
           },
         ],
-        note:
-          "Puedes desactivar esta opción cuando quieras repitiendo el mismo proceso y eligiendo \"Dejar de solicitar Face ID\".",
+        note: "Para quitarlo, repite el gesto y toca “Dejar de solicitar Face ID”.",
       },
       {
         eyebrow: "Paso 3",
-        title: "Prueba y personaliza tu experiencia",
-        description:
-          "Verifica que todo funcione y deja notas para tu equipo o clientes.",
+        title: "Valida y comparte",
+        description: "Haz una prueba rápida y guarda este flujo para tu equipo.",
         highlights: [
           {
             title: "Haz una prueba en un chat real",
-            description:
-              "Abre un chat con alguien de confianza, lanza el teclado de magicPay y confirma que permanece en pantalla mientras Face ID se verifica solo al entrar a la app.",
+            description: "Abre un chat, lanza el teclado y verifica que permanezca visible.",
           },
           {
             title: "Crea un mensaje guía",
-            description:
-              "Guarda un texto en Notas o en tu CRM con esta guía para compartirla rápido con usuarios que reporten el mismo problema.",
+            description: "Guarda esta solución como respuesta rápida en tu CRM o notas.",
           },
           {
             title: "Documenta con evidencias",
-            description:
-              "Captura pantalla o graba un video corto del antes y después. Te será útil para soporte interno y para actualizar este tutorial.",
+            description: "Si puedes, toma un screenshot o video corto del antes y después.",
           },
         ],
       },
@@ -183,7 +206,7 @@ const content: Record<"en" | "es", LocaleContent> = {
     attachments: {
       title: "¿Vas a agregar imágenes o videos?",
       description:
-        "Estos recursos ayudan a que el tutorial sea aún más claro. Cuando los tengas, súbelos a la librería y enlázalos aquí.",
+        "Si agregas medios, súbelos a la librería y vincúlalos aquí.",
       suggestions: [
         "Captura de WhatsApp mostrando la ruta Ajustes → Privacidad → Bloqueo de aplicación",
         "Screenshot del interruptor \"Requerir Face ID\" desactivado",
@@ -193,7 +216,7 @@ const content: Record<"en" | "es", LocaleContent> = {
     support: {
       title: "¿Necesitas que lo revisemos contigo?",
       description:
-        "Nuestro equipo puede acompañarte por videollamada o chat para validar que el flujo quedó perfecto.",
+        "Si quieres que lo revisemos contigo en vivo, escríbenos y te ayudamos al momento.",
       ctaLabel: "Escríbenos a soporte@mgic.me",
       ctaHref: "mailto:soporte@mgic.me",
     },
@@ -201,110 +224,120 @@ const content: Record<"en" | "es", LocaleContent> = {
   en: {
     heroBadge: "Help Center",
     pageTitle: "WhatsApp closes the keyboard when Face ID appears",
-    intro:
-      "If the magicPay keyboard disappears every time WhatsApp asks for Face ID, it means WhatsApp’s in-app Face ID lock is on. Follow these steps to turn it off (without losing security) and keep typing smoothly.",
+    intro: (
+      <>
+        The keyboard closes because WhatsApp keeps its in-app Face ID lock on. Turn it off and let iOS request Face ID only when you launch the app.
+      </>
+    ),
     overview: {
-      title: "Understand the issue in under a minute",
+      title: "At a glance",
       paragraphs: [
-        "WhatsApp includes an extra App Lock under Settings → Privacy → App Lock. When it’s enabled, any overlay app (like our keyboard) gets dismissed as soon as Face ID pops up.",
-        "The fix is to disable that internal lock and rely on iOS instead. This way you still get Face ID when launching WhatsApp, and the magicPay keyboard stays open.",
+        (
+          <>
+            WhatsApp kicks out the keyboard because <span className="font-medium">Settings → Privacy → App Lock → Require Face ID</span> is enabled.
+          </>
+        ),
+        (
+          <>
+            Disable it and let iOS own Face ID when you launch the app. The keyboard stays put and you remain protected.
+          </>
+        ),
       ],
       checklist: [
-        "Make sure your iPhone is up to date and Face ID works on the home screen",
-        "Confirm you’re not using the WhatsApp beta on this device",
-        "Keep your device passcode handy in case iOS asks for it",
+        "iPhone with Face ID working",
+        "Latest WhatsApp (not beta)",
+        "Device passcode nearby",
       ],
       quickTipTitle: "Quick fix",
-      quickTipDescription:
-        "Go straight to WhatsApp → Settings → Privacy → App Lock and turn off \"Require Face ID\". Then return to the home screen, long-press WhatsApp, and choose \"Require Face ID\" so iOS handles the protection when opening the app.",
+      quickTipDescription: (
+        <>
+          Open <span className="font-medium">WhatsApp → Settings → Privacy → App Lock</span> and switch off <span className="font-medium">Require Face ID</span>. On the home screen, long-press the icon and tap <span className="font-medium">Require Face ID</span> so iOS handles it.
+        </>
+      ),
     },
     sections: [
       {
         eyebrow: "Step 1",
-        title: "Turn off WhatsApp’s in-app Face ID lock",
-        description:
-          "This toggle lives only inside WhatsApp. Once it’s disabled, the keyboard will stay put.",
+        title: "Switch off Face ID inside WhatsApp",
+        description: "That toggle is what closes the keyboard. Turn it off and you’re done.",
         steps: [
           {
             label: "1",
-            title: "Open WhatsApp and go to Settings",
-            description:
-              "On iPhone, tap the \"Settings\" tab in the bottom-right corner. If your WhatsApp is in Spanish it will read \"Configuración\".",
-            bullets: [
-              "Double-check you’re in the right account if you use WhatsApp Business",
-              "Stay connected to the internet so the change is saved",
-            ],
+            title: "open Settings",
+            description: (
+              <>
+                Tap <span className="font-medium">Settings</span> in the bottom-right corner.
+              </>
+            ),
           },
           {
             label: "2",
-            title: "Tap Privacy → App Lock",
-            description:
-              "Scroll until you find \"App Lock\" inside the Privacy section.",
+            title: "go to Privacy → App Lock",
+            description: (
+              <>
+                Scroll to <span className="font-medium">App Lock</span>.
+              </>
+            ),
           },
           {
             label: "3",
-            title: "Switch off \"Require Face ID\"",
-            description:
-              "You’ll see a toggle called \"Require Face ID\". Turn it off. WhatsApp will ask for Face ID or your passcode to confirm.",
-            footnote:
-              "If you previously set a timeout (for example \"After 1 minute\"), it will be disabled as well.",
+            title: "turn off Require Face ID",
+            description: (
+              <>
+                Confirm with Face ID or passcode and leave the switch <span className="font-medium">off</span>.
+              </>
+            ),
+            footnote: "Any timeout you set (After 1 minute, etc.) is removed too.",
           },
         ],
-        note:
-          "Now open the magicPay keyboard in any chat. It should remain visible instead of closing immediately.",
+        note: "Open a chat again—the keyboard should stay visible.",
       },
       {
         eyebrow: "Step 2",
-        title: "Let iOS request Face ID when launching WhatsApp",
-        description:
-          "We’ll keep Face ID, but managed by iOS so it plays nicely with the keyboard.",
+        title: "Let iOS handle Face ID",
+        description: "You keep security, and WhatsApp stops closing the keyboard.",
         steps: [
           {
             label: "1",
-            title: "Return to your iPhone home screen",
-            description:
-              "Close WhatsApp or swipe up to leave it. No need to force quit.",
+            title: "go back home",
+            description: "Leave WhatsApp normally; no force quit needed.",
           },
           {
             label: "2",
-            title: "Long-press the WhatsApp icon",
-            description:
-              "When the quick actions menu appears, tap \"Require Face ID\". This enables iOS-level protection for the app.",
+            title: "long-press WhatsApp",
+            description: (
+              <>
+                Pick <span className="font-medium">Require Face ID</span> from the quick actions menu.
+              </>
+            ),
             bullets: [
-              "If the option is missing, check Settings → Face ID & Passcode to verify Face ID is set up",
-              "Update WhatsApp Business if you use that version",
+              "If you can’t see it, check Settings → Face ID & Passcode.",
             ],
           },
           {
             label: "3",
-            title: "Approve the confirmation",
-            description:
-              "iOS will display a confirmation. From now on, you’ll see Face ID before the chat list whenever you open WhatsApp from the icon.",
+            title: "confirm",
+            description: "Approve the alert. From now on Face ID shows up when launching WhatsApp.",
           },
         ],
-        note:
-          "To disable it later, repeat the gesture and choose \"Don’t Require Face ID\".",
+        note: "To stop it later, repeat the gesture and choose “Don’t Require Face ID”.",
       },
       {
         eyebrow: "Step 3",
-        title: "Test and share the flow",
-        description:
-          "Make sure everything works and document it for your team.",
+        title: "Test and share",
+        description: "Quickly validate and keep this fix handy for your team.",
         highlights: [
           {
             title: "Run a live chat test",
-            description:
-              "Open a chat with a teammate, launch the magicPay keyboard, and confirm it stays visible while Face ID only appears when opening the app.",
+            description: "Try it in a real chat and confirm the keyboard stays in place.",
           },
           {
             title: "Save a ready-to-send reply",
-            description:
-              "Create a canned response in Notes, your CRM, or your help desk so you can share this fix instantly with anyone who reports it.",
+            description: "Store this flow as a canned reply in Notes, CRM, or help desk.",
           },
           {
             title: "Capture evidence",
-            description:
-              "Take screenshots or record a short clip of the before/after. It’s useful for internal training and for updating this tutorial with visuals.",
+            description: "Grab a quick screenshot or clip of the before/after if you can.",
           },
         ],
       },
@@ -312,7 +345,7 @@ const content: Record<"en" | "es", LocaleContent> = {
     attachments: {
       title: "Planning to add images or videos?",
       description:
-        "Visuals make this walkthrough even clearer. Once they’re ready, upload them to the media library and link them here.",
+        "Add visuals later by uploading them to the library and linking them here.",
       suggestions: [
         "Screenshot of WhatsApp showing Settings → Privacy → App Lock",
         "Image of the \"Require Face ID\" toggle turned off",
@@ -322,7 +355,7 @@ const content: Record<"en" | "es", LocaleContent> = {
     support: {
       title: "Need a hand double-checking?",
       description:
-        "Our team can hop on a quick call or chat to make sure the flow works perfectly for you.",
+        "Want us to double-check it live? Drop us a line and we’ll jump in.",
       ctaLabel: "Email us at support@mgic.me",
       ctaHref: "mailto:support@mgic.me",
     },
