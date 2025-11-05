@@ -75,7 +75,7 @@ const content: Record<"en" | "es", LocaleContent> = {
     pageTitle: "WhatsApp cierra el teclado al pedir Face ID",
     intro: (
       <>
-        Si el teclado se cierra es porque WhatsApp activó su bloqueo interno con Face ID. Desactívalo y deja que iOS pida Face ID solo al abrir la app.
+        magic es el teclado que abre en cualquier chat para enviar ligas de pago sin salir de la conversación. Si en WhatsApp activaste <span className="font-medium">Requerir Face ID</span>, el teclado se corta cuando avanzas. Aquí lo resolvemos.
       </>
     ),
     overview: {
@@ -83,12 +83,12 @@ const content: Record<"en" | "es", LocaleContent> = {
       paragraphs: [
         (
           <>
-            WhatsApp cierra el teclado porque tiene prendido <span className="font-medium">Privacidad → Bloqueo de aplicación → Requerir Face ID</span>.
+            WhatsApp saca a magic porque en <span className="font-medium">Privacidad → Bloqueo de aplicación</span> dejaste activado <span className="font-medium">Requerir Face ID</span>.
           </>
         ),
         (
           <>
-            Apágalo y permite que el sistema iOS pida Face ID al abrir la app. El teclado se queda fijo y sigues protegido.
+            Al apagarlo, magic se mantiene abierto. Luego iOS puede seguir pidiendo Face ID cuando abres WhatsApp desde el home, así que no pierdes seguridad.
           </>
         ),
       ],
@@ -100,7 +100,7 @@ const content: Record<"en" | "es", LocaleContent> = {
       quickTipTitle: "Paso rápido",
       quickTipDescription: (
         <>
-          Abre <span className="font-medium">WhatsApp → Ajustes → Privacidad → Bloqueo de aplicación</span> y apaga <span className="font-medium">Requerir Face ID</span>. Luego, en el home, mantén presionado el ícono y toca <span className="font-medium">Solicitar Face ID</span> para que iOS lo gestione.
+          Ve a <span className="font-medium">WhatsApp → Ajustes → Privacidad → Bloqueo de aplicación</span> y apaga <span className="font-medium">Requerir Face ID</span>. Después, desde el home, mantén presionado el ícono y toca <span className="font-medium">Solicitar Face ID</span> para que iOS lo pida al abrir la app.
         </>
       ),
     },
@@ -116,7 +116,7 @@ const content: Record<"en" | "es", LocaleContent> = {
         steps: [
           {
             label: "1",
-            title: "entra a Ajustes",
+            title: "Entra a Ajustes",
             description: (
               <>
                 Entra a <span className="font-medium">Configuración</span> (esquina inferior derecha).
@@ -125,7 +125,7 @@ const content: Record<"en" | "es", LocaleContent> = {
           },
           {
             label: "2",
-            title: "abre Privacidad → Bloqueo de aplicación",
+            title: "Abre Privacidad → Bloqueo de aplicación",
             description: (
               <>
                 Baja hasta <span className="font-medium">Bloqueo de aplicación</span>.
@@ -134,7 +134,7 @@ const content: Record<"en" | "es", LocaleContent> = {
           },
           {
             label: "3",
-            title: "apaga Requerir Face ID",
+            title: "Apaga Requerir Face ID",
             description: (
               <>
                 Confirma con Face ID o código y deja el switch en <span className="font-medium">off</span>.
@@ -143,11 +143,7 @@ const content: Record<"en" | "es", LocaleContent> = {
             footnote: "Si tenías un temporizador (1 minuto, etc.), también se apaga.",
           },
         ],
-        note: (
-          <>
-            Vuelve a un chat: el teclado ya no debe cerrarse.
-          </>
-        ),
+        note: "Vuelve a un chat: el teclado magic ya no se cierra al avanzar.",
       },
       {
         eyebrow: "Paso 2",
@@ -160,15 +156,15 @@ const content: Record<"en" | "es", LocaleContent> = {
         steps: [
           {
             label: "1",
-            title: "ve al home",
+            title: "Ve al home",
             description: "Cierra WhatsApp de forma normal (no hace falta forzarla).",
           },
           {
             label: "2",
-            title: "mantén presionado el ícono",
+            title: "Mantén presionado el ícono",
             description: (
               <>
-                Elige <span className="font-medium">Solicitar Face ID</span> en el menú que aparece.
+                Elige <span className="font-medium">Solicitar Face ID</span> en el menú. Ahora la protección depende de iOS.
               </>
             ),
             bullets: [
@@ -177,8 +173,8 @@ const content: Record<"en" | "es", LocaleContent> = {
           },
           {
             label: "3",
-            title: "confirma",
-            description: "Acepta la alerta. Desde ahora Face ID aparecerá solo al abrir WhatsApp.",
+            title: "Confirma",
+            description: "Acepta la alerta. Face ID se pedirá solo al abrir WhatsApp desde el icono.",
           },
         ],
         note: "Para quitarlo, repite el gesto y toca “Dejar de solicitar Face ID”.",
@@ -186,7 +182,7 @@ const content: Record<"en" | "es", LocaleContent> = {
       {
         eyebrow: "Paso 3",
         title: "Valida y comparte",
-        description: "Haz una prueba rápida y guarda este flujo para tu equipo.",
+        description: "Haz una prueba y comparte esta guía con quien lo necesite.",
         highlights: [
           {
             title: "Haz una prueba en un chat real",
@@ -226,7 +222,7 @@ const content: Record<"en" | "es", LocaleContent> = {
     pageTitle: "WhatsApp closes the keyboard when Face ID appears",
     intro: (
       <>
-        The keyboard closes because WhatsApp keeps its in-app Face ID lock on. Turn it off and let iOS request Face ID only when you launch the app.
+        magic is the keyboard you open in any chat to send payment links without leaving the conversation. If WhatsApp has <span className="font-medium">Require Face ID</span> on, it cuts the flow. Let’s fix it.
       </>
     ),
     overview: {
@@ -234,12 +230,12 @@ const content: Record<"en" | "es", LocaleContent> = {
       paragraphs: [
         (
           <>
-            WhatsApp kicks out the keyboard because <span className="font-medium">Settings → Privacy → App Lock → Require Face ID</span> is enabled.
+            WhatsApp kicks out magic because <span className="font-medium">Settings → Privacy → App Lock → Require Face ID</span> stays enabled.
           </>
         ),
         (
           <>
-            Disable it and let iOS own Face ID when you launch the app. The keyboard stays put and you remain protected.
+            Turn it off so magic stays open. Then iOS can still request Face ID when you launch WhatsApp from the home screen—security intact.
           </>
         ),
       ],
@@ -251,7 +247,7 @@ const content: Record<"en" | "es", LocaleContent> = {
       quickTipTitle: "Quick fix",
       quickTipDescription: (
         <>
-          Open <span className="font-medium">WhatsApp → Settings → Privacy → App Lock</span> and switch off <span className="font-medium">Require Face ID</span>. On the home screen, long-press the icon and tap <span className="font-medium">Require Face ID</span> so iOS handles it.
+          Go to <span className="font-medium">WhatsApp → Settings → Privacy → App Lock</span>, switch off <span className="font-medium">Require Face ID</span>, then long-press the icon on the home screen and tap <span className="font-medium">Require Face ID</span> so iOS asks for it when opening the app.
         </>
       ),
     },
@@ -263,7 +259,7 @@ const content: Record<"en" | "es", LocaleContent> = {
         steps: [
           {
             label: "1",
-            title: "open Settings",
+            title: "Open Settings",
             description: (
               <>
                 Tap <span className="font-medium">Settings</span> in the bottom-right corner.
@@ -272,7 +268,7 @@ const content: Record<"en" | "es", LocaleContent> = {
           },
           {
             label: "2",
-            title: "go to Privacy → App Lock",
+            title: "Go to Privacy → App Lock",
             description: (
               <>
                 Scroll to <span className="font-medium">App Lock</span>.
@@ -281,7 +277,7 @@ const content: Record<"en" | "es", LocaleContent> = {
           },
           {
             label: "3",
-            title: "turn off Require Face ID",
+            title: "Turn off Require Face ID",
             description: (
               <>
                 Confirm with Face ID or passcode and leave the switch <span className="font-medium">off</span>.
@@ -299,15 +295,15 @@ const content: Record<"en" | "es", LocaleContent> = {
         steps: [
           {
             label: "1",
-            title: "go back home",
+            title: "Go back home",
             description: "Leave WhatsApp normally; no force quit needed.",
           },
           {
             label: "2",
-            title: "long-press WhatsApp",
+            title: "Long-press WhatsApp",
             description: (
               <>
-                Pick <span className="font-medium">Require Face ID</span> from the quick actions menu.
+                Pick <span className="font-medium">Require Face ID</span> in the menu so iOS owns the protection.
               </>
             ),
             bullets: [
@@ -316,8 +312,8 @@ const content: Record<"en" | "es", LocaleContent> = {
           },
           {
             label: "3",
-            title: "confirm",
-            description: "Approve the alert. From now on Face ID shows up when launching WhatsApp.",
+            title: "Confirm",
+            description: "Approve the alert. Face ID appears only when opening WhatsApp from the icon.",
           },
         ],
         note: "To stop it later, repeat the gesture and choose “Don’t Require Face ID”.",
@@ -325,7 +321,7 @@ const content: Record<"en" | "es", LocaleContent> = {
       {
         eyebrow: "Step 3",
         title: "Test and share",
-        description: "Quickly validate and keep this fix handy for your team.",
+        description: "Try it once and keep this fix handy for anyone who needs it.",
         highlights: [
           {
             title: "Run a live chat test",
