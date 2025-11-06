@@ -18,7 +18,7 @@
     "form": {
       "fullName": "Nombre completo",
       "email": "Tu correo electrónico",
-      "company": "Nombre de la empresa",
+      "company": "Nombre del banco / fintech / app",
       "country": "País",
       "selectCountry": "Selecciona un país",
       "loadingCountries": "Cargando países...",
@@ -28,7 +28,7 @@
         "nameRequired": "Ingresa tu nombre completo",
         "emailRequired": "Ingresa tu correo electrónico",
         "emailInvalid": "Ingresa un correo válido",
-        "companyRequired": "Ingresa el nombre de tu empresa",
+        "companyRequired": "Ingresa el nombre de tu banco, fintech o app",
         "countryRequired": "Selecciona tu país",
         "messageRequired": "Cuéntanos qué necesitas",
         "submitError": "Hubo un error al enviar el formulario",

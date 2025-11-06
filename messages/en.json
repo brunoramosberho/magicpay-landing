@@ -18,7 +18,7 @@
     "form": {
       "fullName": "Full name",
       "email": "Your email",
-      "company": "Company Name",
+      "company": "Bank / fintech / app name",
       "country": "Country",
       "selectCountry": "Select country",
       "loadingCountries": "Loading countries...",
@@ -28,7 +28,7 @@
         "nameRequired": "Full name is required",
         "emailRequired": "Email is required",
         "emailInvalid": "Please enter a valid email address",
-        "companyRequired": "Company name is required",
+        "companyRequired": "Bank / fintech / app name is required",
         "countryRequired": "Country is required",
         "messageRequired": "Message is required",
         "submitError": "Error sending the form",
