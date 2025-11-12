@@ -5,16 +5,16 @@
     "magic": "magic"
   },
   "hero": {
-    "title": "Envía dinero como si fuera",
+    "title": "El chat-to-pay de tu banco es",
     "magic": "magia",
-    "subtitle": "Desde cualquier chat. Un toque. Cobro al instante.",
-    "description": "Integra pagos con un toque en la app móvil de tu banco — SDK para iOS y Android."
+    "subtitle": "Hecho para bancos y fintechs: comparte ligas de pago desde cualquier chat.",
+    "description": "∗ magic es el teclado seguro que se integra en la app de tu banco para enviar ligas por WhatsApp, Telegram, Instagram y más."
   },
   "contact": {
     "title": "Mira",
     "magic": "magic",
     "live": "en vivo",
-    "subtitle": "Conoce nuestra solución de pagos en acción. Agenda tu demo personalizada hoy mismo.",
+    "subtitle": "Pensado para equipos de banca y fintech que quieren lanzar chat-to-pay. Agenda tu demo personalizada.",
     "form": {
       "fullName": "Nombre completo",
       "email": "Tu correo electrónico",

@@ -5,16 +5,16 @@
     "magic": "magic"
   },
   "hero": {
-    "title": "Send money like",
+    "title": "Your bank's chat-to-pay is",
     "magic": "magic",
-    "subtitle": "From any chat. One tap. Instant claim.",
-    "description": "Embed one-tap payments inside your bank's mobile app — iOS & Android SDK."
+    "subtitle": "Built for banks & fintechs to share payment links from any chat.",
+    "description": "∗ magic is the secure keyboard your banking app embeds to send payment links from WhatsApp, Telegram, Instagram, and more."
   },
   "contact": {
     "title": "See",
     "magic": "magic",
     "live": "live",
-    "subtitle": "Experience our payment solution in action. Schedule your personalized demo today.",
+    "subtitle": "For bank and fintech teams launching chat-to-pay. Book a personalized walkthrough.",
     "form": {
       "fullName": "Full name",
       "email": "Your email",
