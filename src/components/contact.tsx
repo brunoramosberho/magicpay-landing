@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card } from '@/components/ui/card'
-import { AuroraText } from '@/components/ui/aurora-text'
 import { RequestDemoButton } from '@/components/ui/request-demo-button'
 import { TextEffect } from '@/components/ui/text-effect'
 import Image from 'next/image'
@@ -70,7 +69,7 @@ export default function ContactSection() {
             email: email.trim() === '' || !validateEmail(email.trim()),
             company: company.trim() === '',
             country: country.trim() === '',
-            message: message.trim() === ''
+            message: false
         }
         setErrors(newErrors)
         
@@ -120,13 +119,7 @@ export default function ContactSection() {
                         fontSize: '88pt',
                         lineHeight: 1.0
                     }}>
-                    {t('title')}{' '}
-                    <AuroraText 
-                        colors={["#306FF6", "#B7E9FC", "#306FF6", "#123888"]}
-                        speed={1.5}>
-                        {t('magic')}
-                    </AuroraText>
-                    {' '}{t('live')}
+                    {t('title')}
                 </h2>
 
                 <TextEffect

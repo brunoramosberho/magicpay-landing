@@ -56,8 +56,7 @@ export default async function Features() {
                             <h3 className="text-xl sm:text-2xl font-normal leading-snug mb-3">{t('payWithoutLeavingChat.title')}</h3>
                             <p className="text-sm sm:text-base mt-0">
                                 {t('payWithoutLeavingChat.descriptionPart1')}{' '}
-                                <span className="inline-block text-base sm:text-lg md:text-xl leading-none align-[-0.1em]">*</span>
-                                <span className="font-medium lowercase">{t('payWithoutLeavingChat.magicKeyboard')}</span>
+                                <span className="font-medium">{t('payWithoutLeavingChat.magicKeyboard')}</span>
                                 {' '}{t('payWithoutLeavingChat.descriptionPart2')}
                             </p>
                         </CardContent>

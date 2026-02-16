@@ -40,6 +40,9 @@ export const HeroHeader = () => {
                                     height={43}
                                     className="h-6 w-auto"
                                 />
+                                <span className="ml-2 hidden sm:inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[0.6875rem] font-medium text-gray-600 whitespace-nowrap">
+                                    {t('badge')}
+                                </span>
                             </Link>
 
                             <div className="flex items-center gap-4">

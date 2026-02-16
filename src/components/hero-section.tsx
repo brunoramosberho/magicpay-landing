@@ -53,12 +53,12 @@ export default async function HeroSection() {
                                         fontSize: '88pt',
                                         lineHeight: 1.0
                                     }}>
-                                    {t('title')}{' '}
                                     <AuroraText 
                                         colors={["#306FF6", "#B7E9FC", "#306FF6", "#123888"]}
                                         speed={1.5}>
                                         {t('magic')}
                                     </AuroraText>
+                                    {' '}{t('title')}
                                 </h1>
                                 <p className="mx-auto mt-8 max-w-2xl text-balance"
                                    style={{ fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif", fontWeight: 400, fontSize: '1.375em' }}>
