@@ -3,10 +3,16 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
+    // Debug: log env var availability
+    const envKeys = Object.keys(process.env).filter(k => k.includes('RESEND'));
+    console.log('ENV keys containing RESEND:', envKeys);
+    console.log('RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
+    console.log('RESEND_API_KEY length:', process.env.RESEND_API_KEY?.length ?? 0);
+
     // Verificar que la API key esté configurada
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
-      console.error('RESEND_API_KEY no está configurada');
+      console.error('RESEND_API_KEY no está configurada. All env keys:', Object.keys(process.env).sort().join(', '));
       return NextResponse.json(
         { error: 'Error de configuración del servidor: RESEND_API_KEY no encontrada' },
         { status: 500 }
