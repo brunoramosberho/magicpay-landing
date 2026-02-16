@@ -19,10 +19,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, email, company, country, message } = body;
 
-    // Validar que todos los campos estén presentes
-    if (!name || !email || !company || !country || !message) {
+    // Validar que los campos requeridos estén presentes
+    if (!name || !email || !company || !country) {
       return NextResponse.json(
-        { error: 'Todos los campos son requeridos' },
+        { error: 'Todos los campos requeridos deben estar presentes' },
         { status: 400 }
       );
     }
