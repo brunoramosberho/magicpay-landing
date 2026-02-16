@@ -2,33 +2,34 @@
   "common": {
     "requestDemo": "Request demo",
     "sending": "Sending...",
-    "magic": "magic"
+    "magic": "magic",
+    "badge": "For banks & fintechs"
   },
   "hero": {
-    "title": "Your bank's chat-to-pay is",
+    "title": "for banks",
     "magic": "magic",
-    "subtitle": "Built for banks & fintechs to share payment links from any chat.",
-    "description": "∗ magic is the secure keyboard your banking app embeds to send payment links from WhatsApp, Telegram, Instagram, and more."
+    "subtitle": "Turn every WhatsApp conversation into a payment channel. Your brand, your rails, your customers.",
+    "description": "Embed one-tap payments inside your banking app — iOS, Android & React Native SDK."
   },
   "contact": {
-    "title": "See",
-    "magic": "magic",
-    "live": "live",
-    "subtitle": "For bank and fintech teams launching chat-to-pay. Book a personalized walkthrough.",
+    "title": "See what your customers would experience",
+    "magic": "",
+    "live": "",
+    "subtitle": "Schedule a personalized demo and see Magic running inside a banking app — live.",
     "form": {
       "fullName": "Full name",
-      "email": "Your email",
-      "company": "Bank / fintech / app name",
+      "email": "Work email",
+      "company": "Bank / fintech name",
       "country": "Country",
       "selectCountry": "Select country",
       "loadingCountries": "Loading countries...",
-      "message": "Message",
+      "message": "Message (optional)",
       "submit": "Request demo",
       "errors": {
         "nameRequired": "Full name is required",
         "emailRequired": "Email is required",
         "emailInvalid": "Please enter a valid email address",
-        "companyRequired": "Bank / fintech / app name is required",
+        "companyRequired": "Bank / fintech name is required",
         "countryRequired": "Country is required",
         "messageRequired": "Message is required",
         "submitError": "Error sending the form",
@@ -43,32 +44,32 @@
   "features": {
     "title": "Features",
     "payWithoutLeavingChat": {
-      "title": "Pay without leaving chat",
-      "description": "Open the bank's *magic keyboard inside WhatsApp, Instagram, Telegram or Messages and send a payment link directly in the conversation.",
-      "descriptionPart1": "Open the bank's",
-      "descriptionPart2": "inside WhatsApp, Instagram, Telegram or Messages and send a payment link directly in the conversation.",
-      "magicKeyboard": "magic keyboard"
+      "title": "Chat-native payments for your customers",
+      "description": "Your customers activate a branded payment keyboard inside WhatsApp, Instagram, Telegram, or Messages — and send payment links without leaving the conversation. Your bank stays front and center.",
+      "descriptionPart1": "Your customers activate a branded",
+      "descriptionPart2": "inside WhatsApp, Instagram, Telegram, or Messages — and send payment links without leaving the conversation. Your bank stays front and center.",
+      "magicKeyboard": "payment keyboard"
     },
     "tapToSend": {
-      "title": "Tap To Send & QR — in-person, instant",
-      "description": "Generate a Tap or QR from your bank app and transfer to any nearby device.",
+      "title": "Tap & QR — in-person transfers, zero friction",
+      "description": "Your customers generate NFC or QR payment links from your app. No account details exchanged. Transfers settle on your existing rails.",
       "ariaLabel": "Tap To Send animation"
     },
     "instantClaim": {
-      "title": "Instant claim — enter once",
-      "description": "Recipients save account details on first claim; subsequent claims are one click and settle fast."
+      "title": "One-click claim for recipients",
+      "description": "Anyone who receives a payment link enters their details once. Every claim after that is a single tap. Fewer errors, fewer support calls, faster settlement."
     },
     "brandCustomizable": {
-      "title": "Brand-customizable",
-      "description": "UI adapts to your bank's colors and tone while keeping Magic's UX patterns and trust signals. Available SDKs: iOS, Android, and React Native."
+      "title": "Fully white-label",
+      "description": "Your colors, your logo, your trust signals. The SDK adapts to your bank's brand while keeping Magic's proven UX patterns. Available for iOS, Android, and React Native."
     },
     "localRails": {
       "title": "Local rails, global reach",
-      "description": "Settles via the fastest local rail (SPEI, SEPA Instant, Pix, RTP / FedNow, Faster Payments, UPI, Bizum, Blik, etc.)."
+      "description": "Settles via the fastest local rail — SPEI, SEPA Instant, Pix, Faster Payments, UPI, Bizum, Blik, and more. Magic orchestrates the experience; your bank executes the transfer. No fund custody, no new compliance burden."
     },
     "trustLine": {
-      "title": "Trust line",
-      "description": "Secure, encrypted, compliant — built to integrate with your KYC/AML and data-residency requirements."
+      "title": "Your security, your compliance",
+      "description": "Magic runs inside your infrastructure. KYC/AML, transaction monitoring, and risk limits stay entirely in your hands. Every link is unique, tokenized, and time-limited."
     }
   },
   "subheader": {
@@ -83,7 +84,7 @@
   },
   "integrations": {
     "title": "Local rails, global reach",
-    "description": "Settles via the fastest local rail (SPEI, SEPA Instant, Pix, RTP / FedNow, Faster Payments, UPI, Bizum, Blik, etc.).",
+    "description": "Settles via the fastest local rail — SPEI, SEPA Instant, Pix, Faster Payments, UPI, Bizum, Blik, and more. Magic orchestrates the experience; your bank executes the transfer.",
     "cta": "Get Started"
   },
   "footer": {
@@ -96,4 +97,3 @@
     "description": "Digital payments made simple"
   }
 }
-

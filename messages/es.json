@@ -1,34 +1,35 @@
 {
   "common": {
-    "requestDemo": "Agenda una demo",
+    "requestDemo": "Solicitar demo",
     "sending": "Enviando...",
-    "magic": "magic"
+    "magic": "magic",
+    "badge": "Para bancos y fintechs"
   },
   "hero": {
-    "title": "El chat-to-pay de tu banco es",
+    "title": "para bancos",
     "magic": "magia",
-    "subtitle": "Hecho para bancos y fintechs: comparte ligas de pago desde cualquier chat.",
-    "description": "∗ magic es el teclado seguro que se integra en la app de tu banco para enviar ligas por WhatsApp, Telegram, Instagram y más."
+    "subtitle": "Convierte cada conversación de WhatsApp en un canal de pagos. Tu marca, tus rieles, tus clientes.",
+    "description": "Integra pagos con un toque dentro de tu app bancaria — SDK para iOS, Android y React Native."
   },
   "contact": {
-    "title": "Mira",
-    "magic": "magic",
-    "live": "en vivo",
-    "subtitle": "Pensado para equipos de banca y fintech que quieren lanzar chat-to-pay. Agenda tu demo personalizada.",
+    "title": "Mira lo que tus clientes experimentarían",
+    "magic": "",
+    "live": "",
+    "subtitle": "Agenda una demo personalizada y ve Magic corriendo dentro de una app bancaria — en vivo.",
     "form": {
       "fullName": "Nombre completo",
-      "email": "Tu correo electrónico",
-      "company": "Nombre del banco / fintech / app",
+      "email": "Email corporativo",
+      "company": "Banco / fintech",
       "country": "País",
       "selectCountry": "Selecciona un país",
       "loadingCountries": "Cargando países...",
-      "message": "Mensaje",
-      "submit": "Agenda una demo",
+      "message": "Mensaje (opcional)",
+      "submit": "Solicitar demo",
       "errors": {
         "nameRequired": "Ingresa tu nombre completo",
         "emailRequired": "Ingresa tu correo electrónico",
         "emailInvalid": "Ingresa un correo válido",
-        "companyRequired": "Ingresa el nombre de tu banco, fintech o app",
+        "companyRequired": "Ingresa el nombre de tu banco o fintech",
         "countryRequired": "Selecciona tu país",
         "messageRequired": "Cuéntanos qué necesitas",
         "submitError": "Hubo un error al enviar el formulario",
@@ -41,34 +42,34 @@
     }
   },
   "features": {
-    "title": "Funcionalidades clave",
+    "title": "Funcionalidades",
     "payWithoutLeavingChat": {
-      "title": "Paga sin salir del chat",
-      "description": "Abre el *teclado magic del banco dentro de WhatsApp, Instagram, Telegram o Mensajes y envía una liga de pago directamente en la conversación.",
-      "descriptionPart1": "Abre el",
-      "descriptionPart2": "del banco dentro de WhatsApp, Instagram, Telegram o Mensajes y envía una liga de pago directamente en la conversación.",
-      "magicKeyboard": "teclado magic"
+      "title": "Pagos nativos en chat para tus clientes",
+      "description": "Tus clientes activan un teclado de pagos con tu marca dentro de WhatsApp, Instagram, Telegram o Mensajes, y envían ligas de pago sin salir de la conversación. Tu banco siempre al frente.",
+      "descriptionPart1": "Tus clientes activan un",
+      "descriptionPart2": "con tu marca dentro de WhatsApp, Instagram, Telegram o Mensajes, y envían ligas de pago sin salir de la conversación. Tu banco siempre al frente.",
+      "magicKeyboard": "teclado de pagos"
     },
     "tapToSend": {
-      "title": "Tap para enviar y QR — en persona, al instante",
-      "description": "Genera un Tap o un QR desde la app de tu banco y cobra en cualquier dispositivo cercano.",
+      "title": "Tap y QR — transferencias presenciales, cero fricción",
+      "description": "Tus clientes generan ligas de pago por NFC o QR desde tu app. Sin compartir datos de cuenta. Las transferencias se liquidan por tus rieles existentes.",
       "ariaLabel": "Animación de Tap para Enviar"
     },
     "instantClaim": {
-      "title": "Cobro instantáneo — captura una sola vez",
-      "description": "La persona guardará sus datos bancarios en el primer cobro; los siguientes se completan con un toque."
+      "title": "Cobro en un clic para quien recibe",
+      "description": "Quien recibe una liga ingresa sus datos una sola vez. Después, cada cobro es un solo toque. Menos errores, menos llamadas a soporte, liquidación más rápida."
     },
     "brandCustomizable": {
-      "title": "Personalizable con tu marca",
-      "description": "La interfaz adopta los colores y tono de tu banco sin perder la experiencia magic ni sus señales de confianza. SDKs disponibles: iOS, Android y React Native."
+      "title": "Totalmente white-label",
+      "description": "Tus colores, tu logo, tus señales de confianza. El SDK se adapta a la identidad de tu banco manteniendo los patrones de UX probados de Magic. Disponible para iOS, Android y React Native."
     },
     "localRails": {
       "title": "Rieles locales, alcance global",
-      "description": "Liquidamos por el riel local más rápido (SPEI, SEPA Instant, Pix, RTP / FedNow, Faster Payments, UPI, Bizum, Blik, etc.)."
+      "description": "Se liquida por el riel local más rápido: SPEI, SEPA Instant, Pix, Faster Payments, UPI, Bizum, Blik y más. Magic orquesta la experiencia; tu banco ejecuta la transferencia. Sin custodia de fondos, sin nueva carga de cumplimiento."
     },
     "trustLine": {
-      "title": "Seguro como siempre, más fácil que nunca",
-      "description": "Seguro, cifrado y compliant — listo para integrarse con tus procesos de KYC/AML y residencia de datos."
+      "title": "Tu seguridad, tu cumplimiento",
+      "description": "Magic corre dentro de tu infraestructura. KYC/AML, monitoreo transaccional y límites de riesgo se quedan enteramente en tus manos. Cada liga es única, tokenizada y con vencimiento."
     }
   },
   "subheader": {
@@ -83,12 +84,12 @@
   },
   "integrations": {
     "title": "Rieles locales, alcance global",
-    "description": "Liquidamos por el riel local más rápido (SPEI, SEPA Instant, Pix, RTP / FedNow, Faster Payments, UPI, Bizum, Blik, etc.).",
+    "description": "Se liquida por el riel local más rápido: SPEI, SEPA Instant, Pix, Faster Payments, UPI, Bizum, Blik y más. Magic orquesta la experiencia; tu banco ejecuta la transferencia.",
     "cta": "Conoce más"
   },
   "footer": {
     "copyright": "© {year} Desarrollado por {brand}",
-    "privacyNotice": "Aviso de privacidad",
+    "privacyNotice": "Aviso de Privacidad",
     "legalText": "Este sitio cumple con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) de México."
   },
   "metadata": {
@@ -96,4 +97,3 @@
     "description": "Pagos digitales sin complicaciones"
   }
 }
-
