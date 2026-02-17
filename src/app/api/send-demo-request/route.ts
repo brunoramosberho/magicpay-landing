@@ -72,7 +72,7 @@ Este correo fue enviado desde el formulario de contacto de MagicPay.
 
     // Enviar correo usando Resend
     const { data, error } = await resend.emails.send({
-      from: 'MagicPay Contact <onboarding@resend.dev>', // Cambiar según tu dominio verificado en Resend
+      from: 'MagicPay <contact@magicpay.mx>',
       to: ['bruno@magicpay.mx', 'santiago@magicpay.mx'],
       replyTo: email,
       subject: `Nueva solicitud de demo - ${company}`,

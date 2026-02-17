@@ -112,11 +112,10 @@ export default function ContactSection() {
     return (
         <section id="contact" className="pt-8 pb-32 md:pt-16 md:pb-32 relative z-10">
             <div className="mx-auto max-w-7xl px-6">
-                <h2 className="text-center text-balance"
+                <h2 className="text-center text-balance text-3xl sm:text-5xl md:text-7xl lg:text-[88pt]"
                     style={{ 
                         fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif", 
                         fontWeight: 450,
-                        fontSize: 'clamp(2.5rem, 8vw, 88pt)',
                         lineHeight: 1.0
                     }}>
                     {t('title')}
