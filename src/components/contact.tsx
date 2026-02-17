@@ -116,7 +116,7 @@ export default function ContactSection() {
                     style={{ 
                         fontFamily: "'Apercu Pro', ui-sans-serif, system-ui, sans-serif", 
                         fontWeight: 450,
-                        fontSize: '88pt',
+                        fontSize: 'clamp(2.5rem, 8vw, 88pt)',
                         lineHeight: 1.0
                     }}>
                     {t('title')}
