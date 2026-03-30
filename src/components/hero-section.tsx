@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { AuroraText } from '@/components/ui/aurora-text'
 import { RequestDemoButton } from '@/components/ui/request-demo-button'
 import { HeroHeader } from './header'
+import { ChatPhoneAnimation } from './chat-phone-animation'
 
 
 export default async function HeroSection() {
@@ -78,36 +79,8 @@ export default async function HeroSection() {
                         </div>
 
                         <div className="relative mt-8 px-2 sm:mt-12 md:mt-20 pb-16 md:pb-20">
-                            <div className="relative mx-auto max-w-6xl">
-                                <div 
-                                    className="aspect-video w-full mx-auto relative overflow-hidden"
-                                    style={{ 
-                                        /* Frame 1 */
-                                        boxSizing: 'border-box',
-                                        
-                                        background: '#F7F7F7',
-                                        backgroundColor: 'color(display-p3 0.970 0.970 0.970)',
-                                        boxShadow: '0 0.125em 2em rgba(0, 0, 0, 0.08), 0 0.125em 2em color(display-p3 0.000 0.000 0.000 / 0.08)',
-                                        borderRadius: '1.6875em',
-                                        border: '1px solid transparent',
-                                        backgroundImage: 'linear-gradient(#F7F7F7, #F7F7F7), linear-gradient(0deg, #FFFFFF 0%, rgba(255, 255, 255, 0.2) 50%, #FFFFFF 100%)',
-                                        backgroundOrigin: 'border-box',
-                                        backgroundClip: 'padding-box, border-box'
-                                    }}>
-                                    <video
-                                        src="/magicpay-walkthrough.mp4"
-                                        autoPlay
-                                        loop
-                                        muted
-                                        playsInline
-                                        preload="none"
-                                        poster="/placeholder-1.png"
-                                        className="rounded-[1.6875em] w-full h-full object-cover object-center"
-                                        controls={false}
-                                    />
-                                </div>
-                                
-                            </div>
+                            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[#306FF6]/[0.04] blur-[80px] pointer-events-none" />
+                            <ChatPhoneAnimation />
                         </div>
                     </div>
                 </section>

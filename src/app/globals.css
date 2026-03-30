@@ -108,6 +108,11 @@
   .animate-aurora {
     animation: aurora 8s ease-in-out infinite alternate;
   }
+
+  [data-chat-demo],
+  [data-chat-demo] * {
+    font-family: inherit;
+  }
 }
 
 @theme inline {
