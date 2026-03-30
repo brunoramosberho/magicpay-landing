@@ -68,9 +68,8 @@ function TapCircle() {
     return (
         <motion.span
             initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 1.4, opacity: 0 }}
-            transition={{ duration: 0.12, exit: { duration: 0.35, ease: 'easeOut' } }}
+            animate={{ scale: 1, opacity: 1, transition: { duration: 0.12 } }}
+            exit={{ scale: 1.4, opacity: 0, transition: { duration: 0.35, ease: 'easeOut' } }}
             className="absolute inset-0 m-auto w-9 h-9 rounded-full bg-black/[0.14] pointer-events-none z-50"
             style={{ boxShadow: '0 0 0 1px rgba(0,0,0,0.08)' }}
         />
@@ -423,9 +422,8 @@ function ChatAnimationInner({ onReplay }: { onReplay: () => void }) {
                         <motion.div
                             key="magic-kb"
                             initial={{ y: 30, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ type: 'spring', damping: 25, stiffness: 200, exit: { duration: 0.25 } }}
+                            animate={{ y: 0, opacity: 1, transition: { type: 'spring', damping: 25, stiffness: 200 } }}
+                            exit={{ opacity: 0, transition: { duration: 0.25 } }}
                         >
                             <div className="flex items-center justify-between px-3.5 py-[5px] border-t border-gray-100 bg-white">
                                 <span className="text-[10px] font-semibold text-[#202329]/60">Jonathan Moore</span>
