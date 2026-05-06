@@ -110,7 +110,8 @@
           </span>
           Core Integration
         </a></li>
-        <li><a class="sidebar-link sub" data-target="backend-webhook" href="#backend-webhook">Webhook payment-link</a></li>
+        <li><a class="sidebar-link sub" data-target="backend-login" href="#backend-login">Login</a></li>
+        <li><a class="sidebar-link sub" data-target="backend-authorize" href="#backend-authorize">Autorización transacción</a></li>
         <li><a class="sidebar-link sub" data-target="backend-claim" href="#backend-claim">Claim payment-link</a></li>
         <li><a class="sidebar-link sub" data-target="backend-security" href="#backend-security">Seguridad</a></li>
       </ul>
@@ -914,21 +915,41 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
       <h2>Core Integration · Backend</h2>
       <p class="lede">Tu backend es donde ocurre la transferencia real. Magic notifica los eventos de payment-link; tú procesas el claim y mueves el dinero por tu rail.</p>
 
-      <h3 id="backend-webhook">Flujo de creación de payment-link</h3>
-      <p>Después de crear un nuevo payment-link, magic notifica vía webhook. Crea un endpoint para recibir esta información y guarda <strong>todos los valores</strong>: los necesitarás para el proceso de claim.</p>
+      <h3 id="backend-login">Flujo de validación previa (login)</h3>
+      <p>Antes de autorizar una transacción, magic envía las credenciales del usuario a tu backend para validar la contraseña encriptada. Expón un endpoint que reciba este payload y responda con la verificación.</p>
 
       <div class="code-card">
         <div class="code-tabs">
-          <button class="code-tab active" data-tab="b-webhook"><span class="lang-dot dot-json"></span>POST · webhook payload</button>
+          <button class="code-tab active" data-tab="b-login"><span class="lang-dot dot-json"></span>POST · login payload</button>
           <span class="code-tabs-spacer"></span>
           <button class="copy-btn">Copiar</button>
         </div>
-<pre class="code-pane active" data-pane="b-webhook"><code>{
-  <span class="tk-key">"paymentId"</span>: <span class="tk-str">"4679b372-e3d4-43f4-a978-ac23a13aeb3c"</span>,
-  <span class="tk-key">"userId"</span>:    <span class="tk-str">"fd80789f-213e-452f-a83c-d241f6c1e0ed"</span>,
-  <span class="tk-key">"accountId"</span>: <span class="tk-str">"1eaca391-995c-4760-96d5-58c9f438cf6f"</span>,
-  <span class="tk-key">"token"</span>:     <span class="tk-str">"1eaca391-995c-4760-96d5-58c9f438cf6f"</span>,
-  <span class="tk-key">"amount"</span>:    <span class="tk-num">100</span>
+<pre class="code-pane active" data-pane="b-login"><code>{
+  <span class="tk-key">"userid"</span>:   <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</span>,
+  <span class="tk-key">"password"</span>: <span class="tk-str">"password_encrypted"</span>
+}</code></pre>
+      </div>
+
+      <h3 id="backend-authorize">Flujo de autorización de transacción</h3>
+      <p>Una vez validado el login, magic notifica la autorización del payment-link. Crea un endpoint para recibir esta información y guarda <strong>todos los valores</strong>: los necesitarás para el proceso de claim.</p>
+
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="b-authorize"><span class="lang-dot dot-json"></span>POST · authorize payload</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="b-authorize"><code>{
+  <span class="tk-key">"userId"</span>:        <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</span>,
+  <span class="tk-key">"tokenFinsus"</span>:   <span class="tk-str">"13245"</span>,
+  <span class="tk-key">"paymentLinkId"</span>: <span class="tk-str">"magic251205001"</span>,
+  <span class="tk-key">"accountId"</span>:     <span class="tk-str">"1234"</span>,
+  <span class="tk-key">"amount"</span>:        <span class="tk-num">1</span>,
+  <span class="tk-key">"location"</span>: {
+    <span class="tk-key">"latitud"</span>:  <span class="tk-num">20.967370</span>,
+    <span class="tk-key">"longitud"</span>: <span class="tk-num">-89.592586</span>,
+    <span class="tk-key">"ip"</span>:       <span class="tk-str">"127.0.0.1"</span>
+  }
 }</code></pre>
       </div>
 
@@ -942,9 +963,19 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
           <button class="copy-btn">Copiar</button>
         </div>
 <pre class="code-pane active" data-pane="b-claim"><code>{
-  <span class="tk-key">"paymentId"</span>:       <span class="tk-str">"4679b372-e3d4-43f4-a978-ac23a13aeb3c"</span>,
-  <span class="tk-key">"token"</span>:           <span class="tk-str">"1eaca391-995c-4760-96d5-58c9f438cf6f"</span>,
-  <span class="tk-key">"receptorAccount"</span>: <span class="tk-str">"012180015532594712"</span>
+  <span class="tk-key">"userId"</span>:          <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</span>,
+  <span class="tk-key">"paymentLinkId"</span>:   <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-ffffffffffff"</span>,
+  <span class="tk-key">"receptorAccount"</span>: <span class="tk-str">"01234567891234679"</span>,
+  <span class="tk-key">"receptorName"</span>:    <span class="tk-str">"Juan Pérez"</span>,
+  <span class="tk-key">"receptorBank"</span>:    <span class="tk-str">"40012"</span>,
+  <span class="tk-key">"concept"</span>:         <span class="tk-str">"Pago de mp"</span>,
+  <span class="tk-key">"type"</span>:            <span class="tk-str">"CLABE"</span>,
+  <span class="tk-key">"amount"</span>:          <span class="tk-num">1.00</span>,
+  <span class="tk-key">"location"</span>: {
+    <span class="tk-key">"latitud"</span>:  <span class="tk-num">20.967370</span>,
+    <span class="tk-key">"longitud"</span>: <span class="tk-num">-89.592586</span>,
+    <span class="tk-key">"ip"</span>:       <span class="tk-str">"127.0.0.1"</span>
+  }
 }</code></pre>
       </div>
 
