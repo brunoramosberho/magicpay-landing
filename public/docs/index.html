@@ -464,7 +464,14 @@ github.actor=digital</code></pre>
       </ol>
 
       <h3 id="android-init">Inicialización</h3>
-      <p>Inicializa el SDK desde tu <code>Application</code>. Es la única configuración global que necesitas.</p>
+      <p>Inicializa el SDK <strong>obligatoriamente desde tu clase <code>Application</code></strong>, en <code>onCreate()</code>. Es la única configuración global que necesitas.</p>
+      <div class="callout warn">
+        <span class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 9v4M12 17h.01"/></svg></span>
+        <div class="callout-body">
+          <strong>No lo inicialices en una Activity</strong>
+          <p>Magic mantiene estado global (sesión, claves, configuración remota). Inicializarlo dentro de una Activity, Fragment o Composable produce comportamiento inconsistente y posibles crashes al recrearse el proceso. Tiene que vivir en la <code>Application</code>.</p>
+        </div>
+      </div>
 
       <div class="code-card">
         <div class="code-tabs">
@@ -511,7 +518,7 @@ github.actor=digital</code></pre>
       <p>No necesitas agregar el teclado a mano. Está declarado en el manifest del SDK e incluido automáticamente al compilar. Para usarlo, el usuario debe enrolarse primero.</p>
 
       <h4>Features de aplicación</h4>
-      <p>El composable <code>Magic</code> verifica si el usuario completó onboarding. Tu única responsabilidad es renderizarlo cuando lo necesites; si ya completó onboarding, el SDK abre directamente el home de magic.</p>
+      <p>El composable <code>Dashboard</code> se monta dentro del scope de <code>MagicManager.App { ... }</code> y verifica si el usuario completó onboarding. Tu única responsabilidad es renderizarlo cuando lo necesites; si ya completó onboarding, el SDK abre directamente el home de magic.</p>
 
       <div class="code-card">
         <div class="code-tabs">
@@ -525,9 +532,11 @@ github.actor=digital</code></pre>
     startDestination = <span class="tk-str">"YOUR_START_DESTINATION_ROUTE"</span>
 ) {
     <span class="tk-fn">composable</span>(<span class="tk-str">"MAGIC_FEATURES_ROUTE"</span>) {
-        MagicManager.App.<span class="tk-fn">Magic</span>(
-            onUserDataNeeded = { userData }
-        )
+        MagicManager.<span class="tk-fn">App</span> {
+            <span class="tk-fn">Dashboard</span>(
+                onUserDataNeeded = { userData }
+            )
+        }
     }
 }</code></pre>
 <pre class="code-pane" data-pane="a-feat-frag"><code><span class="tk-kw">class</span> <span class="tk-typ">MiFragment</span> : <span class="tk-typ">Fragment</span>() {
@@ -538,9 +547,11 @@ github.actor=digital</code></pre>
     ): View {
         <span class="tk-kw">return</span> <span class="tk-fn">ComposeView</span>(<span class="tk-fn">requireContext</span>()).<span class="tk-fn">apply</span> {
             <span class="tk-fn">setContent</span> {
-                MagicManager.App.<span class="tk-fn">Magic</span>(
-                    onUserDataNeeded = { userData }
-                )
+                MagicManager.<span class="tk-fn">App</span> {
+                    <span class="tk-fn">Dashboard</span>(
+                        onUserDataNeeded = { userData }
+                    )
+                }
             }
         }
     }
