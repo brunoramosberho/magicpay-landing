@@ -1,0 +1,226 @@
+/* ============================================================
+   MagicPay — Colors & Type
+   Source of truth: Figma Brandbook + landing-page globals.css
+   ============================================================ */
+
+/* ---------- Fonts ---------- */
+@font-face {
+  font-family: 'Apercu Pro';
+  src: url('./fonts/ApercuRegular.woff2') format('woff2'),
+       url('./fonts/ApercuRegular.woff')  format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Apercu Pro';
+  src: url('./fonts/ApercuMedium.woff2') format('woff2'),
+       url('./fonts/ApercuMedium.woff')  format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* SF Compact is an Apple system face used heavily inside the iOS
+   keyboard & device UI mocks. On the web we substitute with the
+   iOS system stack; fall back to Inter. */
+
+/* ---------- Design tokens ---------- */
+:root {
+  /* ===== Brand palette (from Brandbook page 05 "Color Palette") ===== */
+  --mp-white:      #FFFFFF;   /* primary background */
+  --mp-dark:       #202329;   /* primary foreground */
+  --mp-blue:       #306FF6;   /* primary brand / accent */
+  --mp-grey:       #F8F8F8;   /* soft surface */
+
+  /* ===== Neutrals (derived from Figma usage counts) ===== */
+  --mp-neutral-000: #FFFFFF;
+  --mp-neutral-050: #FAFAFA;
+  --mp-neutral-075: #F8F8F8;
+  --mp-neutral-100: #F2F2F2;
+  --mp-neutral-200: #E3E3E3;
+  --mp-neutral-300: #DEDEDE;
+  --mp-neutral-400: #B5B5B5;
+  --mp-neutral-500: #777777;
+  --mp-neutral-600: #6E7174;
+  --mp-neutral-700: #696783;
+  --mp-neutral-800: #333333;
+  --mp-neutral-900: #1B1B1B;
+  --mp-neutral-950: #141414;
+  --mp-ink:         #202329;  /* the canonical dark */
+
+  /* ===== Blues (brand scale) ===== */
+  --mp-blue-50:   #EAF0FE;
+  --mp-blue-100:  #B7E9FC;   /* AuroraText secondary */
+  --mp-blue-400:  #306FF6;   /* brand */
+  --mp-blue-500:  #2A62DB;   /* hover */
+  --mp-blue-700:  #123888;   /* AuroraText deep */
+  --mp-blue-900:  #004685;   /* accent deep */
+  --mp-indigo:    #23223F;   /* supporting */
+  --mp-indigo-deep: #222B59;
+
+  /* ===== Semantic (payment states) ===== */
+  --mp-success:   #B5F2D3;   /* completed pill bg */
+  --mp-success-ink: #0F6B3E;
+  --mp-error:     #FF5F54;   /* destructive */
+  --mp-error-ink: #B64B4D;
+  --mp-warning:   #FFCF6B;
+  --mp-pending:   #6E7174;
+
+  /* ===== Alphas (used in overlays, strokes) ===== */
+  --mp-black-a10: rgba(0,0,0,0.10);
+  --mp-black-a13: rgba(0,0,0,0.13);
+  --mp-black-a15: rgba(0,0,0,0.15);
+  --mp-white-a10: rgba(255,255,255,0.10);
+  --mp-white-a14: rgba(255,255,255,0.14);
+  --mp-white-a20: rgba(255,255,255,0.20);
+  --mp-white-a60: rgba(255,255,255,0.60);
+  --mp-white-a70: rgba(250,250,250,0.70);
+
+  /* ===== Semantic aliases ===== */
+  --mp-bg:          var(--mp-white);
+  --mp-bg-alt:      var(--mp-neutral-075);
+  --mp-bg-inverse:  var(--mp-ink);
+  --mp-fg:          var(--mp-ink);
+  --mp-fg-muted:    #696783;
+  --mp-fg-subtle:   #6E7174;
+  --mp-fg-inverse:  var(--mp-white);
+  --mp-border:      var(--mp-neutral-300);
+  --mp-border-soft: var(--mp-black-a10);
+  --mp-accent:      var(--mp-blue);
+  --mp-accent-hover:var(--mp-blue-500);
+  --mp-accent-ink:  var(--mp-white);
+
+  /* ===== Type families ===== */
+  --mp-font-display: 'Apercu Pro', ui-sans-serif, system-ui, sans-serif;
+  --mp-font-body:    'Apercu Pro', ui-sans-serif, system-ui, sans-serif;
+  /* SF Compact substitution for device UI mocks on web */
+  --mp-font-ios:     -apple-system, 'SF Compact', 'SF Pro Text',
+                     'Inter', system-ui, sans-serif;
+  --mp-font-label:   'Averta Std', 'Apercu Pro', system-ui, sans-serif;
+
+  /* ===== Type scale (display — Apercu Medium, lh 115%) ===== */
+  --mp-display-xxl: 88pt;    /* hero on landing */
+  --mp-display-xl:  clamp(48px, 7vw, 96px);
+  --mp-display-lg:  48px;
+  --mp-display-md:  40px;
+  --mp-display-sm:  32px;
+
+  /* ===== Type scale (body — Apercu Regular, lh 150%) ===== */
+  --mp-body-xl: 27px;   /* Brandbook typography sample */
+  --mp-body-lg: 21px;   /* brand-book body */
+  --mp-body-md: 18px;   /* Averta sub-headings in Brandbook */
+  --mp-body-sm: 16px;
+  --mp-body-xs: 14px;
+  --mp-body-xxs: 12px;
+
+  /* ===== Line heights ===== */
+  --mp-lh-display: 1.15;   /* 115% — from Brandbook page 08 */
+  --mp-lh-body:    1.5;    /* 150% */
+  --mp-lh-tight:   1.0;
+  --mp-lh-ui:      1.3;
+
+  /* ===== Weights ===== */
+  --mp-weight-regular: 400;
+  --mp-weight-medium:  500;   /* Apercu Medium — used for h1–h6 */
+
+  /* ===== Spacing ===== */
+  --mp-space-1:  4px;
+  --mp-space-2:  8px;
+  --mp-space-3:  12px;
+  --mp-space-4:  16px;
+  --mp-space-5:  20px;
+  --mp-space-6:  24px;
+  --mp-space-8:  32px;
+  --mp-space-10: 40px;
+  --mp-space-12: 48px;
+  --mp-space-16: 64px;
+  --mp-space-20: 80px;
+
+  /* ===== Radii (observed in Figma) ===== */
+  --mp-radius-xs:   8px;    /* chips, small controls */
+  --mp-radius-sm:   12px;   /* send-button, keyboard key */
+  --mp-radius-md:   16px;   /* inputs */
+  --mp-radius-lg:   24px;   /* keyboard top-bar surface */
+  --mp-radius-xl:   27px;   /* app cards (dashboard, auth panel) */
+  --mp-radius-2xl:  36px;   /* brand-book hero cards */
+  --mp-radius-pill: 180px;  /* CTA pill button */
+
+  /* ===== Shadows ===== */
+  --mp-shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+  --mp-shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
+  --mp-shadow-md: 0 2px 42px rgba(0,0,0,0.10);   /* keyboard surface, app cards */
+  --mp-shadow-lg: 0 2px 32px rgba(0,0,0,0.08),
+                  0 2px 32px color(display-p3 0 0 0 / 0.08);
+  --mp-shadow-cta:  0 6px 18px rgba(48,111,246,0.25);
+
+  /* ===== Motion ===== */
+  --mp-ease:         cubic-bezier(0.22, 1, 0.36, 1);
+  --mp-ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);
+  --mp-dur-fast:   120ms;
+  --mp-dur-base:   220ms;
+  --mp-dur-slow:   420ms;
+
+  /* ===== Blur ===== */
+  --mp-blur-md: 24px;  /* backdrop-filter used in keyboard + app panels */
+}
+
+/* ---------- Semantic element styles ---------- */
+html, body {
+  background: var(--mp-bg);
+  color: var(--mp-fg);
+  font-family: var(--mp-font-body);
+  font-weight: var(--mp-weight-regular);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--mp-font-display);
+  font-weight: var(--mp-weight-medium);
+  line-height: var(--mp-lh-display);
+  color: var(--mp-fg);
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+h1 { font-size: var(--mp-display-lg); }
+h2 { font-size: var(--mp-display-md); }
+h3 { font-size: var(--mp-display-sm); letter-spacing: -0.005em; }
+h4 { font-size: 24px; }
+h5 { font-size: 20px; }
+h6 { font-size: 18px; }
+
+p, .mp-p {
+  font-family: var(--mp-font-body);
+  font-size: var(--mp-body-sm);
+  line-height: var(--mp-lh-body);
+  color: var(--mp-fg);
+}
+
+small, .mp-caption {
+  font-size: var(--mp-body-xxs);
+  color: var(--mp-fg-muted);
+  line-height: 1.4;
+}
+
+code, kbd, pre, samp {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.9em;
+}
+
+hr {
+  border: 0;
+  border-top: 1.5px solid var(--mp-border-soft);
+  margin: var(--mp-space-8) 0;
+}
+
+::selection { background: var(--mp-blue-100); color: var(--mp-ink); }
+
+/* ---------- Utility classes ---------- */
+.mp-display   { font: var(--mp-weight-medium) var(--mp-display-lg)/var(--mp-lh-display) var(--mp-font-display); letter-spacing:-0.01em; }
+.mp-headline  { font: var(--mp-weight-medium) var(--mp-display-sm)/var(--mp-lh-display) var(--mp-font-display); }
+.mp-title     { font: var(--mp-weight-medium) 24px/1.2 var(--mp-font-display); }
+.mp-body      { font: var(--mp-weight-regular) var(--mp-body-sm)/var(--mp-lh-body) var(--mp-font-body); }
+.mp-body-lg   { font: var(--mp-weight-regular) var(--mp-body-lg)/var(--mp-lh-body) var(--mp-font-body); }
+.mp-caption   { font: var(--mp-weight-regular) var(--mp-body-xxs)/1.4 var(--mp-font-body); color: var(--mp-fg-muted); }
+.mp-label     { font: var(--mp-weight-medium) 12px/1.4 var(--mp-font-body); letter-spacing: 0.02em; text-transform: uppercase; color: var(--mp-fg-muted); }

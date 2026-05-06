@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Magic SDK · Guía de integración</title>
+<link rel="stylesheet" href="/docs/colors_and_type.css">
+<link rel="stylesheet" href="/docs/styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body data-theme="light" data-density="cozy">
+
+<!-- =================== TOPBAR =================== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark"><img src="/docs/assets/icon.svg" alt=""></span>
+      <span class="brand-name">magic</span>
+      <span class="brand-sep"></span>
+      <span class="brand-doctype">Documentación · SDK</span>
+    </a>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-meta">
+      <span>v0.2.2</span>
+      <span class="pill">Beta</span>
+    </div>
+  </div>
+</header>
+
+<div class="app">
+
+  <!-- =================== SIDEBAR =================== -->
+  <aside class="sidebar" data-screen-label="Sidebar">
+    <div class="sidebar-section">
+      <h6 class="sidebar-section-title">Empezar</h6>
+      <ul class="sidebar-links">
+        <li><a class="sidebar-link active" data-target="overview" href="#overview">
+          <span class="sidebar-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          </span>
+          Visión general
+        </a></li>
+        <li><a class="sidebar-link" data-target="architecture" href="#architecture">
+          <span class="sidebar-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          </span>
+          Arquitectura
+        </a></li>
+        <li><a class="sidebar-link" data-target="requirements" href="#requirements">
+          <span class="sidebar-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3 7-7"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </span>
+          Requisitos
+        </a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h6 class="sidebar-section-title">Plataformas</h6>
+      <ul class="sidebar-links">
+        <li><a class="sidebar-link" data-target="android" href="#android">
+          <span class="sidebar-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.48l1.84-3.18a.4.4 0 00-.69-.4l-1.86 3.22a11.4 11.4 0 00-9.78 0L5.25 5.9a.4.4 0 10-.69.4l1.84 3.18A10.7 10.7 0 001 18h22a10.7 10.7 0 00-5.4-8.52zM7 15.25a1 1 0 110-2 1 1 0 010 2zm10 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+          </span>
+          Android SDK
+        </a></li>
+        <li><a class="sidebar-link sub" data-target="android-install" href="#android-install">Instalación</a></li>
+        <li><a class="sidebar-link sub" data-target="android-init" href="#android-init">Inicialización</a></li>
+        <li><a class="sidebar-link sub" data-target="android-features" href="#android-features">Features</a></li>
+
+        <li><a class="sidebar-link" data-target="ios" href="#ios">
+          <span class="sidebar-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          </span>
+          iOS SDK
+        </a></li>
+        <li><a class="sidebar-link sub" data-target="ios-source" href="#ios-source">Source Control</a></li>
+        <li><a class="sidebar-link sub" data-target="ios-package" href="#ios-package">Agregar paquete</a></li>
+        <li><a class="sidebar-link sub" data-target="ios-groups" href="#ios-groups">App Groups</a></li>
+        <li><a class="sidebar-link sub" data-target="ios-privacy" href="#ios-privacy">Privacy & PiP</a></li>
+        <li><a class="sidebar-link sub" data-target="ios-extension" href="#ios-extension">Extensión teclado</a></li>
+        <li><a class="sidebar-link sub" data-target="ios-init" href="#ios-init">Inicialización</a></li>
+        <li><a class="sidebar-link sub" data-target="ios-checklist" href="#ios-checklist">Checklist</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h6 class="sidebar-section-title">Backend</h6>
+      <ul class="sidebar-links">
+        <li><a class="sidebar-link" data-target="backend" href="#backend">
+          <span class="sidebar-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg>
+          </span>
+          Core Integration
+        </a></li>
+        <li><a class="sidebar-link sub" data-target="backend-webhook" href="#backend-webhook">Webhook payment-link</a></li>
+        <li><a class="sidebar-link sub" data-target="backend-claim" href="#backend-claim">Claim payment-link</a></li>
+        <li><a class="sidebar-link sub" data-target="backend-security" href="#backend-security">Seguridad</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h6 class="sidebar-section-title">Soporte</h6>
+      <ul class="sidebar-links">
+        <li><a class="sidebar-link" data-target="faq" href="#faq">
+          <span class="sidebar-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 0c0 2-2.5 2-2.5 4"/><path d="M12 17h.01"/></svg>
+          </span>
+          Troubleshooting & FAQ
+        </a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- =================== MAIN =================== -->
+  <main class="main" id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <p class="hero-eyebrow">Guía de integración</p>
+      <h1>Magic SDK <br>para teclados y pagos por chat.</h1>
+      <p class="hero-lede">Una guía práctica para integrar el SDK de Magic en tus apps iOS y Android, conectar tu backend a los flujos de payment-link, y mantener la marca de tu banco siempre al frente.</p>
+      <div class="hero-meta">
+        <span class="chip dot">v0.2.2 estable</span>
+        <span class="chip">Android · iOS · Backend</span>
+        <span class="chip">Tiempo estimado · 30–45 min</span>
+        <span class="chip">Última actualización · Mayo 2026</span>
+      </div>
+
+      <div class="showcase">
+        <!-- Phone mock -->
+        <div class="showcase-phone">
+          <div class="kb-preview">
+            <!-- iMessage compose bar -->
+            <div class="kb-imessage-bar">
+              <span class="kb-imessage-plus">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              </span>
+              <span class="kb-imessage-field">Message...</span>
+              <svg class="kb-imessage-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/>
+              </svg>
+            </div>
+            <!-- Name bar -->
+            <div class="kb-name-bar">
+              <span class="kb-name">Jonathan Moore</span>
+              <span class="kb-name-sub">Main Account</span>
+            </div>
+            <!-- Keyboard body -->
+            <div class="kb-body">
+              <div class="kb-toolbar">
+                <svg class="kb-tool kb-tool-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+                <svg class="kb-tool kb-tool-dock" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="1" width="18" height="12" rx="2"/>
+                  <line x1="5" y1="4" x2="5.01" y2="4"/><line x1="10" y1="4" x2="10.01" y2="4"/><line x1="15" y1="4" x2="15.01" y2="4"/>
+                  <line x1="5" y1="7" x2="5.01" y2="7"/><line x1="10" y1="7" x2="10.01" y2="7"/><line x1="15" y1="7" x2="15.01" y2="7"/>
+                  <line x1="7" y1="10" x2="13" y2="10"/>
+                </svg>
+                <div class="kb-amount-pill"><span>$320</span></div>
+                <div class="kb-currency">
+                  <span>MXN</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+              <div class="kb-keys">
+                <div class="kb-key">1</div>
+                <div class="kb-key">2</div>
+                <div class="kb-key">3</div>
+                <div class="kb-key">4</div>
+                <div class="kb-key">5</div>
+                <div class="kb-key">6</div>
+                <div class="kb-key">7</div>
+                <div class="kb-key">8</div>
+                <div class="kb-key">9</div>
+                <div class="kb-key">.</div>
+                <div class="kb-key">0</div>
+                <div class="kb-key kb-key-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 9.75L14.25 12m0 0l2.25 2.25M14.25 12l2.25-2.25M14.25 12L12 14.25m-2.58 4.92l-6.374-6.375a1.125 1.125 0 010-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33z"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="kb-send">
+                <svg viewBox="0 0 16 16" fill="none">
+                  <rect width="16" height="16" rx="3" fill="currentColor" fill-opacity="0.2"/>
+                  <path d="M4.5 8L7 10.5L11.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Send
+              </div>
+              <div class="kb-bottom-bar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                <svg viewBox="0 0 24 34" fill="currentColor"><path d="M12 1a5 5 0 015 5v10a5 5 0 01-10 0V6a5 5 0 015-5zM4 14v2a8 8 0 0016 0v-2h2v2a10 10 0 01-9 9.95V30h5v2H6v-2h5v-4.05A10 10 0 012 16v-2h2z"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flow -->
+        <div class="showcase-flow">
+          <h3>Flujo end-to-end</h3>
+          <div class="flow-steps">
+            <div class="flow-step">
+              <span class="flow-step-num">1</span>
+              <div>
+                <div class="flow-step-label">Usuario activa el teclado magic</div>
+                <div class="flow-step-desc">Dentro de WhatsApp, iMessage, Telegram o cualquier app de chat.</div>
+              </div>
+            </div>
+            <div class="flow-step">
+              <span class="flow-step-num">2</span>
+              <div>
+                <div class="flow-step-label">Teclea un monto y autoriza</div>
+                <div class="flow-step-desc">El SDK encripta y solicita autorización biométrica con la información que tu app proveyó.</div>
+              </div>
+            </div>
+            <div class="flow-step">
+              <span class="flow-step-num">3</span>
+              <div>
+                <div class="flow-step-label">Tu backend recibe el webhook</div>
+                <div class="flow-step-desc">Magic notifica el nuevo <code>paymentId</code>; tu sistema lo guarda para el claim.</div>
+              </div>
+            </div>
+            <div class="flow-step">
+              <span class="flow-step-num">4</span>
+              <div>
+                <div class="flow-step-label">Receptor abre el link y reclama</div>
+                <div class="flow-step-desc">Tu backend ejecuta la transferencia por SPEI, SEPA o el rail local que uses.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ OVERVIEW ============ -->
+    <section class="doc-section" id="overview">
+      <p class="section-eyebrow">01 · Empezar</p>
+      <h2>Visión general</h2>
+      <p class="lede">El SDK de Magic está dividido en tres módulos independientes. Lo más común es integrar los tres, pero puedes empezar por la plataforma móvil que más uses.</p>
+
+      <div class="modules">
+        <a class="module-card" href="#android">
+          <div class="module-card-head"><span class="dot" style="background:#3DDC84"></span> Módulo</div>
+          <div class="module-card-title">Android SDK</div>
+          <div class="module-card-desc">SDK Kotlin + Jetpack Compose. Incluye el teclado, las pantallas de onboarding y home.</div>
+          <div class="module-card-foot">Empezar <span class="glyph-arrow"></span></div>
+        </a>
+        <a class="module-card" href="#ios">
+          <div class="module-card-head"><span class="dot" style="background:#202329"></span> Módulo</div>
+          <div class="module-card-title">iOS SDK</div>
+          <div class="module-card-desc">SDK SwiftUI + Custom Keyboard Extension con almacenamiento compartido vía App Group.</div>
+          <div class="module-card-foot">Empezar <span class="glyph-arrow"></span></div>
+        </a>
+        <a class="module-card" href="#backend">
+          <div class="module-card-head"><span class="dot" style="background:#306FF6"></span> Módulo</div>
+          <div class="module-card-title">Core / Backend</div>
+          <div class="module-card-desc">Webhooks de payment-link y endpoint de claim. Aquí ocurre la transferencia real.</div>
+          <div class="module-card-foot">Empezar <span class="glyph-arrow"></span></div>
+        </a>
+      </div>
+
+      <div class="callout note">
+        <span class="callout-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v5M12 16h.01"/></svg>
+        </span>
+        <div class="callout-body">
+          <strong>magic nunca custodia fondos.</strong>
+          <p>Tu app es responsable de ejecutar la transferencia en tus rails locales (SPEI, SEPA, Pix…). Magic orquesta la UX y produce un payment-link, tu backend hace el movimiento real.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ARCHITECTURE ============ -->
+    <section class="doc-section" id="architecture">
+      <p class="section-eyebrow">02 · Empezar</p>
+      <h2>Arquitectura del flujo</h2>
+      <p>Cada pieza tiene una sola responsabilidad. La siguiente vista resume cómo se conectan tu app, el SDK y tu backend.</p>
+
+      <div class="diagram">
+        <p class="diagram-title">Diagrama · Send money</p>
+        <svg viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <!-- App -->
+          <g>
+            <rect x="20" y="40" width="170" height="200" rx="20" fill="#FFFFFF" stroke="#E3E3E3"/>
+            <text x="105" y="72" text-anchor="middle" font-family="Apercu Pro, sans-serif" font-weight="500" font-size="13" fill="#6E7174" letter-spacing="0.6">TU APP DE BANCO</text>
+            <rect x="42" y="92" width="126" height="40" rx="10" fill="#F8F8F8"/>
+            <text x="105" y="117" text-anchor="middle" font-family="Apercu Pro" font-size="13" fill="#202329">UserData / Auth</text>
+            <rect x="42" y="142" width="126" height="40" rx="10" fill="#F8F8F8"/>
+            <text x="105" y="167" text-anchor="middle" font-family="Apercu Pro" font-size="13" fill="#202329">getMainView()</text>
+            <rect x="42" y="192" width="126" height="36" rx="10" fill="#EAF0FE"/>
+            <text x="105" y="215" text-anchor="middle" font-family="Apercu Pro" font-size="12" fill="#306FF6">Magic SDK</text>
+          </g>
+
+          <!-- Arrow 1 -->
+          <g stroke="#B5B5B5" fill="none" stroke-width="1.5">
+            <path d="M195 140 L290 140" stroke-dasharray="4 4"/>
+            <path d="M285 134 L295 140 L285 146" />
+          </g>
+          <text x="242" y="132" text-anchor="middle" font-family="Apercu Pro" font-size="11" fill="#6E7174">activa</text>
+
+          <!-- Keyboard -->
+          <g>
+            <rect x="295" y="40" width="170" height="200" rx="20" fill="#202329"/>
+            <text x="380" y="72" text-anchor="middle" font-family="Apercu Pro" font-weight="500" font-size="13" fill="rgba(255,255,255,0.6)" letter-spacing="0.6">TECLADO MAGIC</text>
+            <rect x="317" y="92" width="126" height="40" rx="10" fill="rgba(255,255,255,0.06)"/>
+            <text x="380" y="117" text-anchor="middle" font-family="Apercu Pro" font-size="13" fill="#FFFFFF">Monto + biometría</text>
+            <rect x="317" y="142" width="126" height="40" rx="10" fill="rgba(255,255,255,0.06)"/>
+            <text x="380" y="167" text-anchor="middle" font-family="Apercu Pro" font-size="13" fill="#FFFFFF">Genera link</text>
+            <rect x="317" y="192" width="126" height="36" rx="10" fill="#306FF6"/>
+            <text x="380" y="215" text-anchor="middle" font-family="Apercu Pro" font-size="12" fill="#FFFFFF">$ paymentId</text>
+          </g>
+
+          <!-- Arrow 2 -->
+          <g stroke="#306FF6" fill="none" stroke-width="1.5">
+            <path d="M470 140 L565 140"/>
+            <path d="M560 134 L570 140 L560 146" />
+          </g>
+          <text x="517" y="132" text-anchor="middle" font-family="Apercu Pro" font-size="11" fill="#306FF6">webhook</text>
+
+          <!-- Backend -->
+          <g>
+            <rect x="570" y="40" width="210" height="200" rx="20" fill="#FFFFFF" stroke="#E3E3E3"/>
+            <text x="675" y="72" text-anchor="middle" font-family="Apercu Pro" font-weight="500" font-size="13" fill="#6E7174" letter-spacing="0.6">TU BACKEND</text>
+            <rect x="592" y="92" width="166" height="40" rx="10" fill="#F8F8F8"/>
+            <text x="675" y="117" text-anchor="middle" font-family="Apercu Pro" font-size="13" fill="#202329">Webhook handler</text>
+            <rect x="592" y="142" width="166" height="40" rx="10" fill="#F8F8F8"/>
+            <text x="675" y="167" text-anchor="middle" font-family="Apercu Pro" font-size="13" fill="#202329">Endpoint claim</text>
+            <rect x="592" y="192" width="166" height="36" rx="10" fill="#B5F2D3"/>
+            <text x="675" y="215" text-anchor="middle" font-family="Apercu Pro" font-size="12" fill="#0F6B3E">SPEI / SEPA / rail</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ============ REQUIREMENTS ============ -->
+    <section class="doc-section" id="requirements">
+      <p class="section-eyebrow">03 · Empezar</p>
+      <h2>Requisitos por plataforma</h2>
+      <p>Antes de empezar, asegúrate de cumplir con los siguientes mínimos. Cualquier requisito que falte se traduce en un error de compilación o un teclado que no aparece.</p>
+
+      <table class="req-table">
+        <thead>
+          <tr>
+            <th>Plataforma</th>
+            <th>Versión mínima</th>
+            <th>Acceso</th>
+            <th>Capabilities</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label"><span class="platform-cell"><span class="platform-icon android">A</span> Android</span></td>
+            <td>SDK 24+ (Android 7.0)</td>
+            <td>GitHub Packages PAT</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td class="label"><span class="platform-cell"><span class="platform-icon ios">i</span> iOS</span></td>
+            <td>iOS 13+ · Xcode 15+</td>
+            <td>GitHub PAT (fine-grained)</td>
+            <td>App Groups, Background Modes (PiP)</td>
+          </tr>
+          <tr>
+            <td class="label"><span class="platform-cell"><span class="platform-icon backend">B</span> Backend</span></td>
+            <td>HTTPS público</td>
+            <td>API key Magic</td>
+            <td>Webhook + endpoint de claim</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============ ANDROID ============ -->
+    <section class="doc-section" id="android">
+      <p class="section-eyebrow">Plataforma · Android</p>
+      <h2>Android SDK</h2>
+      <p class="lede">El SDK Android se distribuye por GitHub Packages (Maven). Está construido sobre Jetpack Compose: las features se exponen como composables que tú decides dónde montar.</p>
+
+      <h3 id="android-install">Instalación</h3>
+
+      <ol class="steps">
+        <li><div class="step-content">
+          <p class="step-title">Configura el repositorio Maven de GitHub Packages</p>
+          <p>Agrégalo en tu <code>settings.gradle</code> apuntando al feed privado de Magic.</p>
+          <div class="code-card">
+            <div class="code-tabs">
+              <button class="code-tab active" data-tab="g1-groovy"><span class="lang-dot dot-groovy"></span>settings.gradle</button>
+              <span class="code-tabs-spacer"></span>
+              <button class="copy-btn">Copiar</button>
+            </div>
+<pre class="code-pane active" data-pane="g1-groovy"><code><span class="tk-com">// settings.gradle</span>
+<span class="tk-fn">maven</span> {
+    url = <span class="tk-fn">uri</span>(<span class="tk-str">"https://maven.pkg.github.com/...."</span>)
+    <span class="tk-fn">credentials</span> {
+        username = project.<span class="tk-fn">findProperty</span>(<span class="tk-str">"gpr.user"</span>) <span class="tk-kw">as</span> String? ?: System.<span class="tk-fn">getenv</span>(<span class="tk-str">"USERNAME"</span>)
+        password = project.<span class="tk-fn">findProperty</span>(<span class="tk-str">"gpr.key"</span>)  <span class="tk-kw">as</span> String? ?: System.<span class="tk-fn">getenv</span>(<span class="tk-str">"TOKEN"</span>)
+    }
+}</code></pre>
+          </div>
+          <div class="callout warn">
+            <span class="callout-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 9v4M12 17h.01"/></svg>
+            </span>
+            <div class="callout-body">
+              <strong>No commits a tu repositorio</strong>
+              <p>Define <code>gpr.user</code> y <code>gpr.key</code> en <code>local.properties</code> (gitignored) o como variables de entorno en CI/CD (<code>USERNAME</code>, <code>TOKEN</code>).</p>
+            </div>
+          </div>
+        </div></li>
+
+        <li><div class="step-content">
+          <p class="step-title">Agrega tu Personal Access Token</p>
+          <p>En tu <code>local.properties</code> coloca tu usuario de GitHub y tu PAT con permisos de lectura sobre el paquete.</p>
+          <div class="code-card">
+            <div class="code-tabs">
+              <button class="code-tab active" data-tab="g2-props"><span class="lang-dot dot-bash"></span>local.properties</button>
+              <span class="code-tabs-spacer"></span>
+              <button class="copy-btn">Copiar</button>
+            </div>
+<pre class="code-pane active" data-pane="g2-props"><code>github.token=YOUR_TOKEN
+github.actor=digital</code></pre>
+          </div>
+        </div></li>
+
+        <li><div class="step-content">
+          <p class="step-title">Agrega la dependencia del SDK</p>
+          <div class="code-card">
+            <div class="code-tabs">
+              <button class="code-tab active" data-tab="g3-groovy"><span class="lang-dot dot-groovy"></span>build.gradle (module)</button>
+              <span class="code-tabs-spacer"></span>
+              <button class="copy-btn">Copiar</button>
+            </div>
+<pre class="code-pane active" data-pane="g3-groovy"><code>dependencies {
+    <span class="tk-fn">implementation</span>(<span class="tk-str">"com.magic:-magic:xxxxxx"</span>)
+}</code></pre>
+          </div>
+          <div class="callout tip">
+            <span class="callout-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+            </span>
+            <div class="callout-body">
+              <strong>Documentación oficial de Gradle</strong>
+              <p>Para detalles sobre Kotlin DSL o Groovy, revisa <a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry">Working with the Gradle registry · GitHub Docs</a>.</p>
+            </div>
+          </div>
+        </div></li>
+      </ol>
+
+      <h3 id="android-init">Inicialización</h3>
+      <p>Inicializa el SDK desde tu <code>Application</code>. Es la única configuración global que necesitas.</p>
+
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="a-init"><span class="lang-dot dot-kotlin"></span>Kotlin</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="a-init"><code><span class="tk-kw">import</span> com.magic.payments.magic.EnvironmentData
+<span class="tk-kw">import</span> com.magic.payments.magic.MagicManager
+<span class="tk-kw">import</span> com.magic.payments.magic.MagicEnvironmentType
+
+<span class="tk-kw">class</span> <span class="tk-typ">MyApp</span> : <span class="tk-typ">Application</span> {
+    <span class="tk-kw">override fun</span> <span class="tk-fn">onCreate</span>() {
+        <span class="tk-kw">super</span>.<span class="tk-fn">onCreate</span>()
+
+        <span class="tk-kw">val</span> myEnvironmentData = <span class="tk-fn">EnvironmentData</span>(
+            type = MagicEnvironmentType.DEVELOPMENT,
+            apiKey = <span class="tk-str">"YOUR_API_KEY"</span>
+        )
+
+        MagicManager.<span class="tk-fn">init</span>(
+            applicationContext = <span class="tk-kw">this</span>,
+            deviceId = <span class="tk-str">"YOUR_DEVICE_ID"</span>, <span class="tk-com">// puede ser null</span>
+            environmentData = myEnvironmentData
+        )
+    }
+}</code></pre>
+      </div>
+
+      <div class="callout note">
+        <span class="callout-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v5M12 16h.01"/></svg>
+        </span>
+        <div class="callout-body">
+          <strong>Sobre <code>deviceId</code> y <code>EnvironmentType</code></strong>
+          <p>Si no provees un <code>deviceId</code>, el SDK genera uno automáticamente. Las opciones de <code>EnvironmentType</code> son <code>PRODUCTION</code> y <code>DEVELOPMENT</code>.</p>
+        </div>
+      </div>
+
+      <h3 id="android-features">Implementación de features</h3>
+      <p>Hay dos tipos de features: <strong>de aplicación</strong> y <strong>de teclado</strong>. Todas están construidas con Jetpack Compose; las funciones devuelven composables que insertas en tu <code>NavHost</code> o dentro de un fragment.</p>
+
+      <h4>Features de teclado</h4>
+      <p>No necesitas agregar el teclado a mano. Está declarado en el manifest del SDK e incluido automáticamente al compilar. Para usarlo, el usuario debe enrolarse primero.</p>
+
+      <h4>Features de aplicación</h4>
+      <p>El composable <code>Magic</code> verifica si el usuario completó onboarding. Tu única responsabilidad es renderizarlo cuando lo necesites; si ya completó onboarding, el SDK abre directamente el home de magic.</p>
+
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="a-feat"><span class="lang-dot dot-kotlin"></span>Jetpack Compose</button>
+          <button class="code-tab" data-tab="a-feat-frag"><span class="lang-dot dot-kotlin"></span>Fragment (no Compose)</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="a-feat"><code><span class="tk-fn">NavHost</span>(
+    navController = navController,
+    startDestination = <span class="tk-str">"YOUR_START_DESTINATION_ROUTE"</span>
+) {
+    <span class="tk-fn">composable</span>(<span class="tk-str">"MAGIC_FEATURES_ROUTE"</span>) {
+        MagicManager.App.<span class="tk-fn">Magic</span>(
+            onUserDataNeeded = { userData }
+        )
+    }
+}</code></pre>
+<pre class="code-pane" data-pane="a-feat-frag"><code><span class="tk-kw">class</span> <span class="tk-typ">MiFragment</span> : <span class="tk-typ">Fragment</span>() {
+    <span class="tk-kw">override fun</span> <span class="tk-fn">onCreateView</span>(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        <span class="tk-kw">return</span> <span class="tk-fn">ComposeView</span>(<span class="tk-fn">requireContext</span>()).<span class="tk-fn">apply</span> {
+            <span class="tk-fn">setContent</span> {
+                MagicManager.App.<span class="tk-fn">Magic</span>(
+                    onUserDataNeeded = { userData }
+                )
+            }
+        }
+    }
+}</code></pre>
+      </div>
+
+      <h4><code>UserData</code> y <code>AuthorizationData</code></h4>
+      <p>El lambda <code>onUserDataNeeded</code> espera un objeto <code>UserData</code>. Carga los datos antes de mostrar las features de magic — solo se recolectan después de que el usuario acepta los términos, y se almacenan de forma segura.</p>
+
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="a-userdata"><span class="lang-dot dot-kotlin"></span>Kotlin</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="a-userdata"><code><span class="tk-kw">import</span> com.magic.payments.magic.AccountData
+<span class="tk-kw">import</span> com.magic.payments.magic.ClientAuthorizationData
+<span class="tk-kw">import</span> com.magic.payments.magic.MagicManager
+<span class="tk-kw">import</span> com.magic.payments.magic.UserData
+
+<span class="tk-com">// Debe haber al menos una cuenta</span>
+<span class="tk-kw">val</span> accountList = <span class="tk-fn">listOf</span>(
+    <span class="tk-fn">AccountData</span>(
+        accountId = <span class="tk-str">"ACCOUNT_ID"</span>,
+        alias = <span class="tk-str">"ACCOUNT_ALIAS"</span> <span class="tk-com">// visible al usuario</span>
+    )
+)
+
+<span class="tk-kw">val</span> authorizationData = <span class="tk-fn">ClientAuthorizationData</span>(
+    password = <span class="tk-str">"PASSWORD"</span>,         <span class="tk-com">// nullable</span>
+    pin = <span class="tk-str">"PIN"</span>,                   <span class="tk-com">// nullable</span>
+    base64PublicKey = <span class="tk-str">""</span>            <span class="tk-com">// requerido</span>
+)
+
+<span class="tk-kw">val</span> userData = <span class="tk-fn">UserData</span>(
+    userId = <span class="tk-str">"USER_ID"</span>,
+    username = <span class="tk-str">"USERNAME"</span>,
+    accountList = accountList,
+    authorizationData = authorizationData
+)</code></pre>
+      </div>
+
+      <ul>
+        <li><strong>password</strong> — contraseña de login. Se encripta con la llave asimétrica (<code>base64PublicKey</code>) y se re-encripta con el KeyStore vía biometría. Si se omite, el usuario la introduce durante el onboarding.</li>
+        <li><strong>pin</strong> — PIN para autorizar transacciones, almacenado de forma segura con biometría. Si se omite, el usuario lo introduce manualmente en cada pago.</li>
+        <li><strong>base64PublicKey</strong> — requerido para encriptar password y pin. Espera un <code>PublicKey</code> codificado en Base64.</li>
+      </ul>
+    </section>
+
+    <!-- ============ iOS ============ -->
+    <section class="doc-section" id="ios">
+      <p class="section-eyebrow">Plataforma · iOS</p>
+      <h2>iOS SDK</h2>
+      <p class="lede">El SDK de iOS se compone de dos targets: tu <strong>app principal</strong> y una <strong>Custom Keyboard Extension</strong>. Ambos comparten almacenamiento seguro vía un App Group.</p>
+
+      <div class="callout note">
+        <span class="callout-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v5M12 16h.01"/></svg></span>
+        <div class="callout-body">
+          <strong>Versión mínima</strong>
+          <p>iOS 13+. Componentes: <code>MagicPaySDK</code> (app principal) + <code>MagicSDK</code> (extensión de teclado).</p>
+        </div>
+      </div>
+
+      <h3 id="ios-source">1 · Source Control en Xcode</h3>
+      <p>Permite que Xcode descargue el SDK desde el repositorio privado.</p>
+      <ol>
+        <li>Abre <strong>Xcode → Settings → Source Control</strong>.</li>
+        <li>Haz clic en <strong>Add Account…</strong></li>
+        <li>Selecciona <strong>GitHub</strong>.</li>
+        <li>Inicia sesión con un Personal Access Token fine-grained (GitHub → Settings → Developer Settings → Personal Access Tokens).</li>
+      </ol>
+
+      <h3 id="ios-package">2 · Agregar el paquete al target principal</h3>
+      <ol>
+        <li>Selecciona tu <strong>Project</strong> en el navegador.</li>
+        <li>Abre <strong>Package Dependencies</strong>.</li>
+        <li>Haz clic en <strong>+</strong> → <strong>Add Package from GitHub</strong>.</li>
+        <li>Pega la URL del repositorio: <code>https://github.com/.....</code></li>
+        <li>Dependency Rule: <strong>Exact Version → 0.2.2</strong>.</li>
+        <li>Add to Target: el target de tu <strong>app principal</strong>.</li>
+        <li><strong>Add Package</strong>.</li>
+      </ol>
+      <div class="callout warn">
+        <span class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 9v4M12 17h.01"/></svg></span>
+        <div class="callout-body">
+          <strong>Importante</strong>
+          <p>Más adelante, cuando crees la extensión de teclado, asignarás <em>el mismo paquete</em> al target del teclado.</p>
+        </div>
+      </div>
+
+      <h3 id="ios-groups">3 · App Groups (almacenamiento seguro compartido)</h3>
+      <p>Magic requiere un contenedor compartido para sincronizar datos entre la app principal y el teclado.</p>
+      <ol>
+        <li>Selecciona <strong>Project → tu App Target → Signing &amp; Capabilities (All)</strong>.</li>
+        <li>Haz clic en <strong>+ Capability → App Groups</strong>.</li>
+        <li>Crea un nuevo App Group con el formato:</li>
+      </ol>
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="i-group"><span class="lang-dot dot-bash"></span>App Group ID</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="i-group"><code>group.&lt;yourcompany&gt;.&lt;yourapp&gt;.magicpay.shared</code></pre>
+      </div>
+      <p>Y agrégalo a tu <code>Info.plist</code>:</p>
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="i-plist"><span class="lang-dot dot-xml"></span>YourApp/Info.plist</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="i-plist"><code>&lt;<span class="tk-tag">key</span>&gt;SharedAppGroup&lt;/<span class="tk-tag">key</span>&gt;
+&lt;<span class="tk-tag">string</span>&gt;group.&lt;yourcompany&gt;.&lt;yourapp&gt;.magicpay.shared&lt;/<span class="tk-tag">string</span>&gt;</code></pre>
+      </div>
+
+      <h3 id="ios-privacy">4 · Privacy Usage Descriptions</h3>
+      <p>En <code>YourApp/Info.plist</code>, agrega o ajusta los mensajes para reflejar el tono de tu UX:</p>
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="i-priv"><span class="lang-dot dot-xml"></span>YourApp/Info.plist</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="i-priv"><code>&lt;<span class="tk-tag">key</span>&gt;NSFaceIDUsageDescription&lt;/<span class="tk-tag">key</span>&gt;
+&lt;<span class="tk-tag">string</span>&gt;Usamos Face ID para autorizar transacciones de forma segura.&lt;/<span class="tk-tag">string</span>&gt;
+
+&lt;<span class="tk-tag">key</span>&gt;NSTouchIDUsageDescription&lt;/<span class="tk-tag">key</span>&gt;
+&lt;<span class="tk-tag">string</span>&gt;Usamos Touch ID para autorizar transacciones de forma segura.&lt;/<span class="tk-tag">string</span>&gt;
+
+&lt;<span class="tk-tag">key</span>&gt;NSLocationWhenInUseUsageDescription&lt;/<span class="tk-tag">key</span>&gt;
+&lt;<span class="tk-tag">string</span>&gt;Usamos tu ubicación para reforzar la seguridad de la transacción.&lt;/<span class="tk-tag">string</span>&gt;</code></pre>
+      </div>
+
+      <h4>Background Modes &mdash; video-guía en Picture-in-Picture <span class="chip" style="background:var(--mp-blue-50);color:var(--mp-blue-700);font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;border:none;display:inline-block;margin-left:8px;vertical-align:middle;">Nuevo</span></h4>
+      <p>Para que el SDK muestre un <strong>video de guía en Picture-in-Picture</strong> mientras el usuario configura el teclado en Ajustes, agrega el capability <strong>Background Modes</strong> con la opción <em>Audio, AirPlay, and Picture in Picture</em> habilitada en el <strong>target principal</strong> de tu app.</p>
+      <ol>
+        <li>Abre tu proyecto en Xcode.</li>
+        <li>Selecciona el target principal de la app (no la extensión de teclado).</li>
+        <li>Ve a <strong>Signing &amp; Capabilities</strong>.</li>
+        <li>Toca <strong>+ Capability</strong> → busca y agrega <strong>Background Modes</strong>.</li>
+        <li>Marca la casilla <strong>Audio, AirPlay, and Picture in Picture</strong>.</li>
+      </ol>
+      <p>O agrégalo directo al <code>Info.plist</code> del target principal:</p>
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="i-pip"><span class="lang-dot dot-xml"></span>YourApp/Info.plist</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="i-pip"><code>&lt;<span class="tk-tag">key</span>&gt;UIBackgroundModes&lt;/<span class="tk-tag">key</span>&gt;
+&lt;<span class="tk-tag">array</span>&gt;
+    &lt;<span class="tk-tag">string</span>&gt;audio&lt;/<span class="tk-tag">string</span>&gt;
+    &lt;<span class="tk-tag">string</span>&gt;picture-in-picture&lt;/<span class="tk-tag">string</span>&gt;
+&lt;/<span class="tk-tag">array</span>&gt;</code></pre>
+      </div>
+      <div class="callout tip">
+        <span class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+        <div class="callout-body">
+          <strong>Sin esto, el flujo sigue funcionando</strong>
+          <p>Si no agregas el capability, la activación del teclado funciona normalmente — solo se omite el video. No hay crash; el fallback abre Settings sin el video, igual que antes.</p>
+        </div>
+      </div>
+
+      <h3 id="ios-extension">5 · Crear la Magic Keyboard Extension</h3>
+      <ol>
+        <li><strong>File → New → Target…</strong></li>
+        <li>Selecciona <strong>Custom Keyboard Extension</strong>.</li>
+        <li>Product Name: <code>MagicKeyboard</code> y <strong>Finish</strong>.</li>
+      </ol>
+      <p>Se agregará un nuevo folder con <code>KeyboardViewController.swift</code>.</p>
+
+      <h4>Configura la extensión</h4>
+      <ol>
+        <li>Target <code>MagicKeyboard</code> → <strong>General</strong>.</li>
+        <li>Display Name: <code>∗ magic</code> (con el nombre de tu app: <code>∗ magic – [App]</code>).</li>
+        <li>Asegúrate de que el <strong>Bundle Identifier</strong> contenga <code>magicpay</code>.</li>
+      </ol>
+
+      <h4>Agrega el SDK al target del teclado</h4>
+      <p>Project → Target → <code>YourAppKeyboard</code> → <strong>General → Frameworks and Libraries</strong> → agrega <code>MagicSDK</code>.</p>
+
+      <h4>App Group para el teclado</h4>
+      <ol>
+        <li>Target <code>MagicKeyboard</code> → <strong>Signing &amp; Capabilities (All)</strong>.</li>
+        <li>Agrega <strong>App Groups</strong>.</li>
+        <li>Selecciona el <em>mismo</em> App Group: <code>group.&lt;yourcompany&gt;.&lt;yourapp&gt;.magicpay.shared</code>.</li>
+        <li>En <code>Keyboard/Info.plist</code>, agrega <code>SharedAppGroup</code> con el mismo valor.</li>
+        <li>Asegúrate de que <code>RequestsOpenAccess = YES</code>:</li>
+      </ol>
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="i-roa"><span class="lang-dot dot-xml"></span>Keyboard/Info.plist</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="i-roa"><code>NSExtension → NSExtensionAttributes → RequestsOpenAccess = YES</code></pre>
+      </div>
+
+      <h3 id="ios-init">6 · Inicializar Magic en tu app</h3>
+      <p>El SDK detecta automáticamente si el usuario completó onboarding. Si lo hizo, muestra el Home; si no, muestra el flujo de Onboarding. Tu única responsabilidad es <strong>(1)</strong> proveer datos de usuario y cuenta y <strong>(2)</strong> llamar <code>getMainView()</code>.</p>
+      <div class="callout warn">
+        <span class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 9v4M12 17h.01"/></svg></span>
+        <div class="callout-body">
+          <strong>Inicialización en SwiftUI</strong>
+          <p>Declara el SDK como <code>@State</code> opcional e inicialízalo desde <code>.onAppear</code> con <code>@MainActor</code>. <strong>No</strong> lo inicialices en <code>init()</code> de la View — provoca problemas de threading.</p>
+        </div>
+      </div>
+
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="i-init"><span class="lang-dot dot-swift"></span>Swift · App principal</button>
+          <button class="code-tab" data-tab="i-kb"><span class="lang-dot dot-swift"></span>Swift · KeyboardViewController</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="i-init"><code><span class="tk-kw">import</span> SwiftUI
+<span class="tk-kw">import</span> MagicPaySDK
+<span class="tk-kw">import</span> MagicPayCoreSDK
+
+<span class="tk-kw">struct</span> <span class="tk-typ">ContentView</span>: <span class="tk-typ">View</span> {
+
+    <span class="tk-com">// Datos de cuenta del usuario</span>
+    <span class="tk-kw">let</span> accountList = [
+        <span class="tk-fn">AccountData</span>(accountId: <span class="tk-str">"ACCOUNT_ID"</span>, alias: <span class="tk-str">"ACCOUNT_ALIAS"</span>)
+    ]
+
+    <span class="tk-com">// Datos de autorización (password y PIN opcionales)</span>
+    <span class="tk-kw">var</span> authorizationData: <span class="tk-typ">ClientAuthorizationData</span> {
+        <span class="tk-fn">ClientAuthorizationData</span>(
+            password: <span class="tk-kw">nil</span>,        <span class="tk-com">// magic lo solicitará durante onboarding</span>
+            pin: <span class="tk-kw">nil</span>,             <span class="tk-com">// idem</span>
+            base64PublicKey: <span class="tk-kw">nil</span>   <span class="tk-com">// solo si se proporciona password/pin</span>
+        )
+    }
+
+    <span class="tk-kw">var</span> userData: <span class="tk-typ">UserData</span> {
+        <span class="tk-fn">UserData</span>(
+            userId: <span class="tk-str">"USER_ID"</span>,
+            username: <span class="tk-str">"USERNAME"</span>,
+            accountList: accountList,
+            authorizationData: authorizationData
+        )
+    }
+
+    <span class="tk-kw">let</span> envData = <span class="tk-fn">EnvironmentData</span>(
+        environment: .dev,            <span class="tk-com">// .dev o .production</span>
+        apiKey: <span class="tk-str">"API_KEY"</span>
+    )
+
+    <span class="tk-com">// ⚠️ IMPORTANTE: declarar el SDK como opcional</span>
+    @<span class="tk-typ">State</span> <span class="tk-kw">private var</span> magicPaySDK: <span class="tk-typ">MagicPaySDK</span>?
+    @<span class="tk-typ">State</span> <span class="tk-kw">private var</span> showMagic = <span class="tk-kw">false</span>
+
+    <span class="tk-com">// ⚠️ IMPORTANTE: inicializar con @MainActor desde .onAppear, NO en init()</span>
+    @<span class="tk-typ">MainActor</span>
+    <span class="tk-kw">func</span> <span class="tk-fn">initializeMagicPay</span>() {
+        <span class="tk-kw">guard</span> magicPaySDK == <span class="tk-kw">nil</span> <span class="tk-kw">else</span> { <span class="tk-kw">return</span> }
+        magicPaySDK = <span class="tk-fn">MagicPaySDK</span>(
+            environmentData: envData,
+            fetchUserData: { <span class="tk-kw">return</span> userData }
+        )
+    }
+
+    <span class="tk-kw">var</span> body: <span class="tk-kw">some</span> <span class="tk-typ">View</span> {
+        <span class="tk-fn">Button</span>(<span class="tk-str">"Iniciar Magic SDK"</span>) { showMagic = <span class="tk-kw">true</span> }
+            .<span class="tk-fn">disabled</span>(magicPaySDK == <span class="tk-kw">nil</span>)
+            .<span class="tk-fn">onAppear</span> { <span class="tk-fn">initializeMagicPay</span>() }
+            .<span class="tk-fn">sheet</span>(isPresented: $showMagic) {
+                <span class="tk-com">// Mostrar Magic (onboarding o home automático)</span>
+                <span class="tk-kw">if let</span> sdk = magicPaySDK {
+                    sdk.<span class="tk-fn">getMainView</span>()
+                }
+            }
+    }
+}</code></pre>
+<pre class="code-pane" data-pane="i-kb"><code><span class="tk-kw">import</span> UIKit
+<span class="tk-kw">import</span> SwiftUI
+<span class="tk-kw">import</span> MagicSDK
+<span class="tk-kw">import</span> MagicPayCoreSDK
+
+<span class="tk-kw">class</span> <span class="tk-typ">KeyboardViewController</span>: <span class="tk-typ">UIInputViewController</span> {
+    <span class="tk-kw">override func</span> <span class="tk-fn">viewDidLoad</span>() {
+        <span class="tk-kw">super</span>.<span class="tk-fn">viewDidLoad</span>()
+
+        <span class="tk-kw">let</span> envData = <span class="tk-fn">EnvironmentData</span>(
+            environment: .dev,
+            apiKey: <span class="tk-str">"API_KEY"</span>
+        )
+
+        <span class="tk-kw">let</span> magicKeyboard = MagicSDK.<span class="tk-fn">getKeyboardMainView</span>(
+            environmentData: envData,
+            textDocumentProxy: <span class="tk-kw">self</span>.textDocumentProxy,
+            inputViewController: <span class="tk-kw">self</span>,
+            switchKeyboardAction: { [<span class="tk-kw">weak</span> <span class="tk-kw">self</span>] <span class="tk-kw">in</span>
+                <span class="tk-kw">self</span>?.<span class="tk-fn">advanceToNextInputMode</span>()
+            }
+        )
+
+        <span class="tk-kw">let</span> child = <span class="tk-fn">UIHostingController</span>(rootView: magicKeyboard)
+        <span class="tk-kw">let</span> childView = child.view!
+        childView.translatesAutoresizingMaskIntoConstraints = <span class="tk-kw">false</span>
+        view.<span class="tk-fn">addSubview</span>(childView)
+
+        NSLayoutConstraint.<span class="tk-fn">activate</span>([
+            childView.topAnchor.<span class="tk-fn">constraint</span>(equalTo: view.topAnchor),
+            childView.leadingAnchor.<span class="tk-fn">constraint</span>(equalTo: view.leadingAnchor),
+            childView.trailingAnchor.<span class="tk-fn">constraint</span>(equalTo: view.trailingAnchor),
+            childView.bottomAnchor.<span class="tk-fn">constraint</span>(equalTo: view.bottomAnchor),
+            childView.heightAnchor.<span class="tk-fn">constraint</span>(equalToConstant: <span class="tk-num">390</span>)
+        ])
+    }
+}</code></pre>
+      </div>
+
+      <h4>Helper para desarrollo · <code>logOut()</code></h4>
+      <p>Durante desarrollo es útil resetear la sesión y el Keychain para volver a probar onboarding desde cero. <code>MagicPaySDK</code> expone un método estático que limpia las credenciales persistidas:</p>
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="i-logout"><span class="lang-dot dot-swift"></span>Swift · Reset session</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="i-logout"><code><span class="tk-com">// Limpia credenciales y caches de sesión.</span>
+<span class="tk-com">// Útil en builds de desarrollo para volver a probar onboarding.</span>
+MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
+      </div>
+
+      <h3 id="ios-checklist">Checklist de validación</h3>
+      <p>Antes de enviar a TestFlight, recorre cada punto. Marca cada item al confirmarlo en tu proyecto.</p>
+
+      <div class="checklist">
+        <div class="checklist-group">
+          <div class="checklist-group-head">App Groups</div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label">App y Keyboard tienen el mismo App Group habilitado en Signing &amp; Capabilities.</span><span class="checklist-status">Pending</span></div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label"><code>SharedAppGroup</code> presente en el Info.plist de la App con el valor correcto.</span><span class="checklist-status">Pending</span></div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label"><code>SharedAppGroup</code> presente en el Info.plist del Keyboard con el mismo valor exacto.</span><span class="checklist-status">Pending</span></div>
+        </div>
+        <div class="checklist-group">
+          <div class="checklist-group-head">SDK Targets</div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label"><code>magic_ios_sdk</code> agregado al target Main App.</span><span class="checklist-status">Pending</span></div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label"><code>magic_ios_sdk</code> agregado al target Keyboard.</span><span class="checklist-status">Pending</span></div>
+        </div>
+        <div class="checklist-group">
+          <div class="checklist-group-head">Configuración del Keyboard Target</div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label">Bundle Identifier del Keyboard contiene "<code>magicpay</code>".</span><span class="checklist-status">Pending</span></div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label"><code>RequestsOpenAccess = YES</code> incluido en el Info.plist del Keyboard (si requiere Full Access).</span><span class="checklist-status">Pending</span></div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label">Display Name del Keyboard configurado como <code>∗ magic</code>.</span><span class="checklist-status">Pending</span></div>
+        </div>
+        <div class="checklist-group">
+          <div class="checklist-group-head">Capabilities (App principal)</div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label">Background Modes con <em>Audio, AirPlay, and Picture in Picture</em> habilitado (para video-guía PiP).</span><span class="checklist-status">Pending</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BACKEND ============ -->
+    <section class="doc-section" id="backend">
+      <p class="section-eyebrow">Plataforma · Backend</p>
+      <h2>Core Integration · Backend</h2>
+      <p class="lede">Tu backend es donde ocurre la transferencia real. Magic notifica los eventos de payment-link; tú procesas el claim y mueves el dinero por tu rail.</p>
+
+      <h3 id="backend-webhook">Flujo de creación de payment-link</h3>
+      <p>Después de crear un nuevo payment-link, magic notifica vía webhook. Crea un endpoint para recibir esta información y guarda <strong>todos los valores</strong>: los necesitarás para el proceso de claim.</p>
+
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="b-webhook"><span class="lang-dot dot-json"></span>POST · webhook payload</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="b-webhook"><code>{
+  <span class="tk-key">"paymentId"</span>: <span class="tk-str">"4679b372-e3d4-43f4-a978-ac23a13aeb3c"</span>,
+  <span class="tk-key">"userId"</span>:    <span class="tk-str">"fd80789f-213e-452f-a83c-d241f6c1e0ed"</span>,
+  <span class="tk-key">"accountId"</span>: <span class="tk-str">"1eaca391-995c-4760-96d5-58c9f438cf6f"</span>,
+  <span class="tk-key">"token"</span>:     <span class="tk-str">"1eaca391-995c-4760-96d5-58c9f438cf6f"</span>,
+  <span class="tk-key">"amount"</span>:    <span class="tk-num">100</span>
+}</code></pre>
+      </div>
+
+      <h3 id="backend-claim">Flujo de claim del payment-link</h3>
+      <p>Necesitas un endpoint que reciba la solicitud de procesar el payment-link, ejecute la transacción y envíe el dinero a la cuenta del receptor.</p>
+
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="b-claim"><span class="lang-dot dot-json"></span>POST · claim payload</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="b-claim"><code>{
+  <span class="tk-key">"paymentId"</span>:       <span class="tk-str">"4679b372-e3d4-43f4-a978-ac23a13aeb3c"</span>,
+  <span class="tk-key">"token"</span>:           <span class="tk-str">"1eaca391-995c-4760-96d5-58c9f438cf6f"</span>,
+  <span class="tk-key">"receptorAccount"</span>: <span class="tk-str">"012180015532594712"</span>
+}</code></pre>
+      </div>
+
+      <h3 id="backend-security">Seguridad de la información</h3>
+      <div class="callout danger">
+        <span class="callout-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 9v4M12 17h.01"/></svg></span>
+        <div class="callout-body">
+          <strong>Encriptación obligatoria</strong>
+          <p>Para garantizar la seguridad, encripta la información mediante un proceso de <em>handshake</em> que comparta la llave de encriptación, o bien transporta el tráfico a través de una VPN.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="doc-section" id="faq">
+      <p class="section-eyebrow">Soporte</p>
+      <h2>Troubleshooting & FAQ</h2>
+      <p class="lede">Las dudas más comunes durante la integración. Si tu caso no aparece aquí, contacta a tu integrador asignado.</p>
+
+      <div class="faq">
+        <div class="faq-item">
+          <div class="faq-q">El teclado magic no aparece en la lista de teclados de iOS</div>
+          <div class="faq-a">
+            <p>Verifica en el target <code>MagicKeyboard</code> que el <strong>Bundle Identifier</strong> contenga <code>magicpay</code> y que el <strong>Display Name</strong> esté configurado como <code>∗ magic</code>. También asegúrate de que el target esté firmado con un Provisioning Profile válido.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">El teclado aparece pero no abre el flujo de pago</div>
+          <div class="faq-a">
+            <p>Casi siempre es App Groups. Confirma que (1) la App y el Keyboard tienen el <strong>mismo</strong> App Group habilitado en Signing &amp; Capabilities, y (2) el valor de <code>SharedAppGroup</code> es idéntico en ambos Info.plist. También revisa que <code>RequestsOpenAccess = YES</code> esté presente en el Info.plist del teclado.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">El video-guía no aparece en Picture-in-Picture</div>
+          <div class="faq-a">
+            <p>Falta el capability <strong>Background Modes</strong> con <em>Audio, AirPlay, and Picture in Picture</em> en el target principal. Sin él, el flujo del teclado funciona normal pero sin el video. Es opt-in: agrega el capability cuando estés listo.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Gradle no encuentra el paquete <code>com.magic:-magic</code></div>
+          <div class="faq-a">
+            <p>Verifica que el repositorio Maven en <code>settings.gradle</code> apunte al feed correcto y que tu PAT tenga permiso de lectura (<code>read:packages</code>). Para CI/CD, define <code>USERNAME</code> y <code>TOKEN</code> como variables de entorno.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">¿Necesito enviar password/PIN al inicializar el SDK?</div>
+          <div class="faq-a">
+            <p>No. Si los omites, magic los solicitará al usuario durante el onboarding. Si los provees, el SDK los encripta con tu <code>base64PublicKey</code> y los almacena de forma segura para autorizar pagos vía biometría.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">¿Qué pasa si <code>deviceId</code> es null?</div>
+          <div class="faq-a">
+            <p>El SDK genera uno automáticamente y lo persiste. Esto es válido para Android y iOS.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">No recibimos el webhook de payment-link</div>
+          <div class="faq-a">
+            <p>Confirma que la URL del webhook esté registrada en el dashboard de magic, sea HTTPS pública, y responda <code>200</code> en menos de 5s. Magic reintenta con backoff exponencial si la primera entrega falla.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>Magic SDK · v0.2.2 · Mayo 2026</span>
+        <span><a href="#top">Volver arriba ↑</a></span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =================== TOC =================== -->
+  <aside class="toc">
+    <h6 class="toc-title">En esta página</h6>
+    <ul class="toc-list">
+      <li><a data-target="overview" href="#overview">Visión general</a></li>
+      <li><a data-target="architecture" href="#architecture">Arquitectura</a></li>
+      <li><a data-target="requirements" href="#requirements">Requisitos</a></li>
+      <li><a data-target="android" href="#android">Android SDK</a></li>
+      <li><a class="toc-h3" data-target="android-install" href="#android-install">Instalación</a></li>
+      <li><a class="toc-h3" data-target="android-init" href="#android-init">Inicialización</a></li>
+      <li><a class="toc-h3" data-target="android-features" href="#android-features">Features</a></li>
+      <li><a data-target="ios" href="#ios">iOS SDK</a></li>
+      <li><a class="toc-h3" data-target="ios-source" href="#ios-source">Source Control</a></li>
+      <li><a class="toc-h3" data-target="ios-package" href="#ios-package">Paquete</a></li>
+      <li><a class="toc-h3" data-target="ios-groups" href="#ios-groups">App Groups</a></li>
+      <li><a class="toc-h3" data-target="ios-privacy" href="#ios-privacy">Privacy & PiP</a></li>
+      <li><a class="toc-h3" data-target="ios-extension" href="#ios-extension">Extensión</a></li>
+      <li><a class="toc-h3" data-target="ios-init" href="#ios-init">Inicialización</a></li>
+      <li><a class="toc-h3" data-target="ios-checklist" href="#ios-checklist">Checklist</a></li>
+      <li><a data-target="backend" href="#backend">Backend</a></li>
+      <li><a data-target="faq" href="#faq">FAQ</a></li>
+    </ul>
+  </aside>
+</div>
+
+<script src="/docs/app.js"></script>
+
+<!-- Tweaks panel -->
+<script type="text/babel" src="/docs/tweaks-panel.jsx"></script>
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "light",
+  "density": "compact",
+  "accent": "#306FF6",
+  "showFlowDiagram": true
+}/*EDITMODE-END*/;
+
+function TweaksApp() {
+  const [t, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+
+  React.useEffect(() => {
+    document.body.dataset.theme = t.theme;
+    document.body.dataset.density = t.density;
+    document.documentElement.style.setProperty('--mp-blue', t.accent);
+    document.documentElement.style.setProperty('--mp-accent', t.accent);
+    const diag = document.querySelector('#architecture .diagram');
+    if (diag) diag.style.display = t.showFlowDiagram ? '' : 'none';
+  }, [t]);
+
+  return (
+    <window.TweaksPanel title="Tweaks">
+      <window.TweakSection label="Tema" />
+      <window.TweakRadio label="Modo" value={t.theme}
+        options={['light', 'dark']}
+        onChange={v => setTweak('theme', v)} />
+      <window.TweakSection label="Densidad" />
+      <window.TweakRadio label="Espaciado" value={t.density}
+        options={['compact', 'cozy', 'comfy']}
+        onChange={v => setTweak('density', v)} />
+      <window.TweakSection label="Marca" />
+      <window.TweakColor label="Acento" value={t.accent}
+        options={['#306FF6', '#202329', '#0F6B3E', '#B97AE7']}
+        onChange={v => setTweak('accent', v)} />
+      <window.TweakToggle label="Mostrar diagrama" value={t.showFlowDiagram}
+        onChange={v => setTweak('showFlowDiagram', v)} />
+    </window.TweaksPanel>
+  );
+}
+
+const root = document.createElement('div');
+document.body.appendChild(root);
+ReactDOM.createRoot(root).render(<TweaksApp />);
+</script>
+</body>
+</html>
