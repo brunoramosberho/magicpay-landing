@@ -113,7 +113,7 @@ export default async function WhatsAppFaceIDHelpPage({
     <>
       <HeroHeader />
       <main className="px-4 pt-28 pb-20 sm:px-6 lg:pb-28">
-        <article className="mx-auto max-w-4xl">
+        <article className="mx-auto max-w-5xl">
 
           {/* ── Hero ── */}
           <header className="text-center space-y-5 mb-16">
@@ -157,7 +157,7 @@ export default async function WhatsAppFaceIDHelpPage({
             </div>
 
             {/* Navigation path: Settings → Privacy → App Lock */}
-            <div className="grid gap-6 md:grid-cols-3 mb-12">
+            <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-8 mb-12">
               {[
                 { label: t.step1_1Label, desc: t.step1_1Desc, num: "1", img: "/help/help-wa-settings.png" },
                 { label: t.step1_2Label, desc: t.step1_2Desc, num: "2", img: "/help/help-wa-privacy.png" },
@@ -171,14 +171,14 @@ export default async function WhatsAppFaceIDHelpPage({
                     <span className="text-base font-semibold text-foreground">{step.label}</span>
                   </div>
                   {step.img && (
-                    <div className="relative mx-auto w-full max-w-[280px] overflow-hidden rounded-2xl border border-border/60 shadow-lg transition-transform group-hover:scale-[1.02]">
+                    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-border/60 shadow-lg transition-transform group-hover:scale-[1.02]">
                       <Image
                         src={step.img}
                         alt={step.label}
-                        width={560}
-                        height={400}
+                        width={768}
+                        height={548}
                         className="w-full h-auto"
-                        quality={90}
+                        quality={95}
                       />
                     </div>
                   )}
@@ -188,20 +188,20 @@ export default async function WhatsAppFaceIDHelpPage({
             </div>
 
             {/* Before / After comparison */}
-            <div className="rounded-3xl border border-border bg-gradient-to-b from-card/80 to-background p-6 sm:p-10">
+            <div className="rounded-3xl border border-border bg-gradient-to-b from-card/80 to-background p-5 sm:p-10">
               <div className="grid gap-8 sm:grid-cols-2">
                 <div className="space-y-4 text-center">
                   <span className="inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-red-600">
                     {t.beforeLabel}
                   </span>
-                  <div className="relative mx-auto w-full max-w-[300px] overflow-hidden rounded-2xl border-2 border-red-200 shadow-lg">
+                  <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border-2 border-red-200 shadow-lg">
                     <Image
                       src="/help/help-wa-faceid-on.png"
                       alt="Face ID ON"
-                      width={600}
-                      height={430}
+                      width={768}
+                      height={548}
                       className="w-full h-auto"
-                      quality={90}
+                      quality={95}
                     />
                   </div>
                 </div>
@@ -210,14 +210,14 @@ export default async function WhatsAppFaceIDHelpPage({
                   <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-600">
                     {t.afterLabel}
                   </span>
-                  <div className="relative mx-auto w-full max-w-[300px] overflow-hidden rounded-2xl border-2 border-emerald-200 shadow-lg">
+                  <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border-2 border-emerald-200 shadow-lg">
                     <Image
                       src="/help/help-wa-faceid-off.png"
                       alt="Face ID OFF"
-                      width={600}
-                      height={430}
+                      width={768}
+                      height={548}
                       className="w-full h-auto"
-                      quality={90}
+                      quality={95}
                     />
                   </div>
                 </div>
@@ -262,14 +262,14 @@ export default async function WhatsAppFaceIDHelpPage({
                 </div>
               </div>
 
-              <div className="relative mx-auto w-full max-w-[380px] overflow-hidden rounded-2xl border border-border/60 shadow-xl">
+              <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-border/60 shadow-xl">
                 <Image
                   src="/help/help-ios-longpress.png"
                   alt="iOS long press menu"
-                  width={760}
-                  height={540}
+                  width={768}
+                  height={548}
                   className="w-full h-auto"
-                  quality={90}
+                  quality={95}
                 />
               </div>
             </div>
