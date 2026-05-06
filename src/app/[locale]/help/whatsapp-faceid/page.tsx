@@ -1,60 +1,8 @@
 import {HeroHeader} from "@/components/header";
 import Footer from "@/components/footer";
 import {Button} from "@/components/ui/button";
+import Image from "next/image";
 import type {Metadata} from "next";
-import type {ReactNode} from "react";
-
-type Step = {
-  label: string;
-  title: string;
-  description: ReactNode;
-  bullets?: ReactNode[];
-  footnote?: ReactNode;
-};
-
-type Highlight = {
-  title: string;
-  description: ReactNode;
-};
-
-type Section = {
-  eyebrow?: string;
-  title: string;
-  description?: ReactNode;
-  steps?: Step[];
-  highlights?: Highlight[];
-  checklist?: ReactNode[];
-  note?: ReactNode;
-};
-
-type Attachment = {
-  title: string;
-  description: ReactNode;
-  suggestions: string[];
-};
-
-type SupportBlock = {
-  title: string;
-  description: ReactNode;
-  ctaLabel: string;
-  ctaHref: string;
-};
-
-type LocaleContent = {
-  heroBadge: string;
-  pageTitle: string;
-  intro: ReactNode;
-  overview: {
-    title: string;
-    paragraphs: ReactNode[];
-    checklist: ReactNode[];
-    quickTipTitle: string;
-    quickTipDescription: ReactNode;
-  };
-  sections: Section[];
-  attachments: Attachment;
-  support: SupportBlock;
-};
 
 const metadataByLocale: Record<string, Metadata> = {
   es: {
@@ -69,292 +17,78 @@ const metadataByLocale: Record<string, Metadata> = {
   },
 };
 
-const content: Record<"en" | "es", LocaleContent> = {
+const copy = {
   es: {
-    heroBadge: "Centro de ayuda",
-    pageTitle: "WhatsApp cierra el teclado al pedir Face ID",
-    intro: (
-      <>
-        magic es el teclado que abre en cualquier chat para enviar ligas de pago sin salir de la conversación. Si en WhatsApp activaste <span className="font-medium">Requerir Face ID</span>, el teclado se corta cuando avanzas. Aquí lo resolvemos.
-      </>
-    ),
-    overview: {
-      title: "Solución de un vistazo",
-      paragraphs: [
-        (
-          <>
-            WhatsApp saca a magic porque en <span className="font-medium">Privacidad → Bloqueo de aplicación</span> dejaste activado <span className="font-medium">Requerir Face ID</span>.
-          </>
-        ),
-        (
-          <>
-            Al apagarlo, magic se mantiene abierto. Luego iOS puede seguir pidiendo Face ID cuando abres WhatsApp desde el home, así que no pierdes seguridad.
-          </>
-        ),
-      ],
-      checklist: [
-        "iPhone con Face ID funcional",
-        "WhatsApp actualizado (no beta)",
-        "Código de desbloqueo a la mano",
-      ],
-      quickTipTitle: "Paso rápido",
-      quickTipDescription: (
-        <>
-          Ve a <span className="font-medium">WhatsApp → Ajustes → Privacidad → Bloqueo de aplicación</span> y apaga <span className="font-medium">Requerir Face ID</span>. Después, desde el home, mantén presionado el ícono y toca <span className="font-medium">Solicitar Face ID</span> para que iOS lo pida al abrir la app.
-        </>
-      ),
-    },
-    sections: [
-      {
-        eyebrow: "Paso 1",
-        title: "Apaga Face ID dentro de WhatsApp",
-        description: (
-          <>
-            Es el detonador del cierre. Desactívalo y tu teclado deja de desaparecer.
-          </>
-        ),
-        steps: [
-          {
-            label: "1",
-            title: "Entra a Ajustes",
-            description: (
-              <>
-                Entra a <span className="font-medium">Configuración</span> (esquina inferior derecha).
-              </>
-            ),
-          },
-          {
-            label: "2",
-            title: "Abre Privacidad → Bloqueo de aplicación",
-            description: (
-              <>
-                Baja hasta <span className="font-medium">Bloqueo de aplicación</span>.
-              </>
-            ),
-          },
-          {
-            label: "3",
-            title: "Apaga Requerir Face ID",
-            description: (
-              <>
-                Confirma con Face ID o código y deja el switch en <span className="font-medium">off</span>.
-              </>
-            ),
-            footnote: "Si tenías un temporizador (1 minuto, etc.), también se apaga.",
-          },
-        ],
-        note: "Vuelve a un chat: el teclado magic ya no se cierra al avanzar.",
-      },
-      {
-        eyebrow: "Paso 2",
-        title: "Deja que iOS pida Face ID",
-        description: (
-          <>
-            Mantienes seguridad sin que WhatsApp cierre el teclado.
-          </>
-        ),
-        steps: [
-          {
-            label: "1",
-            title: "Ve al home",
-            description: "Cierra WhatsApp de forma normal (no hace falta forzarla).",
-          },
-          {
-            label: "2",
-            title: "Mantén presionado el ícono",
-            description: (
-              <>
-                Elige <span className="font-medium">Solicitar Face ID</span> en el menú. Ahora la protección depende de iOS.
-              </>
-            ),
-            bullets: [
-              "Si no aparece, revisa Ajustes → Face ID y código.",
-            ],
-          },
-          {
-            label: "3",
-            title: "Confirma",
-            description: "Acepta la alerta. Face ID se pedirá solo al abrir WhatsApp desde el icono.",
-          },
-        ],
-        note: "Para quitarlo, repite el gesto y toca “Dejar de solicitar Face ID”.",
-      },
-      {
-        eyebrow: "Paso 3",
-        title: "Valida y comparte",
-        description: "Haz una prueba y comparte esta guía con quien lo necesite.",
-        highlights: [
-          {
-            title: "Haz una prueba en un chat real",
-            description: "Abre un chat, lanza el teclado y verifica que permanezca visible.",
-          },
-          {
-            title: "Crea un mensaje guía",
-            description: "Guarda esta solución como respuesta rápida en tu CRM o notas.",
-          },
-          {
-            title: "Documenta con evidencias",
-            description: "Si puedes, toma un screenshot o video corto del antes y después.",
-          },
-        ],
-      },
-    ],
-    attachments: {
-      title: "¿Vas a agregar imágenes o videos?",
-      description:
-        "Si agregas medios, súbelos a la librería y vincúlalos aquí.",
-      suggestions: [
-        "Captura de WhatsApp mostrando la ruta Ajustes → Privacidad → Bloqueo de aplicación",
-        "Screenshot del interruptor \"Requerir Face ID\" desactivado",
-        "Video corto (10-15 s) demostrando cómo se solicita Face ID desde el home",
-      ],
-    },
-    support: {
-      title: "¿Necesitas que lo revisemos contigo?",
-      description:
-        "Si quieres que lo revisemos contigo en vivo, escríbenos y te ayudamos al momento.",
-      ctaLabel: "Escríbenos a soporte@mgic.me",
-      ctaHref: "mailto:soporte@mgic.me",
-    },
+    badge: "Centro de ayuda",
+    title: "WhatsApp cierra el teclado al pedir Face ID",
+    subtitle: "Desactiva Face ID dentro de WhatsApp y actívalo desde iOS. Toma menos de un minuto.",
+    why: "¿Por qué pasa?",
+    whyText: "WhatsApp tiene un ajuste llamado Requerir Face ID que bloquea la app y cierra teclados de terceros como magic. Al apagarlo, magic se mantiene abierto.",
+    noWorries: "No pierdes seguridad",
+    noWorriesText: "iOS puede pedir Face ID al abrir WhatsApp desde el home. Misma protección, sin cerrar el teclado.",
+    checklist: ["iPhone con Face ID", "WhatsApp actualizado", "Código de desbloqueo"],
+    paso1Badge: "Paso 1",
+    paso1Title: "Apaga Face ID dentro de WhatsApp",
+    paso1Subtitle: "3 toques y listo",
+    step1_1Label: "Abre Ajustes",
+    step1_1Desc: "Toca la pestaña Tú en WhatsApp.",
+    step1_2Label: "Ve a Privacidad",
+    step1_2Desc: "Toca Bloqueo de aplicación.",
+    step1_3Label: "Apaga el switch",
+    step1_3Desc: "Deja Requerir Face ID en off.",
+    beforeLabel: "Antes",
+    afterLabel: "Después",
+    paso1Done: "El teclado magic ya no se cierra al avanzar.",
+    paso2Badge: "Paso 2",
+    paso2Title: "Activa Face ID desde iOS",
+    paso2Subtitle: "Seguridad sin interrupciones",
+    step2_1Label: "Mantén presionado",
+    step2_1Desc: "Desde el home, haz long press en WhatsApp.",
+    step2_2Label: "Toca Solicitar Face ID",
+    step2_2Desc: "Ahora iOS pide Face ID al abrir la app.",
+    paso2Note: 'Para quitarlo, repite el gesto y elige "Dejar de solicitar Face ID".',
+    doneTitle: "¡Listo!",
+    doneText: "Abre un chat, lanza el teclado magic y verifica que permanezca visible. Si funcionó, comparte esta guía.",
+    supportTitle: "¿Necesitas ayuda?",
+    supportText: "Escríbenos y te ayudamos al momento.",
+    supportCta: "Escríbenos a soporte@mgic.me",
+    tip: "Tip: Marca este tutorial como favorito para compartirlo cuando lo necesites.",
   },
   en: {
-    heroBadge: "Help Center",
-    pageTitle: "WhatsApp closes the keyboard when Face ID appears",
-    intro: (
-      <>
-        magic is the keyboard you open in any chat to send payment links without leaving the conversation. If WhatsApp has <span className="font-medium">Require Face ID</span> on, it cuts the flow. Let’s fix it.
-      </>
-    ),
-    overview: {
-      title: "At a glance",
-      paragraphs: [
-        (
-          <>
-            WhatsApp kicks out magic because <span className="font-medium">Settings → Privacy → App Lock → Require Face ID</span> stays enabled.
-          </>
-        ),
-        (
-          <>
-            Turn it off so magic stays open. Then iOS can still request Face ID when you launch WhatsApp from the home screen—security intact.
-          </>
-        ),
-      ],
-      checklist: [
-        "iPhone with Face ID working",
-        "Latest WhatsApp (not beta)",
-        "Device passcode nearby",
-      ],
-      quickTipTitle: "Quick fix",
-      quickTipDescription: (
-        <>
-          Go to <span className="font-medium">WhatsApp → Settings → Privacy → App Lock</span>, switch off <span className="font-medium">Require Face ID</span>, then long-press the icon on the home screen and tap <span className="font-medium">Require Face ID</span> so iOS asks for it when opening the app.
-        </>
-      ),
-    },
-    sections: [
-      {
-        eyebrow: "Step 1",
-        title: "Switch off Face ID inside WhatsApp",
-        description: "That toggle is what closes the keyboard. Turn it off and you’re done.",
-        steps: [
-          {
-            label: "1",
-            title: "Open Settings",
-            description: (
-              <>
-                Tap <span className="font-medium">Settings</span> in the bottom-right corner.
-              </>
-            ),
-          },
-          {
-            label: "2",
-            title: "Go to Privacy → App Lock",
-            description: (
-              <>
-                Scroll to <span className="font-medium">App Lock</span>.
-              </>
-            ),
-          },
-          {
-            label: "3",
-            title: "Turn off Require Face ID",
-            description: (
-              <>
-                Confirm with Face ID or passcode and leave the switch <span className="font-medium">off</span>.
-              </>
-            ),
-            footnote: "Any timeout you set (After 1 minute, etc.) is removed too.",
-          },
-        ],
-        note: "Open a chat again—the keyboard should stay visible.",
-      },
-      {
-        eyebrow: "Step 2",
-        title: "Let iOS handle Face ID",
-        description: "You keep security, and WhatsApp stops closing the keyboard.",
-        steps: [
-          {
-            label: "1",
-            title: "Go back home",
-            description: "Leave WhatsApp normally; no force quit needed.",
-          },
-          {
-            label: "2",
-            title: "Long-press WhatsApp",
-            description: (
-              <>
-                Pick <span className="font-medium">Require Face ID</span> in the menu so iOS owns the protection.
-              </>
-            ),
-            bullets: [
-              "If you can’t see it, check Settings → Face ID & Passcode.",
-            ],
-          },
-          {
-            label: "3",
-            title: "Confirm",
-            description: "Approve the alert. Face ID appears only when opening WhatsApp from the icon.",
-          },
-        ],
-        note: "To stop it later, repeat the gesture and choose “Don’t Require Face ID”.",
-      },
-      {
-        eyebrow: "Step 3",
-        title: "Test and share",
-        description: "Try it once and keep this fix handy for anyone who needs it.",
-        highlights: [
-          {
-            title: "Run a live chat test",
-            description: "Try it in a real chat and confirm the keyboard stays in place.",
-          },
-          {
-            title: "Save a ready-to-send reply",
-            description: "Store this flow as a canned reply in Notes, CRM, or help desk.",
-          },
-          {
-            title: "Capture evidence",
-            description: "Grab a quick screenshot or clip of the before/after if you can.",
-          },
-        ],
-      },
-    ],
-    attachments: {
-      title: "Planning to add images or videos?",
-      description:
-        "Add visuals later by uploading them to the library and linking them here.",
-      suggestions: [
-        "Screenshot of WhatsApp showing Settings → Privacy → App Lock",
-        "Image of the \"Require Face ID\" toggle turned off",
-        "10–15 second clip demonstrating how to enable Face ID from the home screen",
-      ],
-    },
-    support: {
-      title: "Need a hand double-checking?",
-      description:
-        "Want us to double-check it live? Drop us a line and we’ll jump in.",
-      ctaLabel: "Email us at support@mgic.me",
-      ctaHref: "mailto:support@mgic.me",
-    },
+    badge: "Help Center",
+    title: "WhatsApp closes the keyboard when Face ID appears",
+    subtitle: "Turn off Face ID inside WhatsApp and enable it from iOS. Takes less than a minute.",
+    why: "Why does this happen?",
+    whyText: "WhatsApp has a setting called Require Face ID that locks the app and closes third-party keyboards like magic. Turning it off keeps magic open.",
+    noWorries: "You won't lose security",
+    noWorriesText: "iOS can still require Face ID when opening WhatsApp from the home screen. Same protection, no keyboard interruption.",
+    checklist: ["iPhone with Face ID", "Latest WhatsApp", "Device passcode"],
+    paso1Badge: "Step 1",
+    paso1Title: "Turn off Face ID inside WhatsApp",
+    paso1Subtitle: "3 taps and done",
+    step1_1Label: "Open Settings",
+    step1_1Desc: "Tap the You tab in WhatsApp.",
+    step1_2Label: "Go to Privacy",
+    step1_2Desc: "Tap App Lock.",
+    step1_3Label: "Switch it off",
+    step1_3Desc: "Leave Require Face ID off.",
+    beforeLabel: "Before",
+    afterLabel: "After",
+    paso1Done: "The magic keyboard no longer closes when you move forward.",
+    paso2Badge: "Step 2",
+    paso2Title: "Enable Face ID from iOS",
+    paso2Subtitle: "Security without interruptions",
+    step2_1Label: "Long-press",
+    step2_1Desc: "From the home screen, long-press WhatsApp.",
+    step2_2Label: "Tap Require Face ID",
+    step2_2Desc: "Now iOS asks for Face ID when opening the app.",
+    paso2Note: 'To undo, repeat the gesture and choose "Don\'t Require Face ID".',
+    doneTitle: "All done!",
+    doneText: "Open a chat, launch the magic keyboard and verify it stays visible. If it worked, share this guide.",
+    supportTitle: "Need help?",
+    supportText: "Drop us a line and we'll jump right in.",
+    supportCta: "Email us at support@mgic.me",
+    tip: "Tip: Bookmark this tutorial so you can share it quickly when needed.",
   },
 };
 
@@ -373,205 +107,198 @@ export default async function WhatsAppFaceIDHelpPage({
   params: Promise<{locale: string}>;
 }) {
   const {locale} = await params;
-  const normalizedLocale = (locale in content ? locale : "en") as keyof typeof content;
-  const copy = content[normalizedLocale];
+  const t = locale in copy ? copy[locale as keyof typeof copy] : copy.en;
 
   return (
     <>
       <HeroHeader />
-      <main className="px-6 pt-32 pb-24 lg:pb-32">
-        <article className="mx-auto max-w-5xl space-y-12">
-          <header className="space-y-6 text-center sm:text-left">
-            <span className="inline-flex items-center justify-center rounded-full border border-border px-4 py-1 text-xs font-medium uppercase tracking-wide text-foreground/70">
-              {copy.heroBadge}
+      <main className="px-4 pt-28 pb-20 sm:px-6 lg:pb-28">
+        <article className="mx-auto max-w-4xl">
+
+          {/* ── Hero ── */}
+          <header className="text-center space-y-5 mb-16">
+            <span className="inline-flex items-center rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-foreground/60">
+              {t.badge}
             </span>
-            <h1 className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-              {copy.pageTitle}
+            <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-5xl leading-tight">
+              {t.title}
             </h1>
-            <p className="text-lg leading-relaxed text-foreground/80">
-              {copy.intro}
+            <p className="mx-auto max-w-xl text-lg text-foreground/70">
+              {t.subtitle}
             </p>
           </header>
 
-          <section className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-            <div className="space-y-6 rounded-3xl border border-border bg-card/70 p-8 shadow-sm">
-              <h2 className="text-2xl font-semibold text-foreground">
-                {copy.overview.title}
-              </h2>
-              {copy.overview.paragraphs.map((paragraph, index) => (
-                <p key={`overview-paragraph-${index}`} className="text-base leading-7 text-foreground/80">
-                  {paragraph}
-                </p>
-              ))}
-              <div className="rounded-2xl border border-dashed border-border/80 bg-background/60 p-6">
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-foreground/70">
-                  Checklist
-                </h3>
-                <ul className="mt-4 space-y-2 text-sm text-foreground/80">
-                  {copy.overview.checklist.map((item, index) => (
-                    <li key={`checklist-${index}`} className="flex gap-2">
-                      <span className="mt-1 inline-block h-2 w-2 rounded-full bg-emerald-400" aria-hidden />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+          {/* ── Why + Checklist ── */}
+          <section className="mb-20 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl border border-border bg-card/60 p-6 space-y-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-100 text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               </div>
+              <h3 className="text-lg font-semibold text-foreground">{t.why}</h3>
+              <p className="text-sm leading-relaxed text-foreground/70">{t.whyText}</p>
             </div>
-            <div className="flex flex-col justify-between rounded-3xl border border-border bg-gradient-to-br from-emerald-500/20 via-background to-background p-8">
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-foreground/70">
-                  {copy.overview.quickTipTitle}
-                </h3>
-                <p className="text-base leading-7 text-foreground/80">
-                  {copy.overview.quickTipDescription}
-                </p>
+            <div className="rounded-2xl border border-border bg-card/60 p-6 space-y-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
-              <div className="mt-6 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-sm text-emerald-900">
-                <p>
-                  {normalizedLocale === "es"
-                    ? "Tip: Marca este tutorial como favorito en tu navegador para compartirlo con usuarios cuando lo necesites."
-                    : "Tip: Bookmark this tutorial so you can share it quickly whenever someone needs it."}
-                </p>
-              </div>
+              <h3 className="text-lg font-semibold text-foreground">{t.noWorries}</h3>
+              <p className="text-sm leading-relaxed text-foreground/70">{t.noWorriesText}</p>
             </div>
           </section>
 
-          <section className="space-y-12">
-            {copy.sections.map((section, sectionIndex) => (
-              <div
-                key={`section-${sectionIndex}`}
-                className="space-y-6 rounded-3xl border border-border bg-card/80 p-8 shadow-sm"
-              >
-                <div className="space-y-3">
-                  {section.eyebrow ? (
-                    <span className="inline-flex items-center justify-center rounded-full border border-border px-3 py-0.5 text-xs font-semibold uppercase tracking-wide text-foreground/60">
-                      {section.eyebrow}
+          {/* ── PASO 1 ── */}
+          <section className="mb-20">
+            <div className="text-center mb-10 space-y-3">
+              <span className="inline-flex items-center rounded-full bg-foreground text-background px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
+                {t.paso1Badge}
+              </span>
+              <h2 className="text-2xl font-semibold text-foreground sm:text-3xl">{t.paso1Title}</h2>
+              <p className="text-foreground/60">{t.paso1Subtitle}</p>
+            </div>
+
+            {/* Navigation path: Settings → Privacy → App Lock */}
+            <div className="grid gap-6 md:grid-cols-3 mb-12">
+              {[
+                { label: t.step1_1Label, desc: t.step1_1Desc, num: "1", img: "/help/help-wa-settings.png" },
+                { label: t.step1_2Label, desc: t.step1_2Desc, num: "2", img: "/help/help-wa-privacy.png" },
+                { label: t.step1_3Label, desc: t.step1_3Desc, num: "3", img: null },
+              ].map((step) => (
+                <div key={step.num} className="group text-center space-y-4">
+                  <div className="flex items-center justify-center gap-3 mb-2">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-background text-sm font-bold">
+                      {step.num}
                     </span>
-                  ) : null}
-                  <h2 className="text-2xl font-semibold text-foreground">
-                    {section.title}
-                  </h2>
-                  {section.description ? (
-                    <p className="text-base leading-7 text-foreground/80">
-                      {section.description}
-                    </p>
-                  ) : null}
+                    <span className="text-base font-semibold text-foreground">{step.label}</span>
+                  </div>
+                  {step.img && (
+                    <div className="relative mx-auto w-full max-w-[280px] overflow-hidden rounded-2xl border border-border/60 shadow-lg transition-transform group-hover:scale-[1.02]">
+                      <Image
+                        src={step.img}
+                        alt={step.label}
+                        width={560}
+                        height={400}
+                        className="w-full h-auto"
+                        quality={90}
+                      />
+                    </div>
+                  )}
+                  <p className="text-sm text-foreground/60">{step.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Before / After comparison */}
+            <div className="rounded-3xl border border-border bg-gradient-to-b from-card/80 to-background p-6 sm:p-10">
+              <div className="grid gap-8 sm:grid-cols-2">
+                <div className="space-y-4 text-center">
+                  <span className="inline-flex items-center rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-red-600">
+                    {t.beforeLabel}
+                  </span>
+                  <div className="relative mx-auto w-full max-w-[300px] overflow-hidden rounded-2xl border-2 border-red-200 shadow-lg">
+                    <Image
+                      src="/help/help-wa-faceid-on.png"
+                      alt="Face ID ON"
+                      width={600}
+                      height={430}
+                      className="w-full h-auto"
+                      quality={90}
+                    />
+                  </div>
                 </div>
 
-                {section.steps ? (
-                  <div className="grid gap-4 md:grid-cols-2">
-                    {section.steps.map((step, stepIndex) => (
-                      <div
-                        key={`section-${sectionIndex}-step-${stepIndex}`}
-                        className="flex h-full flex-col rounded-2xl border border-border bg-background/60 p-6"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground/10 text-sm font-semibold text-foreground">
-                            {step.label}
-                          </span>
-                          <h3 className="text-lg font-semibold text-foreground">
-                            {step.title}
-                          </h3>
-                        </div>
-                        <p className="mt-4 text-sm leading-6 text-foreground/80">
-                          {step.description}
-                        </p>
-                        {step.bullets ? (
-                          <ul className="mt-4 space-y-2 text-sm text-foreground/70">
-                            {step.bullets.map((bullet, bulletIndex) => (
-                              <li key={`section-${sectionIndex}-step-${stepIndex}-bullet-${bulletIndex}`} className="flex gap-2">
-                                <span className="mt-1 inline-block h-1.5 w-1.5 rounded-full bg-foreground/50" aria-hidden />
-                                <span>{bullet}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : null}
-                        {step.footnote ? (
-                          <p className="mt-4 text-xs text-foreground/60">
-                            {step.footnote}
-                          </p>
-                        ) : null}
-                      </div>
-                    ))}
+                <div className="space-y-4 text-center">
+                  <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-600">
+                    {t.afterLabel}
+                  </span>
+                  <div className="relative mx-auto w-full max-w-[300px] overflow-hidden rounded-2xl border-2 border-emerald-200 shadow-lg">
+                    <Image
+                      src="/help/help-wa-faceid-off.png"
+                      alt="Face ID OFF"
+                      width={600}
+                      height={430}
+                      className="w-full h-auto"
+                      quality={90}
+                    />
                   </div>
-                ) : null}
-
-                {section.highlights ? (
-                  <div className="grid gap-4 md:grid-cols-3">
-                    {section.highlights.map((highlight, highlightIndex) => (
-                      <div
-                        key={`section-${sectionIndex}-highlight-${highlightIndex}`}
-                        className="rounded-2xl border border-border bg-background/60 p-6"
-                      >
-                        <h3 className="text-lg font-semibold text-foreground">
-                          {highlight.title}
-                        </h3>
-                        <p className="mt-2 text-sm leading-6 text-foreground/70">
-                          {highlight.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                ) : null}
-
-                {section.checklist ? (
-                  <ul className="grid gap-3 sm:grid-cols-2">
-                    {section.checklist.map((item, checklistIndex) => (
-                      <li
-                        key={`section-${sectionIndex}-checklist-${checklistIndex}`}
-                        className="flex items-start gap-3 rounded-2xl border border-border bg-background/60 p-4 text-sm text-foreground/70"
-                      >
-                        <span className="mt-1 inline-block h-2 w-2 rounded-full bg-emerald-400" aria-hidden />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-
-                {section.note ? (
-                  <p className="rounded-2xl border border-dashed border-border/80 bg-background/80 p-4 text-sm text-foreground/70">
-                    {section.note}
-                  </p>
-                ) : null}
+                </div>
               </div>
-            ))}
+
+              <div className="mt-8 flex items-center justify-center gap-3 rounded-2xl bg-emerald-50 border border-emerald-200 p-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-600 shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+                <p className="text-sm font-medium text-emerald-800">{t.paso1Done}</p>
+              </div>
+            </div>
           </section>
 
-          <section className="space-y-4 rounded-3xl border border-border bg-muted/40 p-8">
-            <h2 className="text-2xl font-semibold text-foreground">
-              {copy.attachments.title}
-            </h2>
-            <p className="text-base leading-7 text-foreground/80">
-              {copy.attachments.description}
-            </p>
-            <ul className="space-y-3 text-sm text-foreground/70">
-              {copy.attachments.suggestions.map((suggestion, index) => (
-                <li key={`attachment-${index}`} className="flex gap-2">
-                  <span className="mt-1 inline-block h-2 w-2 rounded-full bg-foreground/40" aria-hidden />
-                  <span>{suggestion}</span>
-                </li>
-              ))}
-            </ul>
+          {/* ── PASO 2 ── */}
+          <section className="mb-20">
+            <div className="text-center mb-10 space-y-3">
+              <span className="inline-flex items-center rounded-full bg-foreground text-background px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
+                {t.paso2Badge}
+              </span>
+              <h2 className="text-2xl font-semibold text-foreground sm:text-3xl">{t.paso2Title}</h2>
+              <p className="text-foreground/60">{t.paso2Subtitle}</p>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-[1fr_1.3fr] items-center">
+              <div className="space-y-6">
+                {[
+                  { num: "1", label: t.step2_1Label, desc: t.step2_1Desc },
+                  { num: "2", label: t.step2_2Label, desc: t.step2_2Desc },
+                ].map((step) => (
+                  <div key={step.num} className="flex gap-4 items-start">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground text-background text-sm font-bold">
+                      {step.num}
+                    </span>
+                    <div>
+                      <h3 className="text-base font-semibold text-foreground">{step.label}</h3>
+                      <p className="text-sm text-foreground/60 mt-1">{step.desc}</p>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800">
+                  {t.paso2Note}
+                </div>
+              </div>
+
+              <div className="relative mx-auto w-full max-w-[380px] overflow-hidden rounded-2xl border border-border/60 shadow-xl">
+                <Image
+                  src="/help/help-ios-longpress.png"
+                  alt="iOS long press menu"
+                  width={760}
+                  height={540}
+                  className="w-full h-auto"
+                  quality={90}
+                />
+              </div>
+            </div>
           </section>
 
-          <section className="flex flex-col gap-6 rounded-3xl border border-border bg-card/80 p-8 shadow-sm md:flex-row md:items-center md:justify-between">
-            <div className="space-y-3">
-              <h2 className="text-2xl font-semibold text-foreground">
-                {copy.support.title}
-              </h2>
-              <p className="text-base leading-7 text-foreground/80">
-                {copy.support.description}
-              </p>
+          {/* ── Done + CTA ── */}
+          <section className="mb-12 text-center rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-background to-background p-8 sm:p-12 space-y-5">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-600"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2 className="text-2xl font-semibold text-foreground sm:text-3xl">{t.doneTitle}</h2>
+            <p className="mx-auto max-w-md text-foreground/70">{t.doneText}</p>
+            <p className="text-xs text-foreground/50">{t.tip}</p>
+          </section>
+
+          {/* ── Support ── */}
+          <section className="flex flex-col gap-6 rounded-2xl border border-border bg-card/60 p-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-2">
+              <h2 className="text-xl font-semibold text-foreground">{t.supportTitle}</h2>
+              <p className="text-sm text-foreground/70">{t.supportText}</p>
             </div>
             <Button asChild size="lg" className="self-start whitespace-nowrap">
-              <a href={copy.support.ctaHref}>{copy.support.ctaLabel}</a>
+              <a href="mailto:soporte@mgic.me">{t.supportCta}</a>
             </Button>
           </section>
+
         </article>
       </main>
       <Footer />
     </>
   );
 }
-
-
