@@ -95,6 +95,28 @@ a { color: inherit; }
   border-radius: 999px;
   font-weight: 500;
 }
+.theme-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid var(--mp-black-a10);
+  background: transparent;
+  color: var(--mp-fg-subtle);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.theme-toggle:hover {
+  background: var(--mp-neutral-100);
+  color: var(--mp-fg);
+}
+.theme-toggle .theme-toggle-moon { display: none; }
+.theme-toggle .theme-toggle-sun { display: inline-block; }
+body[data-theme="dark"] .theme-toggle .theme-toggle-sun { display: none; }
+body[data-theme="dark"] .theme-toggle .theme-toggle-moon { display: inline-block; }
 
 /* ---------- Sidebar ---------- */
 .sidebar {

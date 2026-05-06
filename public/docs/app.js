@@ -1,5 +1,16 @@
-// Magic SDK Docs — interactivity (tabs, copy, TOC, scroll-spy, FAQ, checklist)
+// Magic SDK Docs — interactivity (tabs, copy, TOC, scroll-spy, FAQ, checklist, theme)
 (function () {
+  // --- Theme toggle (light/dark) ---
+  var themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function () {
+      var current = document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', next);
+      try { localStorage.setItem('magic-docs-theme', next); } catch (e) {}
+    });
+  }
+
   // --- Code tabs ---
   document.querySelectorAll('.code-card').forEach(card => {
     const tabs = card.querySelectorAll('.code-tab');
