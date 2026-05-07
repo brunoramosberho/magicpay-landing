@@ -70,6 +70,18 @@
     </div>
 
     <div class="sidebar-section">
+      <h6 class="sidebar-section-title">Personalización</h6>
+      <ul class="sidebar-links">
+        <li><a class="sidebar-link" data-target="customization" href="#customization">
+          <span class="sidebar-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="17.5" r="2.5"/><path d="M13.5 17.5h7M17 14l3.5 3.5L17 21"/></svg>
+          </span>
+          Customizar teclado
+        </a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
       <h6 class="sidebar-section-title">Plataformas</h6>
       <ul class="sidebar-links">
         <li><a class="sidebar-link" data-target="android" href="#android">
@@ -95,18 +107,6 @@
         <li><a class="sidebar-link sub" data-target="ios-extension" href="#ios-extension">Extensión teclado</a></li>
         <li><a class="sidebar-link sub" data-target="ios-init" href="#ios-init">Inicialización</a></li>
         <li><a class="sidebar-link sub" data-target="ios-checklist" href="#ios-checklist">Checklist</a></li>
-      </ul>
-    </div>
-
-    <div class="sidebar-section">
-      <h6 class="sidebar-section-title">Personalización</h6>
-      <ul class="sidebar-links">
-        <li><a class="sidebar-link" data-target="customization" href="#customization">
-          <span class="sidebar-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="17.5" r="2.5"/><path d="M13.5 17.5h7M17 14l3.5 3.5L17 21"/></svg>
-          </span>
-          Customizar teclado
-        </a></li>
       </ul>
     </div>
 
@@ -395,6 +395,149 @@
           </tr>
         </tbody>
       </table>
+    </section>
+
+    <!-- ============ CUSTOMIZATION ============ -->
+    <section class="doc-section" id="customization">
+      <p class="section-eyebrow">Personalización</p>
+      <h2>Customizar el teclado</h2>
+      <p class="lede">Cada cliente recibe el SDK ya brandeado. Los colores se controlan desde el dashboard de configuración del backend, no desde el código del SDK — así que un cambio se aplica en todas las plataformas (Android e iOS) sin recompilar. Acá podés previsualizar cómo queda el teclado en light y dark mode antes de guardar.</p>
+
+      <div class="callout note">
+        <span class="callout-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v5M12 16h.01"/></svg></span>
+        <div class="callout-body">
+          <strong>¿Dónde se aplica?</strong>
+          <p>La configuración real se guarda desde <strong>Dashboard → Configuración del SDK → Apariencia</strong>. Esta página es solo un preview interactivo para probar combinaciones.</p>
+        </div>
+      </div>
+
+      <div class="kb-customizer" id="kb-customizer">
+        <div class="kb-customizer-controls">
+          <h4>Colores</h4>
+          <div class="kb-color-grid">
+            <span class="kb-color-mode-label">Light</span>
+            <div class="kb-color-cell">
+              <input type="color" id="kb-light-primary" value="#306FF6">
+              <span class="kb-hex-prefix">#</span>
+              <input type="text" id="kb-light-primary-hex" value="306FF6" maxlength="6" spellcheck="false" autocomplete="off">
+            </div>
+            <div class="kb-color-cell">
+              <input type="color" id="kb-light-on-primary" value="#FFFFFF">
+              <span class="kb-hex-prefix">#</span>
+              <input type="text" id="kb-light-on-primary-hex" value="FFFFFF" maxlength="6" spellcheck="false" autocomplete="off">
+            </div>
+            <span class="kb-color-mode-label">Dark</span>
+            <div class="kb-color-cell">
+              <input type="color" id="kb-dark-primary" value="#306FF6">
+              <span class="kb-hex-prefix">#</span>
+              <input type="text" id="kb-dark-primary-hex" value="306FF6" maxlength="6" spellcheck="false" autocomplete="off">
+            </div>
+            <div class="kb-color-cell">
+              <input type="color" id="kb-dark-on-primary" value="#FFFFFF">
+              <span class="kb-hex-prefix">#</span>
+              <input type="text" id="kb-dark-on-primary-hex" value="FFFFFF" maxlength="6" spellcheck="false" autocomplete="off">
+            </div>
+          </div>
+          <div class="kb-color-headers">
+            <span></span>
+            <span>Primario</span>
+            <span>Sobre primario</span>
+          </div>
+
+          <h4>Presets</h4>
+          <div class="kb-presets" id="kb-presets">
+            <button type="button" class="kb-preset active" data-primary="#306FF6" data-on-primary="#FFFFFF">
+              <span class="kb-preset-swatch" style="background:#306FF6"></span>magic
+            </button>
+            <button type="button" class="kb-preset" data-primary="#F0634A" data-on-primary="#FFFFFF" data-dark-primary="#F0634A" data-dark-on-primary="#FFFFFF">
+              <span class="kb-preset-swatch" style="background:#F0634A"></span>Finsus
+            </button>
+            <button type="button" class="kb-preset" data-primary="#004481" data-on-primary="#FFFFFF">
+              <span class="kb-preset-swatch" style="background:#004481"></span>BBVA
+            </button>
+            <button type="button" class="kb-preset" data-primary="#EB0029" data-on-primary="#FFFFFF">
+              <span class="kb-preset-swatch" style="background:#EB0029"></span>Banorte
+            </button>
+            <button type="button" class="kb-preset" data-primary="#EC0000" data-on-primary="#FFFFFF">
+              <span class="kb-preset-swatch" style="background:#EC0000"></span>Santander
+            </button>
+            <button type="button" class="kb-preset" data-primary="#006EB5" data-on-primary="#FFFFFF">
+              <span class="kb-preset-swatch" style="background:#006EB5"></span>Citibanamex
+            </button>
+            <button type="button" class="kb-preset" data-primary="#202329" data-on-primary="#FFFFFF" data-dark-primary="#FFFFFF" data-dark-on-primary="#202329">
+              <span class="kb-preset-swatch" style="background:#202329"></span>Mono
+            </button>
+          </div>
+        </div>
+
+        <div class="kb-customizer-preview">
+          <div class="kb-mode-toggle" role="tablist" aria-label="Theme">
+            <button type="button" class="active" data-mode="light" aria-selected="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+              Light
+            </button>
+            <button type="button" data-mode="dark" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+              Dark
+            </button>
+          </div>
+          <div class="kb-customizer-stage">
+            <div class="kb-preview" id="kb-preview-customizer">
+              <div class="kb-imessage-bar">
+                <span class="kb-imessage-plus">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </span>
+                <span class="kb-imessage-field">Message...</span>
+                <svg class="kb-imessage-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/>
+                </svg>
+              </div>
+              <div class="kb-name-bar">
+                <span class="kb-name">Jonathan Moore</span>
+                <span class="kb-name-sub">Main Account</span>
+              </div>
+              <div class="kb-body">
+                <div class="kb-toolbar">
+                  <svg class="kb-tool kb-tool-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+                  <svg class="kb-tool kb-tool-dock" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="1" y="1" width="18" height="12" rx="2"/>
+                    <line x1="5" y1="4" x2="5.01" y2="4"/><line x1="10" y1="4" x2="10.01" y2="4"/><line x1="15" y1="4" x2="15.01" y2="4"/>
+                    <line x1="5" y1="7" x2="5.01" y2="7"/><line x1="10" y1="7" x2="10.01" y2="7"/><line x1="15" y1="7" x2="15.01" y2="7"/>
+                    <line x1="7" y1="10" x2="13" y2="10"/>
+                  </svg>
+                  <div class="kb-amount-pill"><span>$320</span></div>
+                  <div class="kb-currency">
+                    <span>MXN</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </div>
+                </div>
+                <div class="kb-keys">
+                  <div class="kb-key">1</div><div class="kb-key">2</div><div class="kb-key">3</div>
+                  <div class="kb-key">4</div><div class="kb-key">5</div><div class="kb-key">6</div>
+                  <div class="kb-key">7</div><div class="kb-key">8</div><div class="kb-key">9</div>
+                  <div class="kb-key">.</div><div class="kb-key">0</div>
+                  <div class="kb-key kb-key-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 9.75L14.25 12m0 0l2.25 2.25M14.25 12l2.25-2.25M14.25 12L12 14.25m-2.58 4.92l-6.374-6.375a1.125 1.125 0 010-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33z"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="kb-send">
+                  <svg viewBox="0 0 16 16" fill="none">
+                    <rect width="16" height="16" rx="3" fill="currentColor" fill-opacity="0.2"/>
+                    <path d="M4.5 8L7 10.5L11.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  Send
+                </div>
+                <div class="kb-bottom-bar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                  <svg viewBox="0 0 24 34" fill="currentColor"><path d="M12 1a5 5 0 015 5v10a5 5 0 01-10 0V6a5 5 0 015-5zM4 14v2a8 8 0 0016 0v-2h2v2a10 10 0 01-9 9.95V30h5v2H6v-2h5v-4.05A10 10 0 012 16v-2h2z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============ ANDROID ============ -->
@@ -918,149 +1061,6 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
       </div>
     </section>
 
-    <!-- ============ CUSTOMIZATION ============ -->
-    <section class="doc-section" id="customization">
-      <p class="section-eyebrow">Personalización</p>
-      <h2>Customizar el teclado</h2>
-      <p class="lede">El SDK de cada cliente se entrega ya brandeado, pero los colores se ajustan desde el dashboard de configuración del SDK. Acá podés previsualizar cómo queda el teclado en light y dark mode antes de aplicar los cambios.</p>
-
-      <div class="callout note">
-        <span class="callout-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v5M12 16h.01"/></svg></span>
-        <div class="callout-body">
-          <strong>¿Dónde se aplica?</strong>
-          <p>La configuración real se guarda desde <strong>Dashboard → Configuración del SDK → Apariencia</strong>. Esta página es solo un preview interactivo para probar combinaciones.</p>
-        </div>
-      </div>
-
-      <div class="kb-customizer" id="kb-customizer">
-        <div class="kb-customizer-controls">
-          <h4>Colores</h4>
-          <div class="kb-color-grid">
-            <span class="kb-color-mode-label">Light</span>
-            <div class="kb-color-cell">
-              <input type="color" id="kb-light-primary" value="#306FF6">
-              <span class="kb-hex-prefix">#</span>
-              <input type="text" id="kb-light-primary-hex" value="306FF6" maxlength="6" spellcheck="false" autocomplete="off">
-            </div>
-            <div class="kb-color-cell">
-              <input type="color" id="kb-light-on-primary" value="#FFFFFF">
-              <span class="kb-hex-prefix">#</span>
-              <input type="text" id="kb-light-on-primary-hex" value="FFFFFF" maxlength="6" spellcheck="false" autocomplete="off">
-            </div>
-            <span class="kb-color-mode-label">Dark</span>
-            <div class="kb-color-cell">
-              <input type="color" id="kb-dark-primary" value="#306FF6">
-              <span class="kb-hex-prefix">#</span>
-              <input type="text" id="kb-dark-primary-hex" value="306FF6" maxlength="6" spellcheck="false" autocomplete="off">
-            </div>
-            <div class="kb-color-cell">
-              <input type="color" id="kb-dark-on-primary" value="#FFFFFF">
-              <span class="kb-hex-prefix">#</span>
-              <input type="text" id="kb-dark-on-primary-hex" value="FFFFFF" maxlength="6" spellcheck="false" autocomplete="off">
-            </div>
-          </div>
-          <div class="kb-color-headers">
-            <span></span>
-            <span>Primario</span>
-            <span>Sobre primario</span>
-          </div>
-
-          <h4>Presets</h4>
-          <div class="kb-presets" id="kb-presets">
-            <button type="button" class="kb-preset active" data-primary="#306FF6" data-on-primary="#FFFFFF">
-              <span class="kb-preset-swatch" style="background:#306FF6"></span>magic
-            </button>
-            <button type="button" class="kb-preset" data-primary="#F0634A" data-on-primary="#FFFFFF" data-dark-primary="#F0634A" data-dark-on-primary="#FFFFFF">
-              <span class="kb-preset-swatch" style="background:#F0634A"></span>Finsus
-            </button>
-            <button type="button" class="kb-preset" data-primary="#004481" data-on-primary="#FFFFFF">
-              <span class="kb-preset-swatch" style="background:#004481"></span>BBVA
-            </button>
-            <button type="button" class="kb-preset" data-primary="#EB0029" data-on-primary="#FFFFFF">
-              <span class="kb-preset-swatch" style="background:#EB0029"></span>Banorte
-            </button>
-            <button type="button" class="kb-preset" data-primary="#EC0000" data-on-primary="#FFFFFF">
-              <span class="kb-preset-swatch" style="background:#EC0000"></span>Santander
-            </button>
-            <button type="button" class="kb-preset" data-primary="#006EB5" data-on-primary="#FFFFFF">
-              <span class="kb-preset-swatch" style="background:#006EB5"></span>Citibanamex
-            </button>
-            <button type="button" class="kb-preset" data-primary="#202329" data-on-primary="#FFFFFF" data-dark-primary="#FFFFFF" data-dark-on-primary="#202329">
-              <span class="kb-preset-swatch" style="background:#202329"></span>Mono
-            </button>
-          </div>
-        </div>
-
-        <div class="kb-customizer-preview">
-          <div class="kb-mode-toggle" role="tablist" aria-label="Theme">
-            <button type="button" class="active" data-mode="light" aria-selected="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-              Light
-            </button>
-            <button type="button" data-mode="dark" aria-selected="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-              Dark
-            </button>
-          </div>
-          <div class="kb-customizer-stage">
-            <div class="kb-preview" id="kb-preview-customizer">
-              <div class="kb-imessage-bar">
-                <span class="kb-imessage-plus">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-                </span>
-                <span class="kb-imessage-field">Message...</span>
-                <svg class="kb-imessage-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/>
-                </svg>
-              </div>
-              <div class="kb-name-bar">
-                <span class="kb-name">Jonathan Moore</span>
-                <span class="kb-name-sub">Main Account</span>
-              </div>
-              <div class="kb-body">
-                <div class="kb-toolbar">
-                  <svg class="kb-tool kb-tool-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
-                  <svg class="kb-tool kb-tool-dock" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="1" y="1" width="18" height="12" rx="2"/>
-                    <line x1="5" y1="4" x2="5.01" y2="4"/><line x1="10" y1="4" x2="10.01" y2="4"/><line x1="15" y1="4" x2="15.01" y2="4"/>
-                    <line x1="5" y1="7" x2="5.01" y2="7"/><line x1="10" y1="7" x2="10.01" y2="7"/><line x1="15" y1="7" x2="15.01" y2="7"/>
-                    <line x1="7" y1="10" x2="13" y2="10"/>
-                  </svg>
-                  <div class="kb-amount-pill"><span>$320</span></div>
-                  <div class="kb-currency">
-                    <span>MXN</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </div>
-                </div>
-                <div class="kb-keys">
-                  <div class="kb-key">1</div><div class="kb-key">2</div><div class="kb-key">3</div>
-                  <div class="kb-key">4</div><div class="kb-key">5</div><div class="kb-key">6</div>
-                  <div class="kb-key">7</div><div class="kb-key">8</div><div class="kb-key">9</div>
-                  <div class="kb-key">.</div><div class="kb-key">0</div>
-                  <div class="kb-key kb-key-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M12 9.75L14.25 12m0 0l2.25 2.25M14.25 12l2.25-2.25M14.25 12L12 14.25m-2.58 4.92l-6.374-6.375a1.125 1.125 0 010-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33z"/>
-                    </svg>
-                  </div>
-                </div>
-                <div class="kb-send">
-                  <svg viewBox="0 0 16 16" fill="none">
-                    <rect width="16" height="16" rx="3" fill="currentColor" fill-opacity="0.2"/>
-                    <path d="M4.5 8L7 10.5L11.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Send
-                </div>
-                <div class="kb-bottom-bar">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-                  <svg viewBox="0 0 24 34" fill="currentColor"><path d="M12 1a5 5 0 015 5v10a5 5 0 01-10 0V6a5 5 0 015-5zM4 14v2a8 8 0 0016 0v-2h2v2a10 10 0 01-9 9.95V30h5v2H6v-2h5v-4.05A10 10 0 012 16v-2h2z"/></svg>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ============ BACKEND ============ -->
     <section class="doc-section" id="backend">
       <p class="section-eyebrow">Plataforma · Backend</p>
@@ -1226,6 +1226,7 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
       <li><a data-target="overview" href="#overview">Visión general</a></li>
       <li><a data-target="architecture" href="#architecture">Arquitectura</a></li>
       <li><a data-target="requirements" href="#requirements">Requisitos</a></li>
+      <li><a data-target="customization" href="#customization">Customizar teclado</a></li>
       <li><a data-target="android" href="#android">Android SDK</a></li>
       <li><a class="toc-h3" data-target="android-install" href="#android-install">Instalación</a></li>
       <li><a class="toc-h3" data-target="android-init" href="#android-init">Inicialización</a></li>
@@ -1238,7 +1239,6 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
       <li><a class="toc-h3" data-target="ios-extension" href="#ios-extension">Extensión</a></li>
       <li><a class="toc-h3" data-target="ios-init" href="#ios-init">Inicialización</a></li>
       <li><a class="toc-h3" data-target="ios-checklist" href="#ios-checklist">Checklist</a></li>
-      <li><a data-target="customization" href="#customization">Customizar teclado</a></li>
       <li><a data-target="backend" href="#backend">Backend</a></li>
       <li><a data-target="faq" href="#faq">FAQ</a></li>
     </ul>
