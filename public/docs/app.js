@@ -83,4 +83,91 @@
     });
   }, { rootMargin: '-100px 0px -75% 0px', threshold: 0 });
   subheads.forEach(s => obs2.observe(s));
+
+  // --- Keyboard customizer ---
+  var customizer = document.getElementById('kb-customizer');
+  if (customizer) {
+    var preview = document.getElementById('kb-preview-customizer');
+    var presets = document.getElementById('kb-presets');
+    var modeToggleButtons = customizer.querySelectorAll('.kb-mode-toggle button');
+
+    var ids = ['kb-light-primary', 'kb-light-on-primary', 'kb-dark-primary', 'kb-dark-on-primary'];
+    var inputs = {};
+    ids.forEach(function (id) {
+      inputs[id] = {
+        color: document.getElementById(id),
+        hex: document.getElementById(id + '-hex')
+      };
+    });
+
+    function isValidHex(v) { return /^[0-9a-fA-F]{6}$/.test(v); }
+
+    function applyColors() {
+      var mode = customizer.classList.contains('kb-dark') ? 'dark' : 'light';
+      var primary = inputs['kb-' + mode + '-primary'].color.value;
+      var onPrimary = inputs['kb-' + mode + '-on-primary'].color.value;
+      preview.style.setProperty('--kb-primary', primary);
+      preview.style.setProperty('--kb-on-primary', onPrimary);
+    }
+
+    // Color picker -> hex input + apply
+    ids.forEach(function (id) {
+      inputs[id].color.addEventListener('input', function () {
+        inputs[id].hex.value = inputs[id].color.value.replace('#', '').toUpperCase();
+        clearActivePreset();
+        applyColors();
+      });
+      inputs[id].hex.addEventListener('input', function () {
+        var clean = inputs[id].hex.value.replace(/[^0-9a-fA-F]/g, '').slice(0, 6);
+        if (clean !== inputs[id].hex.value) inputs[id].hex.value = clean;
+        if (isValidHex(clean)) {
+          inputs[id].color.value = '#' + clean;
+          clearActivePreset();
+          applyColors();
+        }
+      });
+    });
+
+    // Light/Dark preview toggle
+    modeToggleButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var mode = btn.getAttribute('data-mode');
+        modeToggleButtons.forEach(function (b) {
+          var isActive = b === btn;
+          b.classList.toggle('active', isActive);
+          b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        customizer.classList.toggle('kb-dark', mode === 'dark');
+        applyColors();
+      });
+    });
+
+    // Presets
+    function clearActivePreset() {
+      presets.querySelectorAll('.kb-preset.active').forEach(function (b) {
+        b.classList.remove('active');
+      });
+    }
+    presets.addEventListener('click', function (e) {
+      var btn = e.target.closest('.kb-preset');
+      if (!btn) return;
+      var lightP = btn.getAttribute('data-primary');
+      var lightOn = btn.getAttribute('data-on-primary');
+      var darkP = btn.getAttribute('data-dark-primary') || lightP;
+      var darkOn = btn.getAttribute('data-dark-on-primary') || lightOn;
+      function setPair(idP, idOn, p, on) {
+        inputs[idP].color.value = p;
+        inputs[idP].hex.value = p.replace('#', '').toUpperCase();
+        inputs[idOn].color.value = on;
+        inputs[idOn].hex.value = on.replace('#', '').toUpperCase();
+      }
+      setPair('kb-light-primary', 'kb-light-on-primary', lightP, lightOn);
+      setPair('kb-dark-primary', 'kb-dark-on-primary', darkP, darkOn);
+      clearActivePreset();
+      btn.classList.add('active');
+      applyColors();
+    });
+
+    applyColors();
+  }
 })();
