@@ -139,7 +139,7 @@ function ChatAnimationInner({ onReplay }: { onReplay: () => void }) {
 
         t.push(setTimeout(() => setFaceIdPhase('scanning'), 9800))
         t.push(setTimeout(() => setFaceIdPhase('success'), 10400))
-        t.push(setTimeout(() => { setShowPaymentLink(true); setKeyboardVisible(false) }, 10800))
+        t.push(setTimeout(() => { setShowPaymentLink(true); setKeyboardType('ios') }, 10800))
         t.push(setTimeout(() => setFaceIdPhase('hidden'), 11000))
 
         t.push(setTimeout(() => setShowHeartReaction(true), 11800))
@@ -423,7 +423,7 @@ function ChatAnimationInner({ onReplay }: { onReplay: () => void }) {
                             key="magic-kb"
                             initial={{ y: 30, opacity: 0 }}
                             animate={{ y: 0, opacity: 1, transition: { type: 'spring', damping: 25, stiffness: 200 } }}
-                            exit={{ opacity: 0, transition: { duration: 0.25 } }}
+                            exit={{ y: 20, opacity: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
                         >
                             <div className="flex items-center justify-between px-3.5 py-[5px] border-t border-gray-100 bg-white">
                                 <span className="text-[10px] font-semibold text-[#202329]/60">Jonathan Moore</span>
