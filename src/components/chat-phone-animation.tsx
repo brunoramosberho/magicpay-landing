@@ -430,13 +430,13 @@ function ChatAnimationInner({ onReplay }: { onReplay: () => void }) {
                                 <span className="text-[9px] font-semibold text-[#202329]/60">Main Account</span>
                             </div>
 
-                            <div className="bg-[#D1D3D9] pb-2.5">
+                            <div className="bg-[#F2F2F2] pb-3.5">
                                 {/* Amount toolbar */}
-                                <div className="relative h-12 mx-1">
-                                    <svg className="absolute left-2 top-[18px] w-3 h-3 text-[#202329]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <div className="relative h-11 mx-1">
+                                    <svg className="absolute left-2 top-[16px] w-3 h-3 text-[#202329]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M15 19l-7-7 7-7" />
                                     </svg>
-                                    <svg className="absolute left-6 top-[18px] w-4 h-3" viewBox="0 0 20 14" fill="none" stroke="#202329" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <svg className="absolute left-6 top-[16px] w-4 h-3" viewBox="0 0 20 14" fill="none" stroke="#202329" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                         <rect x="1" y="1" width="18" height="12" rx="2" />
                                         <line x1="5" y1="4" x2="5.01" y2="4" /><line x1="10" y1="4" x2="10.01" y2="4" /><line x1="15" y1="4" x2="15.01" y2="4" />
                                         <line x1="5" y1="7" x2="5.01" y2="7" /><line x1="10" y1="7" x2="10.01" y2="7" /><line x1="15" y1="7" x2="15.01" y2="7" />
@@ -444,7 +444,7 @@ function ChatAnimationInner({ onReplay }: { onReplay: () => void }) {
                                     </svg>
 
                                     <div
-                                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2 py-[5px] rounded-[6px] border border-white/80 bg-[#fafafa]/70 min-w-[60px] text-center"
+                                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-[7px] py-[5px] rounded-[5px] border border-white/80 bg-[#fafafa]/70 min-w-[60px] text-center"
                                         style={{ boxShadow: '0 2px 20px rgba(0,0,0,0.08)', backdropFilter: 'blur(12px)' }}
                                     >
                                         <AnimatePresence mode="wait">
@@ -454,7 +454,7 @@ function ChatAnimationInner({ onReplay }: { onReplay: () => void }) {
                                                 animate={{ opacity: 1 }}
                                                 exit={{ opacity: 0 }}
                                                 transition={{ duration: 0.1 }}
-                                                className="text-[22px] font-semibold tabular-nums leading-none block"
+                                                className="text-[20px] font-semibold tabular-nums leading-none block"
                                                 style={{ color: PRIMARY }}
                                             >
                                                 {currentAmount || '\u00A0'}
@@ -462,8 +462,8 @@ function ChatAnimationInner({ onReplay }: { onReplay: () => void }) {
                                         </AnimatePresence>
                                     </div>
 
-                                    <div className="absolute right-1.5 top-4 flex items-center gap-0.5">
-                                        <span className="text-[11px] font-semibold text-[#202329]">USD</span>
+                                    <div className="absolute right-1.5 top-[14px] flex items-center gap-0.5">
+                                        <span className="text-[11px] font-semibold text-[#202329]">MXN</span>
                                         <svg className="w-2 h-2 text-[#202329]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M6 9l6 6 6-6" />
                                         </svg>
@@ -471,7 +471,7 @@ function ChatAnimationInner({ onReplay }: { onReplay: () => void }) {
                                 </div>
 
                                 {/* Numpad */}
-                                <div className="grid grid-cols-3 gap-[5px] mx-1 mt-0.5">
+                                <div className="grid grid-cols-3 gap-1 mx-1 mt-px">
                                     {magicNumKeys.map((key) => (
                                         <motion.div
                                             key={key}
@@ -480,11 +480,11 @@ function ChatAnimationInner({ onReplay }: { onReplay: () => void }) {
                                                 backgroundColor: activeKey === key ? '#e0e0e0' : '#ffffff',
                                             }}
                                             transition={{ duration: 0.1 }}
-                                            className="relative h-[38px] rounded-[6px] flex items-center justify-center text-[18px] text-[#202329] overflow-hidden"
-                                            style={{ boxShadow: '0 1px 0 rgba(0,0,0,0.08)' }}
+                                            className="relative h-[36px] rounded-[6px] flex items-center justify-center text-[17px] text-[#202329] overflow-hidden"
+                                            style={{ boxShadow: '0 1px 0 rgba(0,0,0,0.06)' }}
                                         >
                                             {key === 'del' ? (
-                                                <svg className="w-[17px] h-[17px] text-[#202329]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                                <svg className="w-[16px] h-[16px] text-[#202329]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                                     <path d="M12 9.75L14.25 12m0 0l2.25 2.25M14.25 12l2.25-2.25M14.25 12L12 14.25m-2.58 4.92l-6.374-6.375a1.125 1.125 0 010-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33z" />
                                                 </svg>
                                             ) : key}
@@ -497,10 +497,10 @@ function ChatAnimationInner({ onReplay }: { onReplay: () => void }) {
                                 <motion.div
                                     animate={{ scale: sendPressed ? 0.95 : 1 }}
                                     transition={{ duration: 0.1 }}
-                                    className="relative mx-[5px] mt-[5px] h-[38px] rounded-[10px] flex items-center justify-center gap-1.5 text-sm font-semibold overflow-hidden"
+                                    className="relative mx-[5px] mt-1 h-[36px] rounded-[8px] flex items-center justify-center gap-[5px] text-[13px] font-semibold overflow-hidden"
                                     style={{ backgroundColor: PRIMARY, color: '#fff' }}
                                 >
-                                    <svg className="w-3 h-3" viewBox="0 0 16 16" fill="none">
+                                    <svg className="w-[12px] h-[12px]" viewBox="0 0 16 16" fill="none">
                                         <rect width="16" height="16" rx="3" fill="rgba(255,255,255,0.2)" />
                                         <path d="M4.5 8L7 10.5L11.5 5.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
