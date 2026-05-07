@@ -54,6 +54,11 @@ a { color: inherit; }
   gap: 10px;
   text-decoration: none;
 }
+.brand-icon {
+  height: 22px;
+  width: 22px;
+  display: block;
+}
 .brand-wordmark {
   height: 22px;
   width: auto;

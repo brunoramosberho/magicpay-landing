@@ -16,6 +16,7 @@
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="#top">
+      <img class="brand-icon" src="/docs/assets/icon.svg" alt="">
       <img class="brand-wordmark" src="/docs/assets/magic.svg" alt="magic">
       <span class="brand-sep"></span>
       <span class="brand-doctype">Documentación · SDK</span>
@@ -938,14 +939,14 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
 
       <div class="code-card">
         <div class="code-tabs">
-          <button class="code-tab active" data-tab="b-authorize-headers"><span class="lang-dot dot-bash"></span>Headers</button>
-          <button class="code-tab" data-tab="b-authorize"><span class="lang-dot dot-json"></span>POST · authorize payload</button>
+          <button class="code-tab active" data-tab="b-authorize"><span class="lang-dot dot-json"></span>POST · authorize payload</button>
+          <button class="code-tab" data-tab="b-authorize-headers"><span class="lang-dot dot-bash"></span>Headers</button>
           <button class="code-tab" data-tab="b-authorize-res"><span class="lang-dot dot-json"></span>200 · response</button>
           <span class="code-tabs-spacer"></span>
           <button class="copy-btn">Copiar</button>
         </div>
-<pre class="code-pane active" data-pane="b-authorize-headers"><code>sessionToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
-<pre class="code-pane" data-pane="b-authorize"><code>{
+<pre class="code-pane" data-pane="b-authorize-headers"><code>sessionToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
+<pre class="code-pane active" data-pane="b-authorize"><code>{
   <span class="tk-key">"userId"</span>:        <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</span>,
   <span class="tk-key">"paymentLinkId"</span>: <span class="tk-str">"magic251205001"</span>,
   <span class="tk-key">"accountId"</span>:     <span class="tk-str">"1234"</span>,
@@ -966,13 +967,13 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
 
       <div class="code-card">
         <div class="code-tabs">
-          <button class="code-tab active" data-tab="b-claim-headers"><span class="lang-dot dot-bash"></span>Headers</button>
-          <button class="code-tab" data-tab="b-claim"><span class="lang-dot dot-json"></span>POST · claim payload</button>
+          <button class="code-tab active" data-tab="b-claim"><span class="lang-dot dot-json"></span>POST · claim payload</button>
+          <button class="code-tab" data-tab="b-claim-headers"><span class="lang-dot dot-bash"></span>Headers</button>
           <span class="code-tabs-spacer"></span>
           <button class="copy-btn">Copiar</button>
         </div>
-<pre class="code-pane active" data-pane="b-claim-headers"><code>txCode: AUTH-9F2C7E1B</code></pre>
-<pre class="code-pane" data-pane="b-claim"><code>{
+<pre class="code-pane" data-pane="b-claim-headers"><code>txCode: AUTH-9F2C7E1B</code></pre>
+<pre class="code-pane active" data-pane="b-claim"><code>{
   <span class="tk-key">"userId"</span>:          <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</span>,
   <span class="tk-key">"paymentLinkId"</span>:   <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-ffffffffffff"</span>,
   <span class="tk-key">"receptorAccount"</span>: <span class="tk-str">"01234567891234679"</span>,
