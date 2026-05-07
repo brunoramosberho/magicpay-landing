@@ -54,18 +54,13 @@ a { color: inherit; }
   gap: 10px;
   text-decoration: none;
 }
-.brand-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px; height: 28px;
+.brand-wordmark {
+  height: 22px;
+  width: auto;
+  display: block;
 }
-.brand-mark img { width: 100%; height: 100%; }
-.brand-name {
-  font-family: var(--mp-font-display);
-  font-weight: 500;
-  font-size: 18px;
-  letter-spacing: -0.01em;
+body[data-theme="dark"] .brand-wordmark {
+  filter: brightness(0) invert(1);
 }
 .brand-sep {
   width: 1px; height: 18px;

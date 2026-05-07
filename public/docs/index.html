@@ -16,8 +16,7 @@
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="#top">
-      <span class="brand-mark"><img src="/docs/assets/icon.svg" alt=""></span>
-      <span class="brand-name">magic</span>
+      <img class="brand-wordmark" src="/docs/assets/magic.svg" alt="magic">
       <span class="brand-sep"></span>
       <span class="brand-doctype">Documentación · SDK</span>
     </a>
@@ -916,11 +915,12 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
       <p class="lede">Tu backend es donde ocurre la transferencia real. Magic notifica los eventos de payment-link; tú procesas el claim y mueves el dinero por tu rail.</p>
 
       <h3 id="backend-login">Flujo de validación previa (login)</h3>
-      <p>Antes de autorizar una transacción, magic envía las credenciales del usuario a tu backend para validar la contraseña encriptada. Expón un endpoint que reciba este payload y responda con la verificación.</p>
+      <p>Antes de autorizar una transacción, magic envía las credenciales del usuario a tu backend para validar la contraseña encriptada. <strong>No requiere headers de autenticación.</strong> Expón un endpoint que reciba este payload y responda con un <code>sessionToken</code> que se reutiliza en la autorización.</p>
 
       <div class="code-card">
         <div class="code-tabs">
           <button class="code-tab active" data-tab="b-login"><span class="lang-dot dot-json"></span>POST · login payload</button>
+          <button class="code-tab" data-tab="b-login-res"><span class="lang-dot dot-json"></span>200 · response</button>
           <span class="code-tabs-spacer"></span>
           <button class="copy-btn">Copiar</button>
         </div>
@@ -928,20 +928,25 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
   <span class="tk-key">"userid"</span>:   <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</span>,
   <span class="tk-key">"password"</span>: <span class="tk-str">"password_encrypted"</span>
 }</code></pre>
+<pre class="code-pane" data-pane="b-login-res"><code>{
+  <span class="tk-key">"sessionToken"</span>: <span class="tk-str">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span>
+}</code></pre>
       </div>
 
       <h3 id="backend-authorize">Flujo de autorización de transacción</h3>
-      <p>Una vez validado el login, magic notifica la autorización del payment-link. Crea un endpoint para recibir esta información y guarda <strong>todos los valores</strong>: los necesitarás para el proceso de claim.</p>
+      <p>Con el <code>sessionToken</code> obtenido en el login, magic notifica la autorización del payment-link. El header <code>sessionToken</code> demuestra que el usuario ya se autenticó. La respuesta debe incluir un <code>txCode</code> — el código que tu core devuelve después de validar la operación — que se reenvía como header en el claim.</p>
 
       <div class="code-card">
         <div class="code-tabs">
-          <button class="code-tab active" data-tab="b-authorize"><span class="lang-dot dot-json"></span>POST · authorize payload</button>
+          <button class="code-tab active" data-tab="b-authorize-headers"><span class="lang-dot dot-bash"></span>Headers</button>
+          <button class="code-tab" data-tab="b-authorize"><span class="lang-dot dot-json"></span>POST · authorize payload</button>
+          <button class="code-tab" data-tab="b-authorize-res"><span class="lang-dot dot-json"></span>200 · response</button>
           <span class="code-tabs-spacer"></span>
           <button class="copy-btn">Copiar</button>
         </div>
-<pre class="code-pane active" data-pane="b-authorize"><code>{
+<pre class="code-pane active" data-pane="b-authorize-headers"><code>sessionToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
+<pre class="code-pane" data-pane="b-authorize"><code>{
   <span class="tk-key">"userId"</span>:        <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</span>,
-  <span class="tk-key">"tokenFinsus"</span>:   <span class="tk-str">"13245"</span>,
   <span class="tk-key">"paymentLinkId"</span>: <span class="tk-str">"magic251205001"</span>,
   <span class="tk-key">"accountId"</span>:     <span class="tk-str">"1234"</span>,
   <span class="tk-key">"amount"</span>:        <span class="tk-num">1</span>,
@@ -951,18 +956,23 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
     <span class="tk-key">"ip"</span>:       <span class="tk-str">"127.0.0.1"</span>
   }
 }</code></pre>
+<pre class="code-pane" data-pane="b-authorize-res"><code>{
+  <span class="tk-key">"txCode"</span>: <span class="tk-str">"AUTH-9F2C7E1B"</span>
+}</code></pre>
       </div>
 
       <h3 id="backend-claim">Flujo de claim del payment-link</h3>
-      <p>Necesitas un endpoint que reciba la solicitud de procesar el payment-link, ejecute la transacción y envíe el dinero a la cuenta del receptor.</p>
+      <p>Con el <code>txCode</code> devuelto por la autorización, magic llama a tu endpoint de claim para ejecutar la transferencia real por tu rail (SPEI, SEPA, Pix, etc.) hacia la cuenta del receptor. El header <code>txCode</code> es el código de autorización que tu core regresó en el paso anterior.</p>
 
       <div class="code-card">
         <div class="code-tabs">
-          <button class="code-tab active" data-tab="b-claim"><span class="lang-dot dot-json"></span>POST · claim payload</button>
+          <button class="code-tab active" data-tab="b-claim-headers"><span class="lang-dot dot-bash"></span>Headers</button>
+          <button class="code-tab" data-tab="b-claim"><span class="lang-dot dot-json"></span>POST · claim payload</button>
           <span class="code-tabs-spacer"></span>
           <button class="copy-btn">Copiar</button>
         </div>
-<pre class="code-pane active" data-pane="b-claim"><code>{
+<pre class="code-pane active" data-pane="b-claim-headers"><code>txCode: AUTH-9F2C7E1B</code></pre>
+<pre class="code-pane" data-pane="b-claim"><code>{
   <span class="tk-key">"userId"</span>:          <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</span>,
   <span class="tk-key">"paymentLinkId"</span>:   <span class="tk-str">"aaaaaaaa-bbbb-cccc-dddd-ffffffffffff"</span>,
   <span class="tk-key">"receptorAccount"</span>: <span class="tk-str">"01234567891234679"</span>,
@@ -977,6 +987,14 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
     <span class="tk-key">"ip"</span>:       <span class="tk-str">"127.0.0.1"</span>
   }
 }</code></pre>
+      </div>
+
+      <div class="callout note">
+        <span class="callout-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v5M12 16h.01"/></svg></span>
+        <div class="callout-body">
+          <strong>Encadenamiento</strong>
+          <p>El flujo es estrictamente secuencial: <code>login</code> → <code>sessionToken</code> → <code>authorize</code> → <code>txCode</code> → <code>claim</code>. Cada token nace en el paso anterior y solo es válido para el siguiente.</p>
+        </div>
       </div>
 
       <h3 id="backend-security">Seguridad de la información</h3>
