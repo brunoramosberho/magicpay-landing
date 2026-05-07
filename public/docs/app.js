@@ -152,7 +152,7 @@
       var btn = e.target.closest('.kb-preset');
       if (!btn) return;
       var lightP = btn.getAttribute('data-primary');
-      var lightOn = btn.getAttribute('data-on-primary');
+      var lightOn = btn.getAttribute('data-on-primary') || '#FFFFFF';
       var darkP = btn.getAttribute('data-dark-primary') || lightP;
       var darkOn = btn.getAttribute('data-dark-on-primary') || lightOn;
       function setPair(idP, idOn, p, on) {
