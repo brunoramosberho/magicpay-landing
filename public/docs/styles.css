@@ -1144,11 +1144,6 @@ body[data-density="comfy"] .main h2 { font-size: 42px; }
   color: var(--mp-fg-muted);
 }
 .kb-color-headers span:first-child { grid-column: 1; }
-.kb-presets-hint {
-  margin: 0 0 10px;
-  font-size: 11px;
-  color: var(--mp-fg-subtle);
-}
 .kb-presets {
   display: flex;
   flex-wrap: wrap;
