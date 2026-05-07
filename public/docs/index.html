@@ -6,9 +6,6 @@
 <title>Magic SDK · Guía de integración</title>
 <link rel="stylesheet" href="/docs/colors_and_type.css">
 <link rel="stylesheet" href="/docs/styles.css">
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 </head>
 <body data-theme="light" data-density="cozy">
 
@@ -1093,52 +1090,5 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
 </div>
 
 <script src="/docs/app.js"></script>
-
-<!-- Tweaks panel -->
-<script type="text/babel" src="/docs/tweaks-panel.jsx"></script>
-<script type="text/babel">
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "theme": "light",
-  "density": "compact",
-  "accent": "#306FF6",
-  "showFlowDiagram": true
-}/*EDITMODE-END*/;
-
-function TweaksApp() {
-  const [t, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
-
-  React.useEffect(() => {
-    document.body.dataset.theme = t.theme;
-    document.body.dataset.density = t.density;
-    document.documentElement.style.setProperty('--mp-blue', t.accent);
-    document.documentElement.style.setProperty('--mp-accent', t.accent);
-    const diag = document.querySelector('#architecture .diagram');
-    if (diag) diag.style.display = t.showFlowDiagram ? '' : 'none';
-  }, [t]);
-
-  return (
-    <window.TweaksPanel title="Tweaks">
-      <window.TweakSection label="Tema" />
-      <window.TweakRadio label="Modo" value={t.theme}
-        options={['light', 'dark']}
-        onChange={v => setTweak('theme', v)} />
-      <window.TweakSection label="Densidad" />
-      <window.TweakRadio label="Espaciado" value={t.density}
-        options={['compact', 'cozy', 'comfy']}
-        onChange={v => setTweak('density', v)} />
-      <window.TweakSection label="Marca" />
-      <window.TweakColor label="Acento" value={t.accent}
-        options={['#306FF6', '#202329', '#0F6B3E', '#B97AE7']}
-        onChange={v => setTweak('accent', v)} />
-      <window.TweakToggle label="Mostrar diagrama" value={t.showFlowDiagram}
-        onChange={v => setTweak('showFlowDiagram', v)} />
-    </window.TweaksPanel>
-  );
-}
-
-const root = document.createElement('div');
-document.body.appendChild(root);
-ReactDOM.createRoot(root).render(<TweaksApp />);
-</script>
 </body>
 </html>

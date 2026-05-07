@@ -35,9 +35,7 @@ a { color: inherit; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: var(--mp-bg);
   border-bottom: 1px solid var(--mp-black-a10);
 }
 .topbar-inner {
