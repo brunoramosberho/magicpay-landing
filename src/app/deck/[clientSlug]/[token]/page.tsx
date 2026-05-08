@@ -40,13 +40,13 @@ export default async function DeckPage({
       client={{
         slug: client.slug,
         name: client.name,
-        brand_color: client.brand_color,
-        logo_url: client.logo_url,
-        app_icon_url: client.app_icon_url,
+        brand_color: client.brand_color ?? null,
+        logo_url: client.logo_url ?? null,
+        app_icon_url: client.app_icon_url ?? null,
         currency: client.currency,
-        pricing_kickoff: client.pricing_kickoff,
-        pricing_monthly_fixed: client.pricing_monthly_fixed,
-        pricing_per_active_user: client.pricing_per_active_user
+        pricing_kickoff: client.pricing_kickoff ?? null,
+        pricing_monthly_fixed: client.pricing_monthly_fixed ?? null,
+        pricing_per_active_user: client.pricing_per_active_user ?? null
       }}
       slides={slides}
     />
