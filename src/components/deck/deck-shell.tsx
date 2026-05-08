@@ -4,6 +4,7 @@ import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
 import {I18nProvider, useI18n} from './i18n-context';
 import {LanguageToggle} from './language-toggle';
+import {SectionsMenu} from './sections-menu';
 
 function FullscreenButton() {
   const [isFs, setIsFs] = useState(false);
@@ -50,6 +51,7 @@ export type DeckClient = {
   name: string;
   brand_color: string | null;
   logo_url: string | null;
+  app_icon_url: string | null;
   currency: string;
   pricing_kickoff: number | null;
   pricing_monthly_fixed: number | null;
@@ -275,6 +277,7 @@ function DeckShellInner({
           )}
         </div>
         <div className="deck-header-actions">
+          <SectionsMenu slides={slides} currentIndex={index} onJump={goTo} />
           <FullscreenButton />
           <LanguageToggle />
         </div>

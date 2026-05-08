@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
     slug?: string;
     brand_color?: string;
     logo_url?: string;
+    app_icon_url?: string;
     pricing_kickoff?: number | null;
     pricing_monthly_fixed?: number | null;
     pricing_per_active_user?: number | null;
@@ -59,6 +60,7 @@ export async function POST(req: NextRequest) {
       slug,
       brand_color: body.brand_color ?? null,
       logo_url: body.logo_url ?? null,
+      app_icon_url: body.app_icon_url ?? null,
       pricing_kickoff: body.pricing_kickoff ?? null,
       pricing_monthly_fixed: body.pricing_monthly_fixed ?? null,
       pricing_per_active_user: body.pricing_per_active_user ?? null,

@@ -97,26 +97,30 @@ function DemoShell({
       <div className="demo-right">{right}</div>
       <style jsx>{`
         .demo-frame {
-          padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+          padding: clamp(32px, 4vh, 64px) var(--pad-x) clamp(28px, 3.5vh, 56px);
           display: grid;
           grid-template-columns: 1.2fr 1fr;
           gap: clamp(40px, 5vw, 80px);
-          align-items: center;
+          align-items: start;
           height: 100%;
           min-height: 0;
         }
         .demo-left {
           display: flex;
           flex-direction: column;
-          gap: 16px;
+          gap: 14px;
           min-width: 0;
+          padding-top: clamp(16px, 3vh, 40px);
         }
         .demo-right {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: center;
           height: 100%;
           min-height: 0;
+        }
+        .demo-right :global(.deck-phone) {
+          max-height: 88%;
         }
         .demo-coming {
           margin-top: 16px;
@@ -146,18 +150,20 @@ function DemoShell({
   );
 }
 
-// 08 Keyboard demo — autoplay video w/ replay
+// 08 Keyboard demo — autoplay video w/ replay. Title and caption replace {client}
+// with the bank's name so it reads as the bank's own keyboard.
 export const KeyboardDemoSlide: SlideDef = {
   id: 'keyboard-demo',
   variant: 'light',
-  Body: () => {
+  Body: ({client}: SlideContext) => {
     const {t} = useI18n();
+    const fillClient = (s: string) => s.replaceAll('{client}', client.name);
     return (
       <DemoShell
         label={t('kb_label')}
         kicker={t('kb_kicker')}
-        title={t('kb_title')}
-        caption={t('kb_explanation')}
+        title={fillClient(t('kb_title'))}
+        caption={fillClient(t('kb_explanation'))}
         right={<VideoPhone src="/deck/videos/keyboard.mp4" />}
       />
     );
@@ -165,72 +171,242 @@ export const KeyboardDemoSlide: SlideDef = {
 };
 
 // 10 Claim demo — interactive flow inside iPhone frame.
-// Toggle "1ra vez" (full form, type CLABE + name) vs "2da vez" (saved account).
-// CLABE/Tarjeta vs DIMO (próximamente). Brand color from client config.
+// Auto-fills CLABE → name → switches to DIMO → fills phone → CODI lookup → auto-claim.
+// Two info callouts on the left explain browser-saved + acquisition channel benefits.
 export const ClaimDemoSlide: SlideDef = {
   id: 'claim-demo',
   variant: 'light',
   Body: ({client}: SlideContext) => {
     const {t} = useI18n();
     return (
-      <DemoShell
-        label={t('claim_label')}
-        kicker={t('claim_kicker')}
-        title={t('claim_title')}
-        right={<ClaimDemo brand={client.brand_color ?? '#306FF6'} />}
-      />
+      <div className="claim-frame">
+        <div className="claim-left">
+          <div className="claim-head">
+            <p className="deck-eyebrow">{t('claim_label')}</p>
+            <p className="deck-kicker">{t('claim_kicker')}</p>
+            <h1 className="claim-title">{t('claim_title')}</h1>
+          </div>
+          <div className="claim-info">
+            <ClaimInfoCard
+              icon={
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                  <path d="M12 16v2" />
+                </svg>
+              }
+              title={t('claim_info_saved_title')}
+              desc={t('claim_info_saved_desc')}
+            />
+            <ClaimInfoCard
+              icon={
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 11l18-8-3 18-7-6-3 6-1-7-4-3z" />
+                </svg>
+              }
+              title={t('claim_info_acq_title')}
+              desc={t('claim_info_acq_desc')}
+            />
+          </div>
+        </div>
+        <div className="claim-right">
+          <ClaimDemo
+            brand={client.brand_color ?? '#306FF6'}
+            clientName={client.name}
+            clientLogo={client.logo_url ?? undefined}
+            clientAppIcon={client.app_icon_url ?? undefined}
+          />
+        </div>
+        <style jsx>{`
+          .claim-frame {
+            padding: clamp(28px, 3.5vh, 56px) var(--pad-x) clamp(20px, 2.5vh, 36px);
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            gap: clamp(32px, 4vw, 64px);
+            align-items: center;
+            height: 100%;
+            min-height: 0;
+          }
+          .claim-left {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(20px, 2.6vh, 32px);
+            min-width: 0;
+          }
+          .claim-head {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+          }
+          .claim-title {
+            font: 500 clamp(28px, 3.4vw, 48px) / 1.05 var(--mp-font-display);
+            letter-spacing: -0.02em;
+            margin: 4px 0 0;
+            color: var(--mp-ink);
+          }
+          .claim-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          }
+          .claim-right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 0;
+          }
+          @media (max-width: 900px) {
+            .claim-frame {
+              grid-template-columns: 1fr;
+            }
+          }
+        `}</style>
+      </div>
     );
   }
 };
 
-// 11 Tap demo — drop tap.jpg into /public/deck/images/ to show the two-phone shot.
-// Falls back to a placeholder phone until the file is added.
-export const TapDemoSlide: SlideDef = {
-  id: 'tap-demo',
-  variant: 'light',
-  Body: () => {
-    const {t} = useI18n();
-    return (
-      <DemoShell
-        label={t('tap_label')}
-        kicker={t('tap_kicker')}
-        title={t('tap_title')}
-        caption={t('tap_caption')}
-        right={<TapImageOrPlaceholder />}
-        badge="Video coming"
-      />
-    );
-  }
-};
-
-function TapImageOrPlaceholder() {
+function ClaimInfoCard({icon, title, desc}: {icon: React.ReactNode; title: string; desc: string}) {
   return (
-    <div className="tap-img-wrap">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/deck/images/tap.png"
-        alt="Two phones tapping to share a payment link via NFC"
-        onError={(e) => {
-          (e.currentTarget as HTMLImageElement).style.display = 'none';
-        }}
-      />
+    <div className="ic">
+      <span className="ic-icon" style={{color: 'var(--brand)'}}>
+        {icon}
+      </span>
+      <div className="ic-text">
+        <h3 className="ic-title">{title}</h3>
+        <p className="ic-desc">{desc}</p>
+      </div>
       <style jsx>{`
-        .tap-img-wrap {
-          width: 100%;
-          height: 100%;
-          display: flex;
+        .ic {
+          display: grid;
+          grid-template-columns: auto 1fr;
+          gap: 14px;
+          padding: 14px 16px;
+          background: var(--mp-grey);
+          border: 1px solid var(--mp-border-soft);
+          border-radius: var(--mp-radius-lg);
+          align-items: flex-start;
+        }
+        .ic-icon {
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          background: color-mix(in srgb, var(--brand) 12%, var(--mp-white));
+          display: inline-flex;
           align-items: center;
           justify-content: center;
+          flex-shrink: 0;
         }
-        .tap-img-wrap :global(img) {
-          max-width: 100%;
-          max-height: 100%;
-          object-fit: contain;
+        .ic-icon :global(svg) {
+          width: 18px;
+          height: 18px;
+        }
+        .ic-title {
+          font: 500 clamp(14px, 1.2vw, 17px) / 1.2 var(--mp-font-display);
+          color: var(--mp-ink);
+          margin: 0 0 4px;
+        }
+        .ic-desc {
+          font: 400 clamp(12px, 1vw, 14px) / 1.45 var(--mp-font-body);
+          color: var(--mp-fg-muted);
+          margin: 0;
         }
       `}</style>
     </div>
   );
 }
+
+// 11 Tap demo — full-bleed video background with text overlay.
+export const TapDemoSlide: SlideDef = {
+  id: 'tap-demo',
+  variant: 'dark',
+  bare: true,
+  Body: () => {
+    const {t} = useI18n();
+    return (
+      <div className="tap-frame">
+        <video
+          className="tap-video"
+          src="/deck/videos/tap.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden
+        />
+        <div className="tap-scrim" aria-hidden />
+        <div className="tap-content">
+          <p className="deck-eyebrow tap-eyebrow">{t('tap_label')}</p>
+          <p className="deck-kicker tap-kicker">{t('tap_kicker')}</p>
+          <h1 className="tap-title">{t('tap_title')}</h1>
+          <p className="tap-caption">{t('tap_caption')}</p>
+        </div>
+        <style jsx global>{`
+          [data-slide-id='tap-demo'] {
+            padding: 0 !important;
+          }
+        `}</style>
+        <style jsx>{`
+          .tap-frame {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            background: #000;
+          }
+          .tap-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          .tap-scrim {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+              90deg,
+              rgba(0, 0, 0, 0.7) 0%,
+              rgba(0, 0, 0, 0.45) 45%,
+              rgba(0, 0, 0, 0.15) 80%,
+              rgba(0, 0, 0, 0) 100%
+            );
+            pointer-events: none;
+          }
+          .tap-content {
+            position: relative;
+            height: 100%;
+            padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 720px;
+            color: #fff;
+          }
+          .tap-eyebrow {
+            color: rgba(255, 255, 255, 0.7);
+          }
+          .tap-kicker {
+            color: var(--brand);
+            margin: 0;
+          }
+          .tap-title {
+            font: 500 clamp(40px, 5.5vw, 80px) / 1.05 var(--mp-font-display);
+            letter-spacing: -0.02em;
+            margin: 12px 0 18px;
+            color: #fff;
+          }
+          .tap-caption {
+            font: 400 clamp(16px, 1.4vw, 22px) / 1.5 var(--mp-font-body);
+            color: rgba(255, 255, 255, 0.85);
+            margin: 0;
+            max-width: 580px;
+          }
+        `}</style>
+      </div>
+    );
+  }
+};
 
 // 12 Voice demo — autoplay video w/ replay
 export const VoiceDemoSlide: SlideDef = {
@@ -299,10 +475,11 @@ export const WhitelabelSlide: SlideDef = {
   }
 };
 
+// Same presets as mgic.me/docs#customization
 const PRESETS = [
-  '#306FF6', '#1A1A2E', '#2C8A3E', '#F5C842', '#000000', '#1F3A52', '#2D5DEB', '#4F8C5A', '#D6383D', '#0E2A4D',
-  '#5C2DD5', '#3DA5D9', '#E5651E', '#7BC97D', '#A8262A', '#1A1A1A', '#2F6E3F', '#4FA3D9', '#C2358F', '#7A1FA8',
-  '#0A2855', '#E58FA5', '#1B3252', '#0F1F33', '#C42026', '#A24A4A', '#3D6AE8', '#7BCFAE', '#F5D04E', '#A8DC72'
+  '#306FF6', '#1D1B3A', '#2DB742', '#FFD84D', '#000000', '#143547', '#294AFB', '#00A651', '#EB0029', '#001E96',
+  '#4F46E5', '#0097D4', '#FF4B00', '#00C26E', '#DB0011', '#1C1C1C', '#3DAE48', '#009EE3', '#D81B8A', '#830AD1',
+  '#003087', '#FF4C5E', '#1E365B', '#242424', '#EA1D25', '#D8322A', '#2B6BE4', '#5FCE87', '#FFE04B', '#B6F687'
 ];
 
 function Customizer({initialColor}: {initialColor: string}) {
@@ -361,19 +538,8 @@ function Customizer({initialColor}: {initialColor: string}) {
             ☾ Dark
           </button>
         </div>
-        <div className="preview-stage">
-          <div className={`preview-chat ${theme}`}>
-            <div className="preview-header">
-              <span className="preview-plus">+</span>
-              <div className="preview-input">Message…</div>
-              <span className="preview-mic">🎤</span>
-            </div>
-            <div className="preview-meta">
-              <span>Jonathan Moore</span>
-              <span className="muted">Main Account</span>
-            </div>
-            <MagicKeyboard amount="320" color={primary} theme={theme} size="md" />
-          </div>
+        <div className={`preview-stage ${theme}`}>
+          <MagicKeyboard amount="320" color={primary} theme={theme} />
         </div>
       </div>
 
@@ -488,58 +654,13 @@ function Customizer({initialColor}: {initialColor: string}) {
           display: flex;
           align-items: center;
           justify-content: center;
+          padding: 24px;
+          background: var(--mp-neutral-100);
+          border-radius: var(--mp-radius-lg);
+          transition: background 220ms;
         }
-        .preview-chat {
-          width: 100%;
-          max-width: 380px;
-          background: var(--mp-grey);
-          border-radius: 18px;
-          padding: 12px 12px 14px;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          border: 1px solid var(--mp-border-soft);
-        }
-        .preview-chat.dark {
-          background: #14141a;
-          border-color: rgba(255, 255, 255, 0.05);
-        }
-        .preview-header {
-          display: grid;
-          grid-template-columns: auto 1fr auto;
-          gap: 8px;
-          align-items: center;
-          background: var(--mp-white);
-          border-radius: 999px;
-          padding: 6px 10px;
-        }
-        .dark .preview-header {
-          background: #1f1f26;
-        }
-        .preview-plus {
-          color: var(--mp-fg-muted);
-          font-size: 16px;
-        }
-        .preview-input {
-          color: var(--mp-fg-muted);
-          font: 400 13px/1 var(--mp-font-ios);
-        }
-        .preview-mic {
-          font-size: 14px;
-          opacity: 0.6;
-        }
-        .preview-meta {
-          display: flex;
-          justify-content: space-between;
-          padding: 0 6px;
-          font: 500 11px/1 var(--mp-font-ios);
-          color: var(--mp-fg);
-        }
-        .dark .preview-meta {
-          color: #fff;
-        }
-        .preview-meta .muted {
-          color: var(--mp-fg-muted);
+        .preview-stage.dark {
+          background: #0a0a0c;
         }
       `}</style>
     </div>

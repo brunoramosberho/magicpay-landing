@@ -50,6 +50,25 @@ export async function verifySession(token: string): Promise<AdminSession | null>
   }
 }
 
+export type AuthFailure = 'no-cookie' | 'invalid-jwt' | 'email-not-allowed';
+
+// Like getCurrentSession but returns a reason when it fails — for diagnostics.
+export async function getCurrentSessionDetailed(): Promise<
+  {ok: true; session: AdminSession} | {ok: false; reason: AuthFailure}
+> {
+  const jar = await cookies();
+  const token = jar.get(COOKIE_NAME)?.value;
+  if (!token) return {ok: false, reason: 'no-cookie'};
+  try {
+    const {payload} = await jwtVerify(token, secret());
+    if (typeof payload.email !== 'string') return {ok: false, reason: 'invalid-jwt'};
+    if (!isEmailAllowed(payload.email)) return {ok: false, reason: 'email-not-allowed'};
+    return {ok: true, session: {email: payload.email}};
+  } catch {
+    return {ok: false, reason: 'invalid-jwt'};
+  }
+}
+
 export async function setSessionCookie(token: string) {
   const jar = await cookies();
   jar.set(COOKIE_NAME, token, {
@@ -63,6 +82,15 @@ export async function setSessionCookie(token: string) {
 
 export async function clearSessionCookie() {
   const jar = await cookies();
+  // Explicit overwrite + maxAge: 0 to ensure the browser actually drops the cookie.
+  // jar.delete() alone can fail to clear if the original `path` attribute doesn't match.
+  jar.set(COOKIE_NAME, '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0
+  });
   jar.delete(COOKIE_NAME);
 }
 

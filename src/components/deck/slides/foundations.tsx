@@ -34,33 +34,45 @@ export const CoverSlide: SlideDef = {
             </h1>
             <p className="cover-subtitle">{t('cover_subtitle')}</p>
             <div className="cover-meta">
-              <span>{t('cover_speaker_full')}</span>
+              <span>{t('cover_date')}</span>
             </div>
           </div>
-          <div className="cover-phone">
-            <div className="deck-phone">
-              <div className="deck-phone-notch" />
-              <div className="deck-phone-screen phone-chat">
-                <div className="phone-bar">
-                  <div className="phone-bar-name">Mom</div>
-                </div>
-                <div className="phone-msgs">
-                  <div className="msg msg-them">{t('cover_msg_them')}</div>
-                  <div className="msg msg-mine">Va, te mando 👇</div>
-                </div>
-                <div className="phone-keyboard-wrap">
-                  <MagicKeyboard amount="300" size="sm" />
+          <div className="cover-keyboard">
+            <div className="cover-stage">
+              <div className="cover-bubbles" aria-hidden>
+                <div className="bubble in">{t('cover_msg_them')}</div>
+                <div className="bubble in">{t('cover_msg_amount')}</div>
+                <div className="bubble out pay-link">
+                  <span className="pl-icon" aria-hidden>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/deck/logos/icon.svg" alt="" />
+                  </span>
+                  <span className="pl-text">
+                    <span className="pl-amount">$300 MXN</span>
+                    <span className="pl-url">mgic.me/xyz</span>
+                  </span>
                 </div>
               </div>
+              <MagicKeyboard
+                amount="300"
+                recipientName={`${client.name} | Jonathan Moore`}
+              />
             </div>
           </div>
         </div>
+        <style jsx global>{`
+          [data-slide-id='cover'] {
+            padding: 0 !important;
+          }
+        `}</style>
         <style jsx>{`
           .cover-frame {
-            position: relative;
-            height: 100%;
-            padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+            position: absolute;
+            inset: 0;
+            padding: clamp(32px, 4vh, 56px) var(--pad-x) clamp(24px, 3vh, 40px);
             overflow: hidden;
+            display: flex;
+            align-items: center;
           }
           .cover-glow {
             position: absolute;
@@ -83,7 +95,7 @@ export const CoverSlide: SlideDef = {
             grid-template-columns: 1.4fr 1fr;
             gap: clamp(40px, 6vw, 100px);
             align-items: center;
-            min-height: 70vh;
+            width: 100%;
           }
           .cover-pill {
             display: inline-flex;
@@ -133,61 +145,94 @@ export const CoverSlide: SlideDef = {
             font: 400 clamp(14px, 1.1vw, 16px) / 1 var(--mp-font-body);
             color: var(--mp-fg-muted);
           }
-          .cover-phone {
+          .cover-keyboard {
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
           }
-          .phone-chat {
-            background: var(--mp-grey);
+          .cover-stage {
+            width: 340px;
+            max-width: 100%;
             display: flex;
             flex-direction: column;
-            font-family: var(--mp-font-ios);
+            gap: 10px;
+            transform: scale(1.15);
+            transform-origin: center;
           }
-          .phone-bar {
-            padding: 56px 16px 16px;
-            border-bottom: 1px solid var(--mp-border-soft);
-            text-align: center;
+          .cover-stage :global(.kb-preview) {
+            max-width: 100%;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.10),
+              0 8px 24px rgba(0, 0, 0, 0.06);
           }
-          .phone-bar-name {
-            font: 500 16px/1 var(--mp-font-ios);
-            color: var(--mp-ink);
-          }
-          .phone-msgs {
-            flex: 1;
+          .cover-bubbles {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            padding: 14px 14px 8px;
-            min-height: 0;
-            overflow: hidden;
+            gap: 4px;
+            align-items: flex-start;
+            padding: 0 6px;
           }
-          .msg {
-            max-width: 82%;
-            padding: 8px 14px;
-            font: 400 14px/1.3 var(--mp-font-ios);
+          .bubble {
+            padding: 9px 14px;
             border-radius: 18px;
+            font: 400 14px/1.35 -apple-system, 'SF Pro', system-ui, sans-serif;
+            max-width: 78%;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
           }
-          .msg-them {
-            background: var(--mp-white);
-            color: var(--mp-ink);
+          .bubble.in {
+            background: #e9e9eb;
+            color: #111;
+            border-bottom-left-radius: 5px;
             align-self: flex-start;
           }
-          .msg-mine {
-            background: color-mix(in srgb, var(--brand) 90%, white);
+          .bubble.out {
+            background: var(--brand);
             color: #fff;
+            border-bottom-right-radius: 5px;
             align-self: flex-end;
           }
-          .phone-keyboard-wrap {
-            padding: 4px 8px 8px;
-            background: var(--mp-grey);
+          .bubble.pay-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 14px 7px 7px;
+          }
+          .pl-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.18);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+          }
+          .pl-icon :global(img) {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
+          }
+          .pl-text {
+            display: inline-flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+          }
+          .pl-amount {
+            font: 600 14px/1.1 var(--mp-font-display);
+            letter-spacing: -0.01em;
+            font-variant-numeric: tabular-nums;
+          }
+          .pl-url {
+            font: 500 11px/1 -apple-system, 'SF Pro', system-ui, sans-serif;
+            opacity: 0.85;
           }
           @media (max-width: 900px) {
             .cover-content {
               grid-template-columns: 1fr;
               gap: 40px;
             }
-            .cover-phone {
+            .cover-keyboard {
               order: -1;
             }
           }
@@ -400,18 +445,18 @@ export const InfrastructureSlide: SlideDef = {
         <style jsx>{`
           .infra-frame {
             height: 100%;
-            padding: clamp(40px, 5vh, 72px) var(--pad-x) clamp(32px, 4vh, 56px);
+            padding: clamp(28px, 3.5vh, 56px) var(--pad-x) clamp(24px, 3vh, 44px);
             display: flex;
             flex-direction: column;
-            gap: clamp(16px, 2.5vh, 28px);
+            gap: clamp(12px, 1.8vh, 22px);
             min-height: 0;
           }
           .infra-kicker {
-            margin-bottom: clamp(8px, 1.5vh, 16px);
-            font-size: clamp(18px, 1.8vw, 28px);
+            margin-bottom: clamp(4px, 1vh, 10px);
+            font-size: clamp(16px, 1.5vw, 24px);
           }
           .infra-title {
-            font: 500 clamp(36px, 4.5vw, 64px) / 1.05 var(--mp-font-display);
+            font: 500 clamp(28px, 3.6vw, 52px) / 1.05 var(--mp-font-display);
             letter-spacing: -0.02em;
             margin: 0;
             color: var(--mp-ink);
@@ -424,16 +469,17 @@ export const InfrastructureSlide: SlideDef = {
             flex-shrink: 0;
           }
           .infra-stats :global(.deck-stat .num) {
-            font-size: clamp(48px, 5.5vw, 80px);
+            font-size: clamp(36px, 4.2vw, 64px);
+            line-height: 1;
           }
           .infra-stats :global(.deck-stat .lbl) {
-            font-size: clamp(13px, 1.1vw, 16px);
-            margin-top: 6px;
+            font-size: clamp(12px, 1vw, 15px);
+            margin-top: 4px;
           }
           .infra-chart {
             background: var(--mp-grey);
             border-radius: var(--mp-radius-lg);
-            padding: clamp(16px, 2vw, 24px);
+            padding: clamp(12px, 1.6vw, 20px);
             display: flex;
             flex-direction: column;
             flex: 1;
@@ -500,13 +546,17 @@ function GrowthChart({caption}: {caption: string}) {
   const innerH = H - pad.t - pad.b;
   const minYear = 2015;
   const maxYear = 2024;
-  const yMin = 0.01;
-  const yMax = 200;
-  const logY = (v: number) =>
-    pad.t + innerH - ((Math.log10(v) - Math.log10(yMin)) / (Math.log10(yMax) - Math.log10(yMin))) * innerH;
+  // Log scale (base 10) — required to show 4+ orders of magnitude (0.01B to 165B).
+  const logMin = -2; // 0.01B
+  const logMax = Math.log10(200); // headroom above UPI 165
+  const yPos = (v: number) => {
+    const logV = Math.log10(Math.max(v, 0.005));
+    return pad.t + innerH - ((logV - logMin) / (logMax - logMin)) * innerH;
+  };
   const xPos = (year: number) => pad.l + ((year - minYear) / (maxYear - minYear)) * innerW;
   const yTicks = [0.1, 1, 10, 100];
   const xTicks = [2015, 2017, 2019, 2021, 2024];
+  const fmtTick = (t: number) => (t < 1 ? `${t}B` : `${t}B`);
 
   const series: Array<{key: string; label: string; color: string; data: typeof CHART_DATA.spei}> = [
     {key: 'upi', label: 'UPI · India', color: '#FF8A3D', data: CHART_DATA.upi},
@@ -515,7 +565,7 @@ function GrowthChart({caption}: {caption: string}) {
   ];
 
   const buildPath = (data: typeof CHART_DATA.spei) =>
-    data.map((p, i) => `${i === 0 ? 'M' : 'L'}${xPos(p.year).toFixed(1)} ${logY(p.value).toFixed(1)}`).join(' ');
+    data.map((p, i) => `${i === 0 ? 'M' : 'L'}${xPos(p.year).toFixed(1)} ${yPos(p.value).toFixed(1)}`).join(' ');
 
   return (
     <div className="growth">
@@ -532,26 +582,26 @@ function GrowthChart({caption}: {caption: string}) {
       </div>
       <div className="growth-svg-wrap">
         <svg viewBox={`0 0 ${W} ${H}`} className="growth-svg" preserveAspectRatio="none">
-          {/* Y-axis log gridlines */}
+          {/* Y-axis linear gridlines */}
           {yTicks.map((t) => (
             <g key={`y-${t}`}>
               <line
                 x1={pad.l}
                 x2={W - pad.r}
-                y1={logY(t)}
-                y2={logY(t)}
+                y1={yPos(t)}
+                y2={yPos(t)}
                 stroke="rgba(0,0,0,0.06)"
                 strokeDasharray="4 4"
               />
               <text
                 x={pad.l - 10}
-                y={logY(t) + 4}
+                y={yPos(t) + 4}
                 textAnchor="end"
                 fontSize="13"
                 fill="var(--mp-fg-muted)"
                 fontFamily="var(--mp-font-body)"
               >
-                {t < 1 ? t.toString() : t.toString()}
+                {fmtTick(t)}
               </text>
             </g>
           ))}
@@ -569,9 +619,9 @@ function GrowthChart({caption}: {caption: string}) {
               {t}
             </text>
           ))}
-          {/* Series */}
-          {series.map((s) => (
-            <g key={s.key}>
+          {/* Series — animated draw on mount */}
+          {series.map((s, sIdx) => (
+            <g key={s.key} className="series" style={{animationDelay: `${sIdx * 200}ms`}}>
               <path
                 d={buildPath(s.data)}
                 fill="none"
@@ -579,14 +629,17 @@ function GrowthChart({caption}: {caption: string}) {
                 strokeWidth="3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="series-line"
               />
-              {s.data.map((p) => (
+              {s.data.map((p, i) => (
                 <circle
                   key={`${s.key}-${p.year}`}
                   cx={xPos(p.year)}
-                  cy={logY(p.value)}
+                  cy={yPos(p.value)}
                   r="4"
                   fill={s.color}
+                  className="series-dot"
+                  style={{animationDelay: `${sIdx * 200 + 1400 + i * 30}ms`}}
                 />
               ))}
               {/* Latest value label */}
@@ -595,14 +648,16 @@ function GrowthChart({caption}: {caption: string}) {
                 return (
                   <text
                     x={xPos(last.year) - 4}
-                    y={logY(last.value) - 12}
+                    y={yPos(last.value) - 12}
                     textAnchor="end"
-                    fontSize="13"
-                    fontWeight="500"
+                    fontSize="14"
+                    fontWeight="600"
                     fill={s.color}
                     fontFamily="var(--mp-font-display)"
+                    className="series-label"
+                    style={{animationDelay: `${sIdx * 200 + 1700}ms`}}
                   >
-                    {last.value < 1 ? last.value.toFixed(2) : Math.round(last.value)}
+                    {Math.round(last.value)}B
                   </text>
                 );
               })()}
@@ -615,7 +670,7 @@ function GrowthChart({caption}: {caption: string}) {
         .growth {
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 8px;
           flex: 1;
           min-height: 0;
         }
@@ -624,7 +679,8 @@ function GrowthChart({caption}: {caption: string}) {
           justify-content: space-between;
           align-items: baseline;
           gap: 16px;
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
+          flex-shrink: 0;
         }
         .growth-head h3 {
           font: 500 clamp(15px, 1.3vw, 18px) / 1.3 var(--mp-font-body);
@@ -657,11 +713,38 @@ function GrowthChart({caption}: {caption: string}) {
           height: 100%;
           display: block;
         }
+        .growth-svg :global(.series-line) {
+          stroke-dasharray: 2400;
+          stroke-dashoffset: 2400;
+          animation: drawLine 1500ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+          animation-delay: inherit;
+        }
+        .growth-svg :global(.series-dot) {
+          opacity: 0;
+          animation: fadeIn 200ms ease forwards;
+          animation-delay: inherit;
+        }
+        .growth-svg :global(.series-label) {
+          opacity: 0;
+          animation: fadeIn 320ms ease forwards;
+          animation-delay: inherit;
+        }
+        @keyframes drawLine {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+        @keyframes fadeIn {
+          to {
+            opacity: 1;
+          }
+        }
         .growth-caption {
-          font: 400 clamp(13px, 1.1vw, 16px) / 1.5 var(--mp-font-body);
+          font: 400 clamp(11px, 0.95vw, 14px) / 1.4 var(--mp-font-body);
           color: var(--mp-fg-muted);
           margin: 0;
           max-width: 900px;
+          flex-shrink: 0;
         }
       `}</style>
     </div>
@@ -920,18 +1003,38 @@ function FlowRow({
   );
 }
 
-// 07 — What is magic (3-bullets)
+// 07 — What is magic (3-bullets + SDK integration visual)
 export const WhatIsMagicSlide: SlideDef = {
   id: 'what-is-magic',
   variant: 'light',
-  Body: () => {
+  Body: ({client}: SlideContext) => {
     const {t} = useI18n();
+    const appIcon = client.app_icon_url ?? client.logo_url;
     return (
       <div className="magic-frame">
         <div className="magic-head">
-          <p className="deck-eyebrow">{t('magic_label')}</p>
-          <p className="deck-kicker">{t('magic_kicker')}</p>
-          <h1 className="deck-title-1">{t('magic_title')}</h1>
+          <div className="magic-head-row">
+            <div className="magic-head-text">
+              <p className="deck-eyebrow">{t('magic_label')}</p>
+              <p className="deck-kicker">{t('magic_kicker')}</p>
+              <h1 className="deck-title-1">{t('magic_title')}</h1>
+            </div>
+            {appIcon && (
+              <div className="sdk-integration" aria-hidden>
+                <div className="si-stack">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={appIcon} alt="" className="si-app" />
+                  <span className="si-magic-badge">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/deck/logos/icon.svg" alt="" />
+                  </span>
+                </div>
+                <span className="si-caption">
+                  SDK integrado en {client.name}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
         <div className="magic-bullets">
           {[
@@ -962,6 +1065,63 @@ export const WhatIsMagicSlide: SlideDef = {
             display: flex;
             flex-direction: column;
             gap: clamp(28px, 4vh, 48px);
+          }
+          .magic-head-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: clamp(20px, 3vw, 48px);
+            flex-wrap: wrap;
+          }
+          .magic-head-text {
+            min-width: 0;
+            flex: 1;
+          }
+          .sdk-integration {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+          }
+          .si-stack {
+            position: relative;
+            width: clamp(72px, 7vw, 104px);
+            height: clamp(72px, 7vw, 104px);
+          }
+          .si-app {
+            width: 100%;
+            height: 100%;
+            border-radius: 28%;
+            object-fit: cover;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
+              0 2px 6px rgba(0, 0, 0, 0.06);
+          }
+          .si-magic-badge {
+            position: absolute;
+            right: -8px;
+            bottom: -8px;
+            width: 38%;
+            height: 38%;
+            border-radius: 30%;
+            background: var(--brand);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px
+                color-mix(in srgb, var(--brand) 35%, transparent),
+              0 0 0 4px var(--mp-bg);
+          }
+          .si-magic-badge :global(img) {
+            width: 60%;
+            height: 60%;
+            filter: brightness(0) invert(1);
+          }
+          .si-caption {
+            font: 500 clamp(11px, 1vw, 13px) / 1.2 var(--mp-font-body);
+            color: var(--mp-fg-muted);
+            letter-spacing: 0.02em;
+            text-align: center;
           }
           .magic-bullets {
             display: grid;

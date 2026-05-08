@@ -212,46 +212,88 @@ export const ImplementationSlide: SlideDef = {
     const {t} = useI18n();
     return (
       <div className="impl-frame">
-        <div className="impl-head">
-          <p className="deck-eyebrow">{t('impl_label')}</p>
-          <p className="deck-kicker">{t('impl_kicker')}</p>
-          <h1 className="deck-title-1">{t('impl_title')}</h1>
-        </div>
-        <div className="impl-stats">
-          <div className="impl-stat hero">
-            <span className="num" style={{color: 'var(--brand)'}}>
-              {t('impl_hero_stat')}
-            </span>
-            <span className="lbl">{t('impl_hero_stat_label')}</span>
+        <div className="impl-top">
+          <div className="impl-head">
+            <p className="deck-eyebrow">{t('impl_label')}</p>
+            <p className="deck-kicker">{t('impl_kicker')}</p>
+            <h1 className="deck-title-1 impl-title">{t('impl_title')}</h1>
           </div>
-          <div className="impl-stat">
-            <span className="num">{t('impl_sprint_stat')}</span>
-            <span className="lbl">{t('impl_sprint_stat_label')}</span>
+          <div className="impl-stats">
+            <div className="impl-stat hero">
+              <span className="num" style={{color: 'var(--brand)'}}>
+                {t('impl_hero_stat')}
+              </span>
+              <span className="lbl">{t('impl_hero_stat_label')}</span>
+            </div>
+            <div className="impl-stat">
+              <span className="num">{t('impl_sprint_stat')}</span>
+              <span className="lbl">{t('impl_sprint_stat_label')}</span>
+            </div>
           </div>
         </div>
         <div className="impl-services">
           <h3>{t('impl_services_title')}</h3>
           <div className="services-grid">
-            <ServiceCard num={1} label={t('impl_service1')} method="POST" path="/payments/links" />
-            <ServiceCard num={2} label={t('impl_service2')} method="POST" path="/payments/claim" />
-            <ServiceCard num={3} label={t('impl_service3')} method="POST" path="/webhooks/events" />
+            <ServiceCard
+              num={1}
+              label={t('impl_service1')}
+              desc={t('impl_service1_desc')}
+              method="POST"
+              path="/login"
+            />
+            <ServiceCard
+              num={2}
+              label={t('impl_service2')}
+              desc={t('impl_service2_desc')}
+              method="POST"
+              path="/authorize"
+            />
+            <ServiceCard
+              num={3}
+              label={t('impl_service3')}
+              desc={t('impl_service3_desc')}
+              method="POST"
+              path="/claim"
+            />
           </div>
         </div>
-        <div className="impl-code">
-          <div className="code-head">
-            <span className="code-dot" style={{background: '#FF5F54'}} />
-            <span className="code-dot" style={{background: '#FFCF6B'}} />
-            <span className="code-dot" style={{background: '#B5F2D3'}} />
-            <span className="code-file">payment-link.swift</span>
+        <div className="impl-data">
+          <div className="impl-data-head">
+            <div>
+              <h3>{t('impl_data_title')}</h3>
+              <p className="impl-data-sub">{t('impl_data_subtitle')}</p>
+            </div>
+            <span className="impl-data-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>
+              No-custodial
+            </span>
           </div>
-          <pre>
-            <code>{`let link = try await magic.payments.create(
-  amount: .mxn(500),
-  recipient: .clabe("..."),
-  channel: .whatsapp
-)
-// link.url -> "mgic.me/p/xK9..."`}</code>
-          </pre>
+          <div className="code-window">
+            <div className="cw-titlebar">
+              <span className="cw-dots">
+                <span className="cw-dot" style={{background: '#FF5F57'}} />
+                <span className="cw-dot" style={{background: '#FEBC2E'}} />
+                <span className="cw-dot" style={{background: '#28C840'}} />
+              </span>
+              <span className="cw-filename">magic.user.ts</span>
+            </div>
+            <pre className="cw-body">
+              <code>
+                <span className="ln">1</span><span className="kw">type</span> <span className="ty">User</span> = {'{'}{'\n'}
+                <span className="ln">2</span>  <span className="prop">userId</span><span className="punct">:</span>    <span className="ty">string</span><span className="punct">;</span>  <span className="cm">// {t('impl_data_code_user_comment')}</span>{'\n'}
+                <span className="ln">3</span>  <span className="prop">accountId</span><span className="punct">:</span> <span className="ty">string</span><span className="punct">;</span>  <span className="cm">// {t('impl_data_code_account_comment')}</span>{'\n'}
+                <span className="ln">4</span>  <span className="prop">alias</span><span className="punct">:</span>     <span className="ty">string</span><span className="punct">;</span>  <span className="cm">// {t('impl_data_code_alias_comment')}</span>{'\n'}
+                <span className="ln">5</span>{'}'}<span className="punct">;</span>{'\n'}
+                <span className="ln">6</span>{'\n'}
+                <span className="ln">7</span><span className="cm">{t('impl_data_code_never_label')}</span>{'\n'}
+                <span className="ln">8</span><span className="cm">// {t('impl_data_code_never_list')}</span>
+              </code>
+            </pre>
+          </div>
+          <div className="impl-data-note">{t('impl_data_note')}</div>
         </div>
         <div className="impl-foot">
           <span className="impl-no-mig">{t('impl_no_migration')}</span>
@@ -267,73 +309,166 @@ export const ImplementationSlide: SlideDef = {
         </div>
         <style jsx>{`
           .impl-frame {
-            padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+            padding: clamp(28px, 3.5vh, 56px) var(--pad-x)
+              clamp(20px, 2.5vh, 36px);
             display: flex;
             flex-direction: column;
-            gap: clamp(20px, 3vh, 36px);
+            gap: clamp(14px, 2vh, 24px);
+          }
+          .impl-top {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: end;
+            gap: clamp(20px, 4vw, 60px);
+          }
+          .impl-title {
+            font-size: clamp(28px, 3.4vw, 48px) !important;
+            line-height: 1.05 !important;
+            margin: 0 !important;
+          }
+          .impl-top :global(.deck-kicker) {
+            margin: 0 0 4px;
+            font-size: clamp(16px, 1.4vw, 22px);
+          }
+          .impl-top :global(.deck-eyebrow) {
+            margin: 0 0 2px;
           }
           .impl-stats {
             display: flex;
-            gap: clamp(24px, 4vw, 64px);
+            gap: clamp(20px, 2.6vw, 40px);
             align-items: flex-end;
-            flex-wrap: wrap;
+            flex-shrink: 0;
           }
           .impl-stat {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
           }
           .impl-stat .num {
-            font: 500 clamp(56px, 7vw, 96px) / 0.95 var(--mp-font-display);
+            font: 500 clamp(36px, 4.4vw, 64px) / 0.95 var(--mp-font-display);
             letter-spacing: -0.03em;
             color: var(--mp-ink);
           }
           .impl-stat .lbl {
-            font: 400 clamp(14px, 1.2vw, 18px) / 1.3 var(--mp-font-body);
+            font: 400 clamp(12px, 1vw, 15px) / 1.3 var(--mp-font-body);
             color: var(--mp-fg-muted);
           }
           .impl-services h3 {
-            font: 500 clamp(20px, 2vw, 28px) / 1.2 var(--mp-font-display);
-            margin: 0 0 16px;
+            font: 500 clamp(15px, 1.3vw, 20px) / 1.2 var(--mp-font-display);
+            margin: 0 0 10px;
           }
           .services-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
+            gap: 10px;
           }
-          .impl-code {
-            background: var(--mp-ink);
-            border-radius: var(--mp-radius-md);
-            overflow: hidden;
+          .impl-data {
+            background: var(--mp-grey);
             border: 1px solid var(--mp-border-soft);
-          }
-          .code-head {
+            border-radius: var(--mp-radius-lg);
+            padding: clamp(14px, 1.8vw, 22px);
             display: flex;
+            flex-direction: column;
+            gap: 10px;
+          }
+          .impl-data-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+          }
+          .impl-data h3 {
+            font: 500 clamp(15px, 1.3vw, 19px) / 1.2 var(--mp-font-display);
+            margin: 0;
+          }
+          .impl-data-sub {
+            font: 400 clamp(12px, 1vw, 14px) / 1.4 var(--mp-font-body);
+            color: var(--mp-fg-muted);
+            margin: 3px 0 0;
+            max-width: 720px;
+          }
+          .impl-data-badge {
+            flex-shrink: 0;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 10px 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 6px 12px;
+            background: color-mix(in srgb, var(--brand) 12%, var(--mp-white));
+            color: var(--brand);
+            border-radius: var(--mp-radius-pill);
+            font: 500 12px/1 var(--mp-font-body);
+            border: 1px solid color-mix(in srgb, var(--brand) 25%, transparent);
           }
-          .code-dot {
-            width: 10px;
-            height: 10px;
+          .code-window {
+            background: #1e1e2e;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18),
+              0 2px 6px rgba(0, 0, 0, 0.08);
+          }
+          .cw-titlebar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 12px;
+            background: #181825;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          }
+          .cw-dots {
+            display: inline-flex;
+            gap: 5px;
+          }
+          .cw-dot {
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
-            opacity: 0.8;
+            display: inline-block;
           }
-          .code-file {
-            margin-left: 8px;
-            font: 500 13px/1 var(--mp-font-body);
-            color: rgba(255, 255, 255, 0.6);
+          .cw-filename {
+            font: 500 11px/1 ui-monospace, 'SF Mono', Menlo, monospace;
+            color: rgba(205, 214, 244, 0.6);
+            margin-left: 4px;
           }
-          .impl-code pre {
+          .cw-body {
             margin: 0;
-            padding: 20px 24px;
-            font: 400 clamp(13px, 1vw, 15px) / 1.6 ui-monospace, 'SF Mono', Menlo,
-              monospace;
-            color: rgba(255, 255, 255, 0.92);
+            padding: 12px 18px 14px;
+            font: 400 clamp(11px, 0.9vw, 13px) / 1.6 ui-monospace, 'SF Mono',
+              Menlo, monospace;
+            color: #cdd6f4;
+            background: #1e1e2e;
             white-space: pre;
             overflow-x: auto;
+          }
+          .cw-body :global(.ln) {
+            display: inline-block;
+            width: 2.2em;
+            color: rgba(205, 214, 244, 0.25);
+            user-select: none;
+            text-align: right;
+            padding-right: 1.2em;
+          }
+          .cw-body :global(.kw) {
+            color: #cba6f7;
+          }
+          .cw-body :global(.ty) {
+            color: #f9e2af;
+          }
+          .cw-body :global(.prop) {
+            color: #89dceb;
+          }
+          .cw-body :global(.punct) {
+            color: rgba(205, 214, 244, 0.6);
+          }
+          .cw-body :global(.cm) {
+            color: #6c7086;
+            font-style: italic;
+          }
+          .impl-data-note {
+            font: 400 clamp(11px, 0.9vw, 13px) / 1.4 var(--mp-font-body);
+            color: var(--mp-fg-muted);
+            padding-top: 6px;
+            border-top: 1px solid var(--mp-border-soft);
           }
           .impl-foot {
             display: flex;
@@ -343,7 +478,7 @@ export const ImplementationSlide: SlideDef = {
             flex-wrap: wrap;
           }
           .impl-no-mig {
-            font: 400 clamp(14px, 1.2vw, 17px) / 1.4 var(--mp-font-body);
+            font: 400 clamp(12px, 1vw, 15px) / 1.4 var(--mp-font-body);
             color: var(--mp-fg-muted);
           }
           .docs-cta {
@@ -375,10 +510,12 @@ export const ImplementationSlide: SlideDef = {
 function ServiceCard({
   num,
   label,
+  desc,
   method,
   path
 }: {
   num: number;
+  desc?: string;
   label: string;
   method: string;
   path: string;
@@ -390,6 +527,7 @@ function ServiceCard({
       </div>
       <div className="svc-body">
         <div className="svc-label">{label}</div>
+        {desc && <div className="svc-desc">{desc}</div>}
         <div className="svc-route">
           <span className="method">{method}</span>
           <code>{path}</code>
@@ -419,6 +557,11 @@ function ServiceCard({
         .svc-label {
           font: 500 14px/1.3 var(--mp-font-body);
           color: var(--mp-ink);
+        }
+        .svc-desc {
+          margin-top: 4px;
+          font: 400 12px/1.4 var(--mp-font-body);
+          color: var(--mp-fg-muted);
         }
         .svc-route {
           margin-top: 6px;

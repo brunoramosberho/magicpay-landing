@@ -3,6 +3,8 @@ import Link from 'next/link';
 import {getCurrentSession} from '@/lib/deck/admin-auth';
 import {supabaseAdmin} from '@/lib/supabase/server';
 import {ClientLinks} from './client-links';
+import {ClientEdit} from './client-edit';
+import {LogoutButton} from '../../logout-button';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,25 +56,39 @@ export default async function ClientDetailPage({params}: {params: Promise<Params
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
-      <div className="mb-6">
+      <div className="mb-6 flex justify-between items-center">
         <Link href="/deck/admin" className="text-sm text-zinc-400 hover:text-zinc-200">
           ← All clients
         </Link>
+        <LogoutButton />
       </div>
 
-      <header className="flex items-start justify-between mb-10">
+      <header className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-3">
-          <span
-            className="w-4 h-4 rounded-full"
-            style={{background: client.brand_color ?? '#3f3f46'}}
-            aria-hidden
-          />
+          {client.logo_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={client.logo_url}
+              alt={client.name}
+              className="w-10 h-10 rounded-md object-contain bg-zinc-900 border border-zinc-800 p-1"
+            />
+          ) : (
+            <span
+              className="w-4 h-4 rounded-full"
+              style={{background: client.brand_color ?? '#3f3f46'}}
+              aria-hidden
+            />
+          )}
           <div>
             <h1 className="text-2xl font-semibold">{client.name}</h1>
             <p className="text-xs text-zinc-500 mt-1 font-mono">/{client.slug}</p>
           </div>
         </div>
       </header>
+
+      <section className="mb-10">
+        <ClientEdit client={client} />
+      </section>
 
       <section className="grid grid-cols-3 gap-4 mb-12">
         <Stat label="Sessions" value={totalSessions} />

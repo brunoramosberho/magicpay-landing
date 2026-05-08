@@ -4,6 +4,7 @@ export type Client = {
   name: string;
   brand_color: string | null;
   logo_url: string | null;
+  app_icon_url: string | null;
   pricing_kickoff: number | null;
   pricing_monthly_fixed: number | null;
   pricing_per_active_user: number | null;

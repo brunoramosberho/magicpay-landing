@@ -9,13 +9,16 @@ export const PricingSlide: SlideDef = {
   variant: 'light',
   Body: ({client}: SlideContext) => {
     const {t} = useI18n();
-    const fmt = (n: number | null) =>
+    // Kickoff/monthly are big round numbers → no decimals.
+    // Per-active-user is typically cents (e.g. $0.50) → always show 2 decimals.
+    const fmt = (n: number | null, opts?: {decimals?: number}) =>
       n == null
-        ? t('price_open')
+        ? null
         : new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: client.currency,
-            maximumFractionDigits: 0
+            minimumFractionDigits: opts?.decimals ?? 0,
+            maximumFractionDigits: opts?.decimals ?? 0
           }).format(n);
 
     const tiers = [
@@ -34,8 +37,11 @@ export const PricingSlide: SlideDef = {
       {
         ttl: t('price_3_title'),
         desc: t('price_3_desc'),
-        value: fmt(client.pricing_per_active_user),
-        suffix: client.pricing_per_active_user != null ? ' / MAU' : ''
+        value: fmt(client.pricing_per_active_user, {decimals: 2}),
+        suffix:
+          client.pricing_per_active_user != null
+            ? ` ${client.currency} / MAU`
+            : ''
       }
     ];
 
@@ -56,17 +62,14 @@ export const PricingSlide: SlideDef = {
         <div className="price-grid">
           {tiers.map((tier, i) => (
             <div className={`price-card ${i === 1 ? 'highlight' : ''}`} key={i}>
-              <div className="price-num">
-                <span
-                  className={`amount ${tier.value === t('price_open') ? 'open' : ''}`}
-                  style={
-                    tier.value === t('price_open') ? undefined : {color: 'var(--brand)'}
-                  }
-                >
-                  {tier.value}
-                </span>
-                {tier.suffix && <span className="suffix">{tier.suffix}</span>}
-              </div>
+              {tier.value && (
+                <div className="price-num">
+                  <span className="amount" style={{color: 'var(--brand)'}}>
+                    {tier.value}
+                  </span>
+                  {tier.suffix && <span className="suffix">{tier.suffix}</span>}
+                </div>
+              )}
               <h3>{tier.ttl}</h3>
               <p>{tier.desc}</p>
             </div>

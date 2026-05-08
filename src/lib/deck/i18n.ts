@@ -12,11 +12,10 @@ export const i18n = {
     cover_subline: 'Pitch comercial 2026',
     cover_subtitle:
       'Pagos desde el chat. Con un tap, un emoji, o tu voz. Tu marca, tus rieles, tus clientes.',
-    cover_speaker: 'Bruno Ramos · CEO & Founder',
-    cover_speaker_full: 'CEO & Founder, magic — Marzo 2026',
     cover_msg_them: '¿Me prestas para la cena?',
+    cover_msg_amount: 'Son $300 🍽️',
     cover_claim: 'Cobrar al banco',
-    cover_date: 'Marzo 2026',
+    cover_date: 'Mayo 2026',
 
     // 02 Background
     bg_label: '02 — Background',
@@ -93,11 +92,11 @@ export const i18n = {
     magic_modes: 'emoji · tap · voz',
 
     // 08 Keyboard demo
-    kb_label: '08 — Demo: teclado',
+    kb_label: '08 — Teclado',
     kb_kicker: 'Manda dinero con un mensaje',
-    kb_title: 'Teclado de pagos del banco, en cualquier chat',
+    kb_title: 'Teclado de pagos de {client}, en cualquier chat',
     kb_explanation:
-      'El teclado es parte del app del banco. No requiere integración con WhatsApp ni con ninguna app de mensajería — funciona en todas.',
+      'El teclado es parte del app de {client}. No requiere integración con WhatsApp ni con ninguna app de mensajería — funciona en todas.',
 
     // 09 30x
     thirtyx_label: '09 — Velocidad',
@@ -112,19 +111,19 @@ export const i18n = {
     claim_label: '10 — Recibir dinero',
     claim_kicker: 'Recibir dinero sin riesgos ni pasos repetitivos',
     claim_title: 'Ligas de pago seguras e instantáneas',
-    claim_step1_title: '1. Toca la liga',
-    claim_step1_desc: 'El destinatario recibe la liga en cualquier chat.',
-    claim_step2_title: '2. Cobra al banco',
-    claim_step2_desc: 'Página segura del banco — captura CLABE solo la primera vez.',
-    claim_step3_title: '3. Listo',
-    claim_step3_desc: 'Recibe el dinero en su cuenta. Pagos siguientes: un solo tap.',
+    claim_info_saved_title: 'Una vez, listo para siempre',
+    claim_info_saved_desc:
+      'La cuenta se guarda en el browser de forma segura. La siguiente liga se reclama con un solo tap.',
+    claim_info_acq_title: 'Canal de adquisición',
+    claim_info_acq_desc:
+      'Si el receptor no es cliente, ve un banner para descargar tu app — adquieres usuarios cada vez que un cliente envía dinero.',
 
     // 11 Tap
     tap_label: '11 — Tap',
     tap_kicker: 'Pagos con un toque',
     tap_title: 'Manda dinero con un tap',
     tap_caption:
-      'NFC entre dos teléfonos. La liga viaja por aire. El cobro se reclama desde la app del banco del recipiente.',
+      'NFC entre dos teléfonos. La liga viaja por aire. El cobro se reclama como cualquier liga de pago — sin pasar por el app del banco.',
 
     // 12 Voice
     voice_label: '12 — Voz',
@@ -195,9 +194,20 @@ export const i18n = {
     impl_sprint_stat: '1 Sprint',
     impl_sprint_stat_label: 'integración completa',
     impl_services_title: 'Solo 3 servicios que exponer',
-    impl_service1: 'Generar liga de pago',
-    impl_service2: 'Cobrar liga',
-    impl_service3: 'Webhook de eventos',
+    impl_service1: 'Login',
+    impl_service1_desc: 'Validación previa de credenciales · responde con sessionToken.',
+    impl_service2: 'Autorización',
+    impl_service2_desc: 'Aprueba la transacción tras la biometría · responde con txCode.',
+    impl_service3: 'Claim',
+    impl_service3_desc: 'Ejecuta la transferencia real por tu rail (SPEI/DiMo).',
+    impl_data_title: 'Qué información guarda magic de tus usuarios',
+    impl_data_subtitle: 'Solo lo mínimo para orquestar la UX. magic no toca dinero, no ve credenciales, no guarda datos sensibles.',
+    impl_data_code_user_comment: 'ID opaco — no expone datos del usuario',
+    impl_data_code_account_comment: 'mapping interno a la cuenta destino',
+    impl_data_code_alias_comment: 'handle público (ej. @bruno)',
+    impl_data_code_never_label: '// Nunca se almacena',
+    impl_data_code_never_list: 'passwords · saldos · números de cuenta · transacciones · datos KYC',
+    impl_data_note: 'Encriptación obligatoria vía handshake o VPN. Tu banco mantiene el control total.',
     impl_no_migration: 'Sin cambios en sistemas críticos · Sin migraciones complejas',
     impl_docs_cta: 'Ver documentación completa',
     impl_docs_url: 'mgic.me/docs',
@@ -235,7 +245,19 @@ export const i18n = {
     close_caption: 'Hablemos de cómo magic puede vivir dentro de tu app.',
     close_name: 'Bruno Ramos',
     close_email: 'bruno@mgic.me',
-    close_url: 'mgic.me'
+    close_url: 'mgic.me',
+
+    // Section navigator (header dropdown)
+    sec_menu: 'Secciones',
+    sec_intro: 'Inicio',
+    sec_context: 'Contexto',
+    sec_problem: 'Problema',
+    sec_solution: 'Solución',
+    sec_demos: 'Demos',
+    sec_security: 'Seguridad',
+    sec_implementation: 'Implementación',
+    sec_pricing: 'Pricing',
+    sec_close: 'Cierre'
   },
 
   en: {
@@ -245,11 +267,10 @@ export const i18n = {
     cover_subline: 'Commercial pitch 2026',
     cover_subtitle:
       'Payments from the chat. With a tap, an emoji, or your voice. Your brand, your rails, your customers.',
-    cover_speaker: 'Bruno Ramos · CEO & Founder',
-    cover_speaker_full: 'CEO & Founder, magic — March 2026',
     cover_msg_them: 'Can you cover dinner?',
+    cover_msg_amount: "It's $300 🍽️",
     cover_claim: 'Claim from bank',
-    cover_date: 'March 2026',
+    cover_date: 'May 2026',
 
     bg_label: '02 — Background',
     bg_title: 'A bit of context',
@@ -319,11 +340,11 @@ export const i18n = {
     magic_modes_label: 'The three ways to pay with magic',
     magic_modes: 'emoji · tap · voice',
 
-    kb_label: '08 — Demo: keyboard',
+    kb_label: '08 — Keyboard',
     kb_kicker: 'Send money with a message',
-    kb_title: "The bank's payment keyboard, in any chat",
+    kb_title: "{client}'s payment keyboard, in any chat",
     kb_explanation:
-      "The keyboard is part of the bank's app. No WhatsApp integration needed — works in any messaging app.",
+      "The keyboard is part of {client}'s app. No WhatsApp integration needed — works in any messaging app.",
 
     thirtyx_label: '09 — Speed',
     thirtyx_big: '30×',
@@ -336,18 +357,18 @@ export const i18n = {
     claim_label: '10 — Receiving money',
     claim_kicker: 'Receive money without risks or repeated steps',
     claim_title: 'Secure, instant payment links',
-    claim_step1_title: '1. Tap the link',
-    claim_step1_desc: 'The recipient gets the link in any chat.',
-    claim_step2_title: '2. Claim at the bank',
-    claim_step2_desc: 'Secure bank page — CLABE captured only the first time.',
-    claim_step3_title: '3. Done',
-    claim_step3_desc: 'Money lands in their account. Next claims: one tap.',
+    claim_info_saved_title: 'Once, ready forever',
+    claim_info_saved_desc:
+      'The account is saved securely in the browser. Next link is claimed with a single tap.',
+    claim_info_acq_title: 'Acquisition channel',
+    claim_info_acq_desc:
+      "If the recipient isn't a customer, they see a banner to download your app — you acquire users every time a customer sends money.",
 
     tap_label: '11 — Tap',
     tap_kicker: 'Payments with one touch',
     tap_title: 'Send money with a tap',
     tap_caption:
-      "NFC between two phones. The link travels through the air. The recipient claims from their bank app.",
+      'NFC between two phones. The link travels through the air. The recipient claims it like any payment link — no bank app needed.',
 
     voice_label: '12 — Voice',
     voice_kicker: 'Magic words',
@@ -412,9 +433,20 @@ export const i18n = {
     impl_sprint_stat: '1 Sprint',
     impl_sprint_stat_label: 'full integration',
     impl_services_title: 'Only 3 services to expose',
-    impl_service1: 'Generate payment link',
-    impl_service2: 'Claim link',
-    impl_service3: 'Events webhook',
+    impl_service1: 'Login',
+    impl_service1_desc: 'Pre-validate credentials · returns sessionToken.',
+    impl_service2: 'Authorize',
+    impl_service2_desc: 'Approve transaction after biometrics · returns txCode.',
+    impl_service3: 'Claim',
+    impl_service3_desc: 'Execute the real transfer over your rail (SPEI/DiMo).',
+    impl_data_title: 'What magic stores about your users',
+    impl_data_subtitle: "The bare minimum to orchestrate the UX. magic doesn't touch money, see credentials, or store sensitive data.",
+    impl_data_code_user_comment: 'opaque ID — no PII exposed',
+    impl_data_code_account_comment: 'internal mapping to destination account',
+    impl_data_code_alias_comment: 'public handle (e.g. @bruno)',
+    impl_data_code_never_label: '// Never stored',
+    impl_data_code_never_list: 'passwords · balances · account numbers · transactions · KYC data',
+    impl_data_note: 'Mandatory encryption via handshake or VPN. Your bank stays in full control.',
     impl_no_migration: 'No changes to critical systems · No complex migrations',
     impl_docs_cta: 'Read full documentation',
     impl_docs_url: 'mgic.me/docs',
@@ -450,7 +482,19 @@ export const i18n = {
     close_caption: "Let's talk about how magic can live inside your app.",
     close_name: 'Bruno Ramos',
     close_email: 'bruno@mgic.me',
-    close_url: 'mgic.me'
+    close_url: 'mgic.me',
+
+    // Section navigator (header dropdown)
+    sec_menu: 'Sections',
+    sec_intro: 'Intro',
+    sec_context: 'Context',
+    sec_problem: 'Problem',
+    sec_solution: 'Solution',
+    sec_demos: 'Demos',
+    sec_security: 'Security',
+    sec_implementation: 'Implementation',
+    sec_pricing: 'Pricing',
+    sec_close: 'Closing'
   }
 } as const;
 

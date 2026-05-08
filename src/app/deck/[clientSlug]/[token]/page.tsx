@@ -30,9 +30,9 @@ export default async function DeckPage({
   const client = Array.isArray(link.client) ? link.client[0] : link.client;
   if (client.slug !== clientSlug) notFound();
 
-  // Append `?bio=0` to skip the "background / Bruno bio" slide.
-  // Slide numbers in the footer auto-renumber based on the filtered array.
-  const slides = bio === '0' ? deckSlides.filter((s) => s.id !== 'background') : deckSlides;
+  // The "background / Bruno bio" slide is skipped by default. Append `?bio=1`
+  // to include it. Slide numbers auto-renumber based on the filtered array.
+  const slides = bio === '1' ? deckSlides : deckSlides.filter((s) => s.id !== 'background');
 
   return (
     <DeckShell
@@ -42,6 +42,7 @@ export default async function DeckPage({
         name: client.name,
         brand_color: client.brand_color,
         logo_url: client.logo_url,
+        app_icon_url: client.app_icon_url,
         currency: client.currency,
         pricing_kickoff: client.pricing_kickoff,
         pricing_monthly_fixed: client.pricing_monthly_fixed,

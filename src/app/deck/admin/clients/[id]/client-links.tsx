@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import type {PresentationLink} from '@/lib/deck/types';
 
 export function ClientLinks({
@@ -78,10 +78,11 @@ export function ClientLinks({
 
 function LinkRow({link, clientSlug}: {link: PresentationLink; clientSlug: string}) {
   const [copied, setCopied] = useState<'full' | 'nobio' | null>(null);
-  const baseUrl =
-    typeof window !== 'undefined'
-      ? `${window.location.origin}/deck/${clientSlug}/${link.token}`
-      : `/deck/${clientSlug}/${link.token}`;
+  const [origin, setOrigin] = useState('');
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
+  const baseUrl = `${origin}/deck/${clientSlug}/${link.token}`;
   const noBioUrl = `${baseUrl}?bio=0`;
 
   const copy = async (url: string, kind: 'full' | 'nobio') => {

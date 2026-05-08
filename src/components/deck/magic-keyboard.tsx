@@ -1,207 +1,352 @@
 'use client';
 
-// MagicKeyboard — replicates the magic numeric pay keyboard from the landing's
-// /docs#customization animation. Color is driven by the `color` prop (defaults
-// to var(--brand)) so it adapts to the client brand or to the white-label demo.
+// MagicKeyboard — pixel-aligned with /docs#customization preview.
+// Color is driven by the `color` prop (defaults to var(--brand)).
+// Theme: light or dark, matching the dashboard preview.
 
 export function MagicKeyboard({
   amount = '0',
   color,
-  size = 'md',
-  theme = 'light'
+  onPrimary,
+  theme = 'light',
+  showImessageBar = true,
+  showNameBar = true,
+  recipientName = 'Jonathan Moore',
+  recipientSub = 'Main Account'
 }: {
   amount?: string;
   color?: string;
-  size?: 'sm' | 'md' | 'lg';
+  onPrimary?: string;
   theme?: 'light' | 'dark';
+  showImessageBar?: boolean;
+  showNameBar?: boolean;
+  recipientName?: string;
+  recipientSub?: string;
 }) {
   const accent = color ?? 'var(--brand)';
+  const onAccent = onPrimary ?? '#FFFFFF';
   return (
     <div
-      className={`mk-root mk-${size} mk-${theme}`}
-      style={{['--mk-accent' as string]: accent}}
+      className={`kb-preview kb-${theme}`}
+      style={
+        {
+          ['--kb-primary' as string]: accent,
+          ['--kb-on-primary' as string]: onAccent
+        } as React.CSSProperties
+      }
     >
-      <div className="mk-bar">
-        <button className="mk-back" aria-label="Back">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path
-              d="M3 8h18M6 8l-3 4 3 4M3 12h18"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+      {showImessageBar && (
+        <div className="kb-imessage-bar">
+          <span className="kb-imessage-plus">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </span>
+          <span className="kb-imessage-field">Message…</span>
+          <svg className="kb-imessage-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
           </svg>
-        </button>
-        <div className="mk-amount">
-          <span className="mk-amount-symbol">$</span>
-          <span className="mk-amount-num">{amount}</span>
         </div>
-        <button className="mk-currency" aria-label="Currency">
-          MXN <span className="mk-chevron">▾</span>
-        </button>
-      </div>
-      <div className="mk-grid">
-        {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0'].map((k) => (
-          <button key={k} className="mk-key">
-            {k}
-          </button>
-        ))}
-        <button className="mk-key mk-del" aria-label="Delete">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path
-              d="M9 5h11a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-7-7 7-7zM18 9l-6 6m0-6l6 6"
-              stroke="currentColor"
-              strokeWidth="1.7"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+      )}
+
+      {showNameBar && (
+        <div className="kb-name-bar">
+          <span className="kb-name">{recipientName}</span>
+          <span className="kb-name-sub">{recipientSub}</span>
+        </div>
+      )}
+
+      <div className="kb-body">
+        <div className="kb-toolbar">
+          <svg className="kb-tool kb-tool-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 19l-7-7 7-7" />
           </svg>
-        </button>
+          <svg className="kb-tool kb-tool-dock" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="1" y="1" width="18" height="12" rx="2" />
+            <line x1="5" y1="4" x2="5.01" y2="4" />
+            <line x1="10" y1="4" x2="10.01" y2="4" />
+            <line x1="15" y1="4" x2="15.01" y2="4" />
+            <line x1="5" y1="7" x2="5.01" y2="7" />
+            <line x1="10" y1="7" x2="10.01" y2="7" />
+            <line x1="15" y1="7" x2="15.01" y2="7" />
+            <line x1="7" y1="10" x2="13" y2="10" />
+          </svg>
+          <div className="kb-amount-pill">
+            <span>${amount}</span>
+          </div>
+          <div className="kb-currency">
+            <span>MXN</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </div>
+        </div>
+        <div className="kb-keys">
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0'].map((k) => (
+            <div className="kb-key" key={k}>
+              {k}
+            </div>
+          ))}
+          <div className="kb-key kb-key-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 9.75L14.25 12m0 0l2.25 2.25M14.25 12l2.25-2.25M14.25 12L12 14.25m-2.58 4.92l-6.374-6.375a1.125 1.125 0 010-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33z" />
+            </svg>
+          </div>
+        </div>
+        <div className="kb-send">
+          <svg viewBox="0 0 16 16" fill="none">
+            <rect width="16" height="16" rx="3" fill="currentColor" fillOpacity="0.2" />
+            <path d="M4.5 8L7 10.5L11.5 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          Send
+        </div>
+        <div className="kb-bottom-bar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+          </svg>
+          <svg viewBox="0 0 24 34" fill="currentColor">
+            <path d="M12 1a5 5 0 015 5v10a5 5 0 01-10 0V6a5 5 0 015-5zM4 14v2a8 8 0 0016 0v-2h2v2a10 10 0 01-9 9.95V30h5v2H6v-2h5v-4.05A10 10 0 012 16v-2h2z" />
+          </svg>
+        </div>
       </div>
-      <button className="mk-send">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/deck/logos/icon.svg" alt="" aria-hidden className="mk-send-icon" />
-        <span>Send</span>
-      </button>
+
       <style jsx>{`
-        .mk-root {
-          --mk-bg: #f3f4f6;
-          --mk-key-bg: #ffffff;
-          --mk-fg: #111;
-          --mk-muted: #777;
+        .kb-preview {
+          position: relative;
+          z-index: 2;
+          margin: 0 auto;
           width: 100%;
-          background: var(--mk-bg);
-          padding: 12px;
-          border-radius: 14px;
-          display: grid;
-          gap: 8px;
-          font-family: var(--mp-font-ios);
-          color: var(--mk-fg);
-          transition: background 220ms var(--mp-ease), color 220ms var(--mp-ease);
+          max-width: 260px;
+          background: #fff;
+          border: 1px solid #e5e7eb;
+          border-radius: 24px;
+          overflow: hidden;
+          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+          font-family: -apple-system, 'SF Pro', 'SF Compact', system-ui, sans-serif;
+          user-select: none;
         }
-        .mk-dark {
-          --mk-bg: #1e1e22;
-          --mk-key-bg: #2a2a2f;
-          --mk-fg: #fff;
-          --mk-muted: #999;
-        }
-        .mk-bar {
-          display: grid;
-          grid-template-columns: auto 1fr auto;
+        .kb-imessage-bar {
+          display: flex;
           align-items: center;
           gap: 8px;
+          padding: 8px 10px;
+          background: #fff;
         }
-        .mk-back {
-          background: var(--mk-key-bg);
-          border: 0;
-          width: 56px;
-          height: 36px;
-          border-radius: 8px;
+        .kb-imessage-plus {
+          width: 22px;
+          height: 22px;
+          border-radius: 999px;
+          background: #f3f4f6;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          color: var(--mk-fg);
-          cursor: default;
+          flex-shrink: 0;
         }
-        .mk-back :global(svg) {
+        .kb-imessage-plus :global(svg) {
+          width: 12px;
+          height: 12px;
+          color: #9ca3af;
+        }
+        .kb-imessage-field {
+          flex: 1;
+          height: 26px;
+          border-radius: 999px;
+          background: #f3f4f6;
+          display: flex;
+          align-items: center;
+          padding: 0 10px;
+          font-size: 10px;
+          color: #9ca3af;
+        }
+        .kb-imessage-mic {
           width: 16px;
           height: 16px;
+          flex-shrink: 0;
+          color: #6b7280;
         }
-        .mk-amount {
-          background: var(--mk-key-bg);
-          border-radius: 8px;
-          height: 36px;
+        .kb-name-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 4px 14px;
+          border-top: 1px solid #f3f4f6;
+        }
+        .kb-name {
+          font-size: 9px;
+          font-weight: 600;
+          color: rgba(32, 35, 41, 0.6);
+        }
+        .kb-name-sub {
+          font-size: 8px;
+          font-weight: 600;
+          color: rgba(32, 35, 41, 0.6);
+        }
+        .kb-body {
+          background: #f2f2f2;
+          border-radius: 18px 18px 0 0;
+          padding-bottom: 14px;
+        }
+        .kb-toolbar {
+          position: relative;
+          height: 44px;
+          margin: 0 4px;
+        }
+        .kb-tool {
+          position: absolute;
+          top: 14px;
+          color: #202329;
+        }
+        .kb-tool-back {
+          left: 7px;
+          width: 11px;
+          height: 11px;
+        }
+        .kb-tool-dock {
+          left: 22px;
+          width: 16px;
+          height: 11px;
+        }
+        .kb-amount-pill {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          padding: 5px 7px;
+          border-radius: 5px;
+          background: rgba(250, 250, 250, 0.7);
+          border: 1px solid #fff;
+          box-shadow: 0 2px 42px rgba(0, 0, 0, 0.1);
+          backdrop-filter: blur(12px);
+        }
+        .kb-amount-pill span {
+          font-size: 20px;
+          font-weight: 600;
+          font-variant-numeric: tabular-nums;
+          line-height: 1;
+          color: var(--kb-primary);
+        }
+        .kb-currency {
+          position: absolute;
+          right: 5px;
+          top: 12px;
+          display: flex;
+          align-items: center;
+          gap: 1px;
+          color: #202329;
+        }
+        .kb-currency span {
+          font-size: 10px;
+          font-weight: 600;
+        }
+        .kb-currency :global(svg) {
+          width: 8px;
+          height: 8px;
+        }
+        .kb-keys {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 4px;
+          margin: 1px 4px 0;
+        }
+        .kb-key {
+          height: 30px;
+          border-radius: 6px;
+          background: #fff;
+          color: #202329;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: var(--mk-accent);
-          font-weight: 500;
-          font-size: 18px;
-          letter-spacing: -0.01em;
-          gap: 1px;
+          font-size: 15px;
+          font-weight: 400;
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
         }
-        .mk-currency {
-          background: transparent;
-          border: 0;
-          color: var(--mk-fg);
-          font: 500 13px/1 var(--mp-font-ios);
-          padding: 0 10px;
-          cursor: default;
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
+        .kb-key-icon :global(svg) {
+          width: 14px;
+          height: 14px;
+          color: #202329;
         }
-        .mk-chevron {
-          font-size: 9px;
-          opacity: 0.6;
-        }
-        .mk-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 6px;
-        }
-        .mk-key {
-          background: var(--mk-key-bg);
-          border: 0;
-          height: 44px;
+        .kb-send {
+          margin: 4px 5px 0;
+          height: 32px;
           border-radius: 8px;
-          font: 500 18px/1 var(--mp-font-ios);
-          color: var(--mk-fg);
-          cursor: default;
-        }
-        .mk-key.mk-del {
-          color: var(--mk-fg);
-        }
-        .mk-key.mk-del :global(svg) {
-          width: 18px;
-          height: 18px;
-        }
-        .mk-send {
-          background: var(--mk-accent);
-          color: #fff;
-          border: 0;
-          height: 44px;
-          border-radius: 10px;
-          font: 500 16px/1 var(--mp-font-body);
-          display: inline-flex;
+          background: var(--kb-primary);
+          color: var(--kb-on-primary);
+          display: flex;
           align-items: center;
           justify-content: center;
-          gap: 8px;
-          cursor: default;
-          margin-top: 4px;
-          transition: background 320ms var(--mp-ease);
+          gap: 5px;
+          font-size: 12px;
+          font-weight: 600;
         }
-        .mk-send-icon {
-          width: 18px;
+        .kb-send :global(svg) {
+          width: 11px;
+          height: 11px;
+        }
+        .kb-bottom-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin: 8px 20px 0;
+          color: #6f7592;
+        }
+        .kb-bottom-bar :global(svg:first-child) {
+          width: 16px;
+          height: 16px;
+        }
+        .kb-bottom-bar :global(svg:last-child) {
+          width: 13px;
           height: 18px;
-          background: rgba(255, 255, 255, 0.95);
-          border-radius: 5px;
-          padding: 2px;
+          fill: #6f7592;
         }
-        /* size variants */
-        .mk-sm {
-          font-size: 13px;
+        /* Dark theme — matches /docs */
+        .kb-dark {
+          background: #1c1c1e;
+          border-color: rgba(255, 255, 255, 0.08);
         }
-        .mk-sm .mk-key {
-          height: 38px;
-          font-size: 15px;
+        .kb-dark .kb-imessage-bar {
+          background: #1c1c1e;
         }
-        .mk-sm .mk-send {
-          height: 38px;
-          font-size: 14px;
+        .kb-dark .kb-imessage-plus,
+        .kb-dark .kb-imessage-field {
+          background: #3a3a3c;
         }
-        .mk-lg .mk-key {
-          height: 56px;
-          font-size: 22px;
+        .kb-dark .kb-imessage-field {
+          color: #6b7280;
         }
-        .mk-lg .mk-send {
-          height: 56px;
-          font-size: 18px;
+        .kb-dark .kb-name-bar {
+          border-top-color: #3a3a3c;
         }
-        .mk-lg .mk-amount {
-          height: 44px;
-          font-size: 22px;
+        .kb-dark .kb-name,
+        .kb-dark .kb-name-sub {
+          color: rgba(255, 255, 255, 0.6);
+        }
+        .kb-dark .kb-body {
+          background: #2c2c2e;
+        }
+        .kb-dark .kb-key {
+          background: #5a5a5e;
+          color: #fff;
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+        }
+        .kb-dark .kb-key-icon :global(svg) {
+          color: #fff;
+        }
+        .kb-dark .kb-tool {
+          color: #fff;
+        }
+        .kb-dark .kb-amount-pill {
+          background: rgba(60, 60, 67, 0.6);
+          border-color: rgba(255, 255, 255, 0.08);
+        }
+        .kb-dark .kb-currency {
+          color: #fff;
+        }
+        .kb-dark .kb-bottom-bar :global(svg) {
+          color: rgba(255, 255, 255, 0.6);
+        }
+        .kb-dark .kb-bottom-bar :global(svg:last-child) {
+          fill: rgba(255, 255, 255, 0.6);
         }
       `}</style>
     </div>

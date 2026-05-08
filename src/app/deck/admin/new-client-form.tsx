@@ -14,6 +14,8 @@ export function NewClientForm() {
     name: '',
     slug: '',
     brand_color: '#000000',
+    logo_url: '',
+    app_icon_url: '',
     pricing_kickoff: '',
     pricing_monthly_fixed: '',
     pricing_per_active_user: '',
@@ -37,6 +39,8 @@ export function NewClientForm() {
         name: form.name,
         slug: form.slug || undefined,
         brand_color: form.brand_color,
+        logo_url: form.logo_url || undefined,
+        app_icon_url: form.app_icon_url || undefined,
         pricing_kickoff: form.pricing_kickoff ? Number(form.pricing_kickoff) : null,
         pricing_monthly_fixed: form.pricing_monthly_fixed
           ? Number(form.pricing_monthly_fixed)
@@ -87,6 +91,8 @@ export function NewClientForm() {
               name: '',
               slug: '',
               brand_color: '#000000',
+              logo_url: '',
+              app_icon_url: '',
               pricing_kickoff: '',
               pricing_monthly_fixed: '',
               pricing_per_active_user: '',
@@ -154,6 +160,22 @@ export function NewClientForm() {
             <option value="MXN">MXN</option>
             <option value="USD">USD</option>
           </select>
+        </Field>
+        <Field label="Logo URL" hint="optional — upload after creating client for full file support">
+          <input
+            value={form.logo_url}
+            onChange={(e) => set('logo_url', e.target.value)}
+            className="input"
+            placeholder="https://… or /deck/logos/client.png"
+          />
+        </Field>
+        <Field label="App icon URL" hint="from apps.apple.com — see edit page for instructions">
+          <input
+            value={form.app_icon_url}
+            onChange={(e) => set('app_icon_url', e.target.value)}
+            className="input"
+            placeholder="https://is1-ssl.mzstatic.com/image/thumb/…"
+          />
         </Field>
       </div>
 
