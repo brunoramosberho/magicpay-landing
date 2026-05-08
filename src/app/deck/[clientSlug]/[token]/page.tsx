@@ -28,7 +28,8 @@ export default async function DeckPage({
   if (link.expires_at && new Date(link.expires_at) < new Date()) notFound();
 
   const client = Array.isArray(link.client) ? link.client[0] : link.client;
-  if (client.slug !== clientSlug) notFound();
+  // Edge case: empty join returns []; link.client[0] is undefined.
+  if (!client || client.slug !== clientSlug) notFound();
 
   // The "background / Bruno bio" slide is skipped by default. Append `?bio=1`
   // to include it. Slide numbers auto-renumber based on the filtered array.
