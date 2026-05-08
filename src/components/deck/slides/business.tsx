@@ -283,13 +283,13 @@ export const ImplementationSlide: SlideDef = {
             <pre className="cw-body">
               <code>
                 <span className="ln">1</span><span className="kw">type</span> <span className="ty">User</span> = {'{'}{'\n'}
-                <span className="ln">2</span>  <span className="prop">userId</span><span className="punct">:</span>    <span className="ty">string</span><span className="punct">;</span>  <span className="cm">// {t('impl_data_code_user_comment')}</span>{'\n'}
-                <span className="ln">3</span>  <span className="prop">accountId</span><span className="punct">:</span> <span className="ty">string</span><span className="punct">;</span>  <span className="cm">// {t('impl_data_code_account_comment')}</span>{'\n'}
-                <span className="ln">4</span>  <span className="prop">alias</span><span className="punct">:</span>     <span className="ty">string</span><span className="punct">;</span>  <span className="cm">// {t('impl_data_code_alias_comment')}</span>{'\n'}
+                <span className="ln">2</span>  <span className="prop">userId</span><span className="punct">:</span>    <span className="ty">string</span><span className="punct">;</span>  <span className="cm">{'// '}{t('impl_data_code_user_comment')}</span>{'\n'}
+                <span className="ln">3</span>  <span className="prop">accountId</span><span className="punct">:</span> <span className="ty">string</span><span className="punct">;</span>  <span className="cm">{'// '}{t('impl_data_code_account_comment')}</span>{'\n'}
+                <span className="ln">4</span>  <span className="prop">alias</span><span className="punct">:</span>     <span className="ty">string</span><span className="punct">;</span>  <span className="cm">{'// '}{t('impl_data_code_alias_comment')}</span>{'\n'}
                 <span className="ln">5</span>{'}'}<span className="punct">;</span>{'\n'}
                 <span className="ln">6</span>{'\n'}
                 <span className="ln">7</span><span className="cm">{t('impl_data_code_never_label')}</span>{'\n'}
-                <span className="ln">8</span><span className="cm">// {t('impl_data_code_never_list')}</span>
+                <span className="ln">8</span><span className="cm">{'// '}{t('impl_data_code_never_list')}</span>
               </code>
             </pre>
           </div>
