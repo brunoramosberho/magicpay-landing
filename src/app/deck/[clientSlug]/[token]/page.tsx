@@ -39,7 +39,10 @@ export default async function DeckPage({
 
   const slides = includeBio
     ? deckSlides
-    : deckSlides.filter((s) => s.id !== 'background');
+    : deckSlides.filter((_, i) => i !== 1);
+  // Slide files use 'use client', so the SlideDef objects arrive on the server
+  // as client references — `s.id` reads as undefined here. We therefore filter
+  // by index (background is at position 1) instead of by id.
 
   return (
     <DeckShell

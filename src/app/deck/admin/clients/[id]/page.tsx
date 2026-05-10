@@ -5,6 +5,7 @@ import {supabaseAdmin} from '@/lib/supabase/server';
 import {ClientLinks} from './client-links';
 import {ClientEdit} from './client-edit';
 import {SlideEngagementChart} from './slide-engagement-chart';
+import {SessionsList} from './sessions-list';
 import {LogoutButton} from '../../logout-button';
 
 export const dynamic = 'force-dynamic';
@@ -139,47 +140,28 @@ export default async function ClientDetailPage({params}: {params: Promise<Params
 
       <section>
         <h2 className="text-sm uppercase tracking-wide text-zinc-400 mb-4">Recent sessions</h2>
-        {!sessions || sessions.length === 0 ? (
-          <p className="text-sm text-zinc-500">No sessions yet.</p>
-        ) : (
-          <ul className="border border-zinc-900 rounded-md divide-y divide-zinc-900">
-            {sessions.map((s) => {
-              const linkRecipient = links?.find((l) => l.id === s.link_id)?.recipient_name;
-              const visitorName = s.visitor_name?.trim() || null;
-              const primary = visitorName ?? linkRecipient ?? 'Unknown visitor';
-              const secondaryParts: string[] = [];
-              if (visitorName && linkRecipient && visitorName !== linkRecipient) {
-                secondaryParts.push(`shared with ${linkRecipient}`);
-              }
-              if (s.ip_city) {
-                secondaryParts.push(
-                  `${s.ip_city}${s.ip_country ? `, ${s.ip_country}` : ''}`
-                );
-              }
-              return (
-                <li
-                  key={s.id}
-                  className="flex items-center justify-between px-4 py-3 text-sm"
-                >
-                  <div>
-                    <div className="text-zinc-300">
-                      {primary}
-                      {secondaryParts.length > 0 && (
-                        <span className="text-zinc-500"> · {secondaryParts.join(' · ')}</span>
-                      )}
-                    </div>
-                    <div className="text-xs text-zinc-500">
-                      {new Date(s.started_at).toLocaleString()}
-                    </div>
-                  </div>
-                  <span className="text-zinc-500">
-                    {formatDuration(s.total_duration_ms ?? 0)}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+        <SessionsList
+          sessions={(sessions ?? []).map((s) => ({
+            id: s.id,
+            link_id: s.link_id,
+            visitor_name: s.visitor_name,
+            visitor_id: s.visitor_id,
+            ip_city: s.ip_city,
+            ip_country: s.ip_country,
+            started_at: s.started_at,
+            total_duration_ms: s.total_duration_ms
+          }))}
+          events={(events ?? []).map((e) => ({
+            session_id: e.session_id,
+            slide_id: e.slide_id,
+            slide_index: e.slide_index,
+            duration_ms: e.duration_ms,
+            entered_at: e.entered_at
+          }))}
+          recipientByLinkId={Object.fromEntries(
+            (links ?? []).map((l) => [l.id, l.recipient_name ?? null])
+          )}
+        />
       </section>
     </div>
   );
