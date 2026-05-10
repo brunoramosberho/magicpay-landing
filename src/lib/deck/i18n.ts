@@ -257,7 +257,13 @@ export const i18n = {
     sec_security: 'Seguridad',
     sec_implementation: 'Implementación',
     sec_pricing: 'Pricing',
-    sec_close: 'Cierre'
+    sec_close: 'Cierre',
+
+    // Visitor name gate (shown once per browser before the deck loads)
+    name_title: 'Antes de empezar',
+    name_subtitle: 'Cuéntanos quién está viendo la presentación.',
+    name_placeholder: 'Tu nombre completo',
+    name_cta: 'Continuar'
   },
 
   en: {
@@ -494,7 +500,12 @@ export const i18n = {
     sec_security: 'Security',
     sec_implementation: 'Implementation',
     sec_pricing: 'Pricing',
-    sec_close: 'Closing'
+    sec_close: 'Closing',
+
+    name_title: 'Before we start',
+    name_subtitle: 'Tell us who is viewing the presentation.',
+    name_placeholder: 'Your full name',
+    name_cta: 'Continue'
   }
 } as const;
 

@@ -7,6 +7,7 @@ type TrackBody = {
   type: 'session_start' | 'session_heartbeat' | 'slide_enter' | 'slide_exit' | 'interaction';
   token: string;
   visitorId?: string;
+  visitorName?: string;
   sessionId?: string;
   slideId?: string;
   slideIndex?: number;
@@ -43,11 +44,13 @@ export async function POST(req: NextRequest) {
   switch (body.type) {
     case 'session_start': {
       const geo = readGeo(req);
+      const visitorName = sanitizeName(body.visitorName);
       const {data: session, error} = await sb
         .from('deck_sessions')
         .insert({
           link_id: link.id,
           visitor_id: body.visitorId ?? null,
+          visitor_name: visitorName,
           user_agent: body.userAgent ?? req.headers.get('user-agent') ?? null,
           referrer: body.referrer ?? null,
           ip_country: geo.country,
@@ -160,4 +163,11 @@ function decodeOrNull(v: string | null): string | null {
   } catch {
     return v;
   }
+}
+
+function sanitizeName(raw: string | undefined): string | null {
+  if (typeof raw !== 'string') return null;
+  const trimmed = raw.trim().replace(/\s+/g, ' ');
+  if (!trimmed) return null;
+  return trimmed.slice(0, 80);
 }

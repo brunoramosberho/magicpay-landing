@@ -15,6 +15,10 @@ export default async function DeckPage({
 }) {
   const {clientSlug, token} = await params;
   const {bio} = await searchParams;
+  // Slide 2 (Bruno bio / "background") is skipped by default. Append `?bio=1`
+  // (or `bio=true`) to include it. Anything else — including `?bio=0` — keeps
+  // the slide hidden. Slide numbers auto-renumber based on the filtered array.
+  const includeBio = bio === '1' || bio === 'true';
   const sb = supabaseAdmin();
 
   const {data: link} = await sb
@@ -31,9 +35,9 @@ export default async function DeckPage({
   // Edge case: empty join returns []; link.client[0] is undefined.
   if (!client || client.slug !== clientSlug) notFound();
 
-  // The "background / Bruno bio" slide is skipped by default. Append `?bio=1`
-  // to include it. Slide numbers auto-renumber based on the filtered array.
-  const slides = bio === '1' ? deckSlides : deckSlides.filter((s) => s.id !== 'background');
+  const slides = includeBio
+    ? deckSlides
+    : deckSlides.filter((s) => s.id !== 'background');
 
   return (
     <DeckShell

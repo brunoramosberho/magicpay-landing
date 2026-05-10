@@ -4,6 +4,7 @@ import {getCurrentSession} from '@/lib/deck/admin-auth';
 import {supabaseAdmin} from '@/lib/supabase/server';
 import {ClientLinks} from './client-links';
 import {ClientEdit} from './client-edit';
+import {SlideEngagementChart} from './slide-engagement-chart';
 import {LogoutButton} from '../../logout-button';
 
 export const dynamic = 'force-dynamic';
@@ -126,23 +127,13 @@ export default async function ClientDetailPage({params}: {params: Promise<Params
         {slideStats.size === 0 ? (
           <p className="text-sm text-zinc-500">No views yet.</p>
         ) : (
-          <ul className="border border-zinc-900 rounded-md divide-y divide-zinc-900">
-            {Array.from(slideStats.entries())
-              .sort((a, b) => b[1].totalMs - a[1].totalMs)
-              .map(([slideId, stat]) => (
-                <li
-                  key={slideId}
-                  className="flex items-center justify-between px-4 py-3 text-sm"
-                >
-                  <span className="font-mono text-zinc-300">{slideId}</span>
-                  <span className="text-zinc-500">
-                    {stat.views} view{stat.views === 1 ? '' : 's'} ·{' '}
-                    {formatDuration(stat.totalMs)} total ·{' '}
-                    {formatDuration(stat.totalMs / stat.views)} avg
-                  </span>
-                </li>
-              ))}
-          </ul>
+          <SlideEngagementChart
+            data={Array.from(slideStats.entries()).map(([slideId, stat]) => ({
+              slideId,
+              views: stat.views,
+              totalMs: stat.totalMs
+            }))}
+          />
         )}
       </section>
 
@@ -154,6 +145,17 @@ export default async function ClientDetailPage({params}: {params: Promise<Params
           <ul className="border border-zinc-900 rounded-md divide-y divide-zinc-900">
             {sessions.map((s) => {
               const linkRecipient = links?.find((l) => l.id === s.link_id)?.recipient_name;
+              const visitorName = s.visitor_name?.trim() || null;
+              const primary = visitorName ?? linkRecipient ?? 'Unknown visitor';
+              const secondaryParts: string[] = [];
+              if (visitorName && linkRecipient && visitorName !== linkRecipient) {
+                secondaryParts.push(`shared with ${linkRecipient}`);
+              }
+              if (s.ip_city) {
+                secondaryParts.push(
+                  `${s.ip_city}${s.ip_country ? `, ${s.ip_country}` : ''}`
+                );
+              }
               return (
                 <li
                   key={s.id}
@@ -161,9 +163,9 @@ export default async function ClientDetailPage({params}: {params: Promise<Params
                 >
                   <div>
                     <div className="text-zinc-300">
-                      {linkRecipient ?? 'Unknown recipient'}
-                      {s.ip_city && (
-                        <span className="text-zinc-500"> · {s.ip_city}, {s.ip_country}</span>
+                      {primary}
+                      {secondaryParts.length > 0 && (
+                        <span className="text-zinc-500"> · {secondaryParts.join(' · ')}</span>
                       )}
                     </div>
                     <div className="text-xs text-zinc-500">
