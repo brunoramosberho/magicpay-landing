@@ -5,6 +5,9 @@ import {motion, AnimatePresence} from 'framer-motion';
 import {I18nProvider, useI18n} from './i18n-context';
 import {LanguageToggle} from './language-toggle';
 import {SectionsMenu} from './sections-menu';
+import {VisitorNameGate} from './visitor-name-gate';
+
+const VISITOR_NAME_KEY = 'mgic_deck_visitor_name';
 
 function FullscreenButton() {
   const [isFs, setIsFs] = useState(false);
@@ -100,6 +103,8 @@ function DeckShellInner({
 }) {
   const {t} = useI18n();
   const [index, setIndex] = useState(0);
+  const [visitorName, setVisitorName] = useState<string | null>(null);
+  const [nameReady, setNameReady] = useState(false);
   const sessionIdRef = useRef<string | null>(null);
   const startedAtRef = useRef<number>(Date.now());
   const slideEnteredAtRef = useRef<number>(Date.now());
@@ -117,6 +122,26 @@ function DeckShellInner({
       id = crypto.randomUUID();
     }
     visitorIdRef.current = id;
+
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem(VISITOR_NAME_KEY);
+    } catch {
+      stored = null;
+    }
+    setVisitorName(stored && stored.trim() ? stored : null);
+    setNameReady(true);
+  }, []);
+
+  const submitName = useCallback((rawName: string) => {
+    const cleaned = rawName.trim().replace(/\s+/g, ' ').slice(0, 80);
+    if (!cleaned) return;
+    try {
+      localStorage.setItem(VISITOR_NAME_KEY, cleaned);
+    } catch {
+      // ignore
+    }
+    setVisitorName(cleaned);
   }, []);
 
   const post = useCallback(
@@ -136,6 +161,8 @@ function DeckShellInner({
   );
 
   useEffect(() => {
+    if (!visitorName) return;
+    if (sessionIdRef.current) return;
     let cancelled = false;
     (async () => {
       try {
@@ -146,6 +173,7 @@ function DeckShellInner({
             type: 'session_start',
             token,
             visitorId: visitorIdRef.current,
+            visitorName,
             userAgent: navigator.userAgent,
             referrer: document.referrer || null
           })
@@ -168,7 +196,7 @@ function DeckShellInner({
     return () => {
       cancelled = true;
     };
-  }, [token, post, slides]);
+  }, [token, post, slides, visitorName]);
 
   useEffect(() => {
     const heartbeat = () => {
@@ -261,8 +289,11 @@ function DeckShellInner({
   const variant = current?.variant ?? 'light';
   const isDark = variant === 'dark';
 
+  const showNameGate = nameReady && !visitorName;
+
   return (
     <div className="deck-root" style={cssVars}>
+      {showNameGate && <VisitorNameGate brand={brand} onSubmit={submitName} />}
       <header className="deck-header">
         <div className="deck-header-mark">
           {/* eslint-disable-next-line @next/next/no-img-element */}

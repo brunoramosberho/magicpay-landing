@@ -32,6 +32,7 @@ export type DeckSession = {
   id: string;
   link_id: string;
   visitor_id: string | null;
+  visitor_name: string | null;
   user_agent: string | null;
   referrer: string | null;
   ip_country: string | null;
