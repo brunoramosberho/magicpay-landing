@@ -3,6 +3,8 @@ import {supabaseAdmin} from '@/lib/supabase/server';
 import {DeckShell} from '@/components/deck/deck-shell';
 import {deckSlides} from '@/components/deck/slides';
 
+export const dynamic = 'force-dynamic';
+
 type Params = {clientSlug: string; token: string};
 type Search = {bio?: string};
 
