@@ -1,7 +1,9 @@
 'use client';
 
+import {useEffect, useState} from 'react';
 import {useI18n} from '../i18n-context';
 import {MagicKeyboard} from '../magic-keyboard';
+import type {Locale} from '@/lib/deck/i18n';
 import type {SlideContext, SlideDef} from '../deck-shell';
 
 // 01 — Cover (C1 design: off-white + soft brand glow + phone mockup)
@@ -875,11 +877,145 @@ export const ProblemSlide: SlideDef = {
 };
 
 // 06 — Flow comparison (today vs saved vs magic)
+const FLOW_STEPS: Record<
+  Locale,
+  {today: string[]; saved: string[]; magic: string[]}
+> = {
+  es: {
+    today: [
+      'cambiando entre apps',
+      'buscando la app del banco',
+      'iniciando sesión',
+      'nueva transferencia',
+      'nuevo destinatario',
+      'capturando nombre',
+      'volviendo al chat por la cuenta',
+      'capturando la cuenta',
+      'capturando monto',
+      'capturando concepto',
+      'siguiente',
+      'confirmando transacción'
+    ],
+    saved: [
+      'cambiando entre apps',
+      'abriendo la app del banco',
+      'iniciando sesión',
+      'nueva transferencia',
+      'eligiendo contacto guardado',
+      'capturando monto',
+      'capturando concepto',
+      'siguiente',
+      'confirmando transacción'
+    ],
+    magic: ['cambiando de teclado', 'capturando monto', 'enviando']
+  },
+  en: {
+    today: [
+      'switching apps',
+      'finding the bank app',
+      'logging in',
+      'new transfer',
+      'new recipient',
+      'entering name',
+      'going back for the account',
+      'entering account number',
+      'entering amount',
+      'entering concept',
+      'next',
+      'confirming transaction'
+    ],
+    saved: [
+      'switching apps',
+      'opening the bank app',
+      'logging in',
+      'new transfer',
+      'picking saved contact',
+      'entering amount',
+      'entering concept',
+      'next',
+      'confirming transaction'
+    ],
+    magic: ['switching keyboard', 'entering amount', 'sending']
+  }
+};
+
 export const FlowSlide: SlideDef = {
   id: 'flow',
   variant: 'light',
   Body: () => {
-    const {t} = useI18n();
+    const {t, locale} = useI18n();
+    const steps = FLOW_STEPS[locale];
+    const doneLabel = t('flow_done');
+
+    // Reveal rows one at a time. Right/Space/PageDown advances within the slide
+    // until all three rows are visible, then bubbles to the deck for the next
+    // slide. Left/PageUp peels rows back before going to the previous slide.
+    const [revealed, setRevealed] = useState(1);
+
+    useEffect(() => {
+      const onKey = (e: KeyboardEvent) => {
+        const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+        if (tag === 'input' || tag === 'textarea') return;
+        if (
+          e.key === 'ArrowRight' ||
+          e.key === ' ' ||
+          e.key === 'PageDown'
+        ) {
+          setRevealed((r) => {
+            if (r < 3) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              return r + 1;
+            }
+            return r;
+          });
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          setRevealed((r) => {
+            if (r > 1) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              return r - 1;
+            }
+            return r;
+          });
+        }
+      };
+      // Capture phase so we run before the deck's bubble-phase listener and can
+      // stop it from advancing slides while we still have rows left to reveal.
+      window.addEventListener('keydown', onKey, true);
+      return () => window.removeEventListener('keydown', onKey, true);
+    }, []);
+
+    const rows = [
+      {
+        key: 'today',
+        label: t('flow_today_label'),
+        meta: t('flow_today_meta'),
+        taps: 90,
+        kind: 'muted' as const,
+        stepMs: 75,
+        steps: steps.today
+      },
+      {
+        key: 'saved',
+        label: t('flow_saved_label'),
+        meta: t('flow_saved_meta'),
+        taps: 35,
+        kind: 'medium' as const,
+        stepMs: 110,
+        steps: steps.saved
+      },
+      {
+        key: 'magic',
+        label: t('flow_magic_label'),
+        meta: t('flow_magic_meta'),
+        taps: 3,
+        kind: 'brand' as const,
+        stepMs: 450,
+        steps: steps.magic
+      }
+    ];
+
     return (
       <div className="flow-frame">
         <div className="flow-head">
@@ -887,9 +1023,18 @@ export const FlowSlide: SlideDef = {
           <h1 className="deck-title-1">{t('flow_title')}</h1>
         </div>
         <div className="flow-rows">
-          <FlowRow label={t('flow_today_label')} taps={90} kind="muted" stepMs={70} />
-          <FlowRow label={t('flow_saved_label')} taps={35} kind="medium" stepMs={70} />
-          <FlowRow label={t('flow_magic_label')} taps={3} kind="brand" stepMs={70} />
+          {rows.slice(0, revealed).map((r) => (
+            <FlowRow
+              key={r.key}
+              label={r.label}
+              meta={r.meta}
+              taps={r.taps}
+              kind={r.kind}
+              stepMs={r.stepMs}
+              steps={r.steps}
+              doneLabel={doneLabel}
+            />
+          ))}
         </div>
         <style jsx>{`
           .flow-frame {
@@ -902,6 +1047,9 @@ export const FlowSlide: SlideDef = {
             display: flex;
             flex-direction: column;
             gap: 24px;
+            width: 100%;
+            max-width: 700px;
+            align-self: flex-start;
           }
         `}</style>
       </div>
@@ -911,31 +1059,107 @@ export const FlowSlide: SlideDef = {
 
 function FlowRow({
   label,
+  meta,
   taps,
   kind,
-  stepMs
+  stepMs,
+  steps,
+  doneLabel
 }: {
   label: string;
+  meta: string;
   taps: number;
   kind: 'muted' | 'medium' | 'brand';
   stepMs: number;
+  steps: string[];
+  doneLabel: string;
 }) {
   const dots = Math.min(taps, 90);
+  const totalMs = taps * stepMs + 200;
+
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    let raf = 0;
+    let cancelled = false;
+    const start = performance.now();
+    const tick = (now: number) => {
+      if (cancelled) return;
+      const e = now - start;
+      setElapsed(e);
+      if (e < totalMs) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
+  }, [totalMs]);
+
+  const done = elapsed >= totalMs;
+  const progress = Math.min(elapsed / totalMs, 1);
+  const stepIndex = done
+    ? steps.length - 1
+    : Math.min(Math.floor(progress * steps.length), steps.length - 1);
+
   return (
-    <div className={`flow-row kind-${kind}`}>
+    <div className={`flow-row kind-${kind} ${done ? 'is-done' : ''}`}>
       <div className="flow-row-head">
-        <span className="flow-row-label">{label}</span>
-        <span className="flow-row-count">{taps}</span>
+        <div className="flow-row-head-text">
+          <span className="flow-row-label">{label}</span>
+          <span className="flow-row-step" aria-live="polite">
+            {done ? (
+              <>
+                <svg className="step-check" viewBox="0 0 16 16" aria-hidden>
+                  <path
+                    d="M3.5 8.5l3 3 6-7"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {doneLabel}
+              </>
+            ) : (
+              <>
+                <span className="step-caret">›</span>
+                {steps[stepIndex]}
+                <span className="step-ellipsis" aria-hidden>
+                  <span />
+                  <span />
+                  <span />
+                </span>
+              </>
+            )}
+          </span>
+        </div>
+        <span className="flow-row-meta">{meta}</span>
       </div>
-      <div className="flow-row-dots">
-        {Array.from({length: dots}).map((_, i) => (
-          <span
-            key={i}
-            className="dot"
-            style={{animationDelay: `${i * stepMs}ms`}}
-          />
-        ))}
-        {taps > 90 && <span className="ellipsis">…</span>}
+      <div className="flow-row-dots-wrap">
+        <div className="flow-row-dots">
+          {Array.from({length: dots}).map((_, i) => (
+            <span
+              key={i}
+              className="dot"
+              style={{animationDelay: `${i * stepMs}ms`}}
+            />
+          ))}
+        </div>
+        <span className="paid" aria-hidden>
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="11" />
+            <path
+              d="M7 12.5l3.2 3.2L17 8.6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
       </div>
       <style jsx>{`
         .flow-row {
@@ -943,34 +1167,110 @@ function FlowRow({
           border-radius: var(--mp-radius-lg);
           background: var(--mp-grey);
           border: 1px solid var(--mp-border-soft);
+          transition: border-color 280ms var(--mp-ease),
+            background 280ms var(--mp-ease);
         }
         .flow-row.kind-brand {
           background: color-mix(in srgb, var(--brand) 8%, var(--mp-white));
           border-color: color-mix(in srgb, var(--brand) 30%, transparent);
         }
+        .flow-row.is-done {
+          border-color: color-mix(in srgb, var(--brand) 45%, transparent);
+        }
         .flow-row-head {
           display: flex;
           justify-content: space-between;
-          align-items: baseline;
+          align-items: flex-start;
           margin-bottom: 14px;
           gap: 16px;
+        }
+        .flow-row-head-text {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          min-width: 0;
+          flex: 1;
         }
         .flow-row-label {
           font: 500 clamp(15px, 1.2vw, 18px) / 1.2 var(--mp-font-body);
           color: var(--mp-ink);
         }
-        .flow-row-count {
-          font: 500 clamp(13px, 1vw, 15px) / 1 var(--mp-font-body);
+        .flow-row-step {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font: 400 clamp(12px, 0.95vw, 14px) / 1.2
+            var(--mp-font-mono, var(--mp-font-body));
           color: var(--mp-fg-muted);
           font-variant-numeric: tabular-nums;
+          letter-spacing: 0.01em;
+          min-height: 1.2em;
         }
-        .flow-row.kind-brand .flow-row-count {
+        .flow-row.is-done .flow-row-step {
           color: var(--brand);
         }
-        .flow-row-dots {
+        .step-caret {
+          color: var(--mp-fg-muted);
+          font-weight: 600;
+        }
+        .step-check {
+          width: 14px;
+          height: 14px;
+          color: var(--brand);
+        }
+        .step-ellipsis {
+          display: inline-flex;
+          gap: 2px;
+          margin-left: 2px;
+        }
+        .step-ellipsis span {
+          width: 3px;
+          height: 3px;
+          border-radius: 50%;
+          background: currentColor;
+          opacity: 0.35;
+          animation: step-blink 1200ms ease-in-out infinite;
+        }
+        .step-ellipsis span:nth-child(2) {
+          animation-delay: 200ms;
+        }
+        .step-ellipsis span:nth-child(3) {
+          animation-delay: 400ms;
+        }
+        @keyframes step-blink {
+          0%,
+          100% {
+            opacity: 0.2;
+            transform: translateY(0);
+          }
+          50% {
+            opacity: 1;
+            transform: translateY(-1px);
+          }
+        }
+        .flow-row-meta {
+          font: 500 clamp(12px, 0.95vw, 14px) / 1.2 var(--mp-font-body);
+          color: var(--mp-fg-muted);
+          font-variant-numeric: tabular-nums;
+          letter-spacing: 0.01em;
+          padding-top: 2px;
+          white-space: nowrap;
+        }
+        .flow-row.kind-brand .flow-row-meta,
+        .flow-row.is-done .flow-row-meta {
+          color: var(--brand);
+        }
+        .flow-row-dots-wrap {
           display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
+          align-items: flex-end;
+          gap: 14px;
+        }
+        .flow-row-dots {
+          flex: 1;
+          display: grid;
+          grid-template-columns: repeat(23, minmax(0, 1fr));
+          gap: 8px 6px;
+          justify-items: center;
           align-items: center;
         }
         .dot {
@@ -994,9 +1294,31 @@ function FlowRow({
             transform: scale(1);
           }
         }
-        .ellipsis {
-          color: var(--mp-fg-muted);
-          font: 400 14px/1 var(--mp-font-body);
+        .paid {
+          flex-shrink: 0;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 22px;
+          height: 22px;
+          color: var(--brand);
+          opacity: 0;
+          transform: scale(0.4);
+          transition: opacity 320ms var(--mp-ease),
+            transform 320ms var(--mp-ease);
+        }
+        .paid :global(svg) {
+          width: 100%;
+          height: 100%;
+        }
+        .paid :global(circle) {
+          fill: color-mix(in srgb, var(--brand) 16%, transparent);
+          stroke: color-mix(in srgb, var(--brand) 55%, transparent);
+          stroke-width: 1.2;
+        }
+        .flow-row.is-done .paid {
+          opacity: 1;
+          transform: scale(1);
         }
       `}</style>
     </div>

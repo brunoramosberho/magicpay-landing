@@ -1,17 +1,23 @@
 'use client';
 
 import {useI18n} from '../i18n-context';
-import type {SlideDef} from '../deck-shell';
+import type {SlideContext, SlideDef} from '../deck-shell';
 
 // 14 — Security (visual cards with icons)
 export const SecuritySlide: SlideDef = {
   id: 'security',
   variant: 'dark',
-  Body: () => {
+  Body: ({client}: SlideContext) => {
     const {t} = useI18n();
+    const fillClient = (s: string) => s.replaceAll('{client}', client.name);
     const items = [
       {key: '1', icon: '🛡️', ttl: t('sec_1_title'), desc: t('sec_1_desc')},
-      {key: '2', icon: '🔐', ttl: t('sec_2_title'), desc: t('sec_2_desc')},
+      {
+        key: '2',
+        icon: '🔐',
+        ttl: fillClient(t('sec_2_title')),
+        desc: t('sec_2_desc')
+      },
       {key: '3', icon: '🔗', ttl: t('sec_3_title'), desc: t('sec_3_desc')},
       {key: '4', icon: '⚖️', ttl: t('sec_4_title'), desc: t('sec_4_desc')}
     ];
@@ -118,8 +124,9 @@ export const SecuritySlide: SlideDef = {
 export const BenefitsSlide: SlideDef = {
   id: 'benefits',
   variant: 'light',
-  Body: () => {
+  Body: ({client}: SlideContext) => {
     const {t} = useI18n();
+    const fillClient = (s: string) => s.replaceAll('{client}', client.name);
     const items = [
       {icon: '👑', ttl: t('ben_1_title'), desc: t('ben_1_desc')},
       {icon: '🚀', ttl: t('ben_2_title'), desc: t('ben_2_desc')},
@@ -131,7 +138,7 @@ export const BenefitsSlide: SlideDef = {
         <div className="ben-head">
           <p className="deck-eyebrow">{t('ben_label')}</p>
           <p className="deck-kicker">{t('ben_kicker')}</p>
-          <h1 className="deck-title-1">{t('ben_title')}</h1>
+          <h1 className="deck-title-1">{fillClient(t('ben_title'))}</h1>
         </div>
         <div className="ben-grid">
           {items.map((it, i) => (

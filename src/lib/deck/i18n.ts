@@ -71,9 +71,13 @@ export const i18n = {
     // 06 Flow comparison
     flow_label: '06 — Hoy',
     flow_title: 'Cómo se siente hoy mandar dinero',
-    flow_today_label: 'SPEI · ~90 taps · ~2 min',
-    flow_saved_label: 'Cuenta guardada / PIX / Bizum · ~30–40 taps',
-    flow_magic_label: 'Con magic · 3 taps · ~4 seg',
+    flow_today_label: 'Cuenta nueva (SPEI, Pix, UPI, Bizum)',
+    flow_saved_label: 'Cuenta guardada (SPEI, Pix, UPI, Bizum)',
+    flow_magic_label: 'Con magic',
+    flow_today_meta: '~90 taps · ~2 min',
+    flow_saved_meta: '~35 taps · ~40 s',
+    flow_magic_meta: '3 taps · ~4 s',
+    flow_done: 'Pago enviado',
 
     // 07 What is magic
     magic_label: '07 — La solución',
@@ -158,7 +162,7 @@ export const i18n = {
     sec_1_title: 'Arquitectura sin custodia',
     sec_1_desc:
       'magic nunca toca el dinero. Todas las transferencias se originan, liquidan y registran exclusivamente en tus sistemas.',
-    sec_2_title: 'Autenticación del banco',
+    sec_2_title: 'Misma autenticación del app {client}',
     sec_2_desc:
       'Las transacciones se firman con tus mismos factores: biometría, Token, NIP. magic solo orquesta la experiencia.',
     sec_3_title: 'Integridad de las ligas',
@@ -171,7 +175,7 @@ export const i18n = {
     // 15 Benefits
     ben_label: '15 — Beneficios',
     ben_kicker: 'El motor para ganar Top of Wallet',
-    ben_title: 'Beneficios para el banco',
+    ben_title: 'Beneficios para {client}',
     ben_1_title: 'Primarización y rentabilidad',
     ben_1_desc:
       'Top of Wallet: al resolver pagos cotidianos en el chat, tu app se vuelve la #1. Mayores saldos abren puerta a crédito e inversiones.',
@@ -327,9 +331,13 @@ export const i18n = {
 
     flow_label: '06 — Today',
     flow_title: 'What sending money feels like today',
-    flow_today_label: 'SPEI · ~90 taps · ~2 min',
-    flow_saved_label: 'Saved account / PIX / Bizum · ~30–40 taps',
-    flow_magic_label: 'With magic · 3 taps · ~4 sec',
+    flow_today_label: 'New account (SPEI, Pix, UPI, Bizum)',
+    flow_saved_label: 'Saved account (SPEI, Pix, UPI, Bizum)',
+    flow_magic_label: 'With magic',
+    flow_today_meta: '~90 taps · ~2 min',
+    flow_saved_meta: '~35 taps · ~40 s',
+    flow_magic_meta: '3 taps · ~4 s',
+    flow_done: 'Payment sent',
 
     magic_label: '07 — The solution',
     magic_kicker: 'What is magic?',
@@ -405,7 +413,7 @@ export const i18n = {
     sec_1_title: 'Non-custodial architecture',
     sec_1_desc:
       'magic never touches the money. All transfers originate, settle and are recorded exclusively in your systems.',
-    sec_2_title: 'Bank-issued authentication',
+    sec_2_title: 'Same auth as the {client} app',
     sec_2_desc:
       'Transactions are signed with your factors: biometrics, Token, PIN. magic only orchestrates the experience.',
     sec_3_title: 'Link integrity',
@@ -417,7 +425,7 @@ export const i18n = {
 
     ben_label: '15 — Benefits',
     ben_kicker: 'The engine to win Top of Wallet',
-    ben_title: 'Benefits for the bank',
+    ben_title: 'Benefits for {client}',
     ben_1_title: 'Primary status & profitability',
     ben_1_desc:
       'Top of Wallet: by solving everyday in-chat payments, your app becomes #1. Higher balances unlock credit and investments.',
