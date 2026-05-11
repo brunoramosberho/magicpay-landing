@@ -9,6 +9,7 @@ export const i18n = {
     cover_kicker: 'Capa de experiencia de pagos',
     cover_title: 'magic para',
     cover_for: 'para',
+    cover_regulator_audience: 'bancos',
     cover_subline: 'Pitch comercial 2026',
     cover_subtitle:
       'Pagos desde el chat. Con un tap, un emoji, o tu voz. Tu marca, tus rieles, tus clientes.',
@@ -84,6 +85,7 @@ export const i18n = {
     magic_kicker: '¿Qué es magic?',
     magic_title: 'Enviar dinero debería sentirse mágico',
     magic_b1_title: 'SDK que vive dentro de tu app',
+    magic_b1_title_regulator: 'SDK que vive dentro del app del banco',
     magic_b1_desc:
       'Se integra con tu iOS, Android o React Native existente. No requiere migración.',
     magic_b2_title: 'Pagos desde cualquier chat',
@@ -99,8 +101,11 @@ export const i18n = {
     kb_label: '08 — Teclado',
     kb_kicker: 'Manda dinero con un mensaje',
     kb_title: 'Teclado de pagos de {client}, en cualquier chat',
+    kb_title_regulator: 'Teclado de pagos del banco, en cualquier chat',
     kb_explanation:
       'El teclado es parte del app de {client}. No requiere integración con WhatsApp ni con ninguna app de mensajería — funciona en todas.',
+    kb_explanation_regulator:
+      'El teclado es parte del app del banco. No requiere integración con WhatsApp ni con ninguna app de mensajería — funciona en todas.',
 
     // 09 30x
     thirtyx_label: '09 — Velocidad',
@@ -163,6 +168,7 @@ export const i18n = {
     sec_1_desc:
       'magic nunca toca el dinero. Todas las transferencias se originan, liquidan y registran exclusivamente en tus sistemas.',
     sec_2_title: 'Misma autenticación del app {client}',
+    sec_2_title_regulator: 'Misma autenticación del app del banco',
     sec_2_desc:
       'Las transacciones se firman con tus mismos factores: biometría, Token, NIP. magic solo orquesta la experiencia.',
     sec_3_title: 'Integridad de las ligas',
@@ -176,6 +182,7 @@ export const i18n = {
     ben_label: '15 — Beneficios',
     ben_kicker: 'El motor para ganar Top of Wallet',
     ben_title: 'Beneficios para {client}',
+    ben_title_regulator: 'Beneficios para el banco',
     ben_1_title: 'Primarización y rentabilidad',
     ben_1_desc:
       'Top of Wallet: al resolver pagos cotidianos en el chat, tu app se vuelve la #1. Mayores saldos abren puerta a crédito e inversiones.',
@@ -274,6 +281,7 @@ export const i18n = {
     cover_kicker: 'Payments experience layer',
     cover_title: 'magic for',
     cover_for: 'for',
+    cover_regulator_audience: 'banks',
     cover_subline: 'Commercial pitch 2026',
     cover_subtitle:
       'Payments from the chat. With a tap, an emoji, or your voice. Your brand, your rails, your customers.',
@@ -343,6 +351,7 @@ export const i18n = {
     magic_kicker: 'What is magic?',
     magic_title: 'Sending money should feel magical',
     magic_b1_title: 'SDK that lives inside your app',
+    magic_b1_title_regulator: 'SDK that lives inside the bank app',
     magic_b1_desc:
       'Integrates with your existing iOS, Android, or React Native app. No migration needed.',
     magic_b2_title: 'Payments from any chat',
@@ -357,8 +366,11 @@ export const i18n = {
     kb_label: '08 — Keyboard',
     kb_kicker: 'Send money with a message',
     kb_title: "{client}'s payment keyboard, in any chat",
+    kb_title_regulator: "The bank's payment keyboard, in any chat",
     kb_explanation:
       "The keyboard is part of {client}'s app. No WhatsApp integration needed — works in any messaging app.",
+    kb_explanation_regulator:
+      "The keyboard is part of the bank's app. No WhatsApp integration needed — works in any messaging app.",
 
     thirtyx_label: '09 — Speed',
     thirtyx_big: '30×',
@@ -414,6 +426,7 @@ export const i18n = {
     sec_1_desc:
       'magic never touches the money. All transfers originate, settle and are recorded exclusively in your systems.',
     sec_2_title: 'Same auth as the {client} app',
+    sec_2_title_regulator: 'Same auth as the bank app',
     sec_2_desc:
       'Transactions are signed with your factors: biometrics, Token, PIN. magic only orchestrates the experience.',
     sec_3_title: 'Link integrity',
@@ -426,6 +439,7 @@ export const i18n = {
     ben_label: '15 — Benefits',
     ben_kicker: 'The engine to win Top of Wallet',
     ben_title: 'Benefits for {client}',
+    ben_title_regulator: 'Benefits for banks',
     ben_1_title: 'Primary status & profitability',
     ben_1_desc:
       'Top of Wallet: by solving everyday in-chat payments, your app becomes #1. Higher balances unlock credit and investments.',

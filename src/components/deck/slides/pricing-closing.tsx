@@ -200,17 +200,22 @@ export const ClosingSlide: SlideDef = {
   Body: ({client}: SlideContext) => {
     const {t} = useI18n();
     const appIcon = client.app_icon_url ?? client.logo_url;
+    const isRegulator = client.kind === 'regulator';
     return (
       <div className="close-frame">
         <div className="close-glow" aria-hidden />
         <div className="close-content">
           <h1 className="close-thanks">
             {t('close_thanks')}
-            <span className="close-comma">,</span>
-            <br />
-            <span className="close-bank" style={{color: 'var(--brand)'}}>
-              {client.name}
-            </span>
+            {!isRegulator && (
+              <>
+                <span className="close-comma">,</span>
+                <br />
+                <span className="close-bank" style={{color: 'var(--brand)'}}>
+                  {client.name}
+                </span>
+              </>
+            )}
             <span className="close-period">.</span>
           </h1>
           <p className="close-caption">{t('close_caption')}</p>

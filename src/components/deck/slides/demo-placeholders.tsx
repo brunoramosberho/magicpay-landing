@@ -185,19 +185,28 @@ function DemoShell({
 }
 
 // 08 Keyboard demo — autoplay video w/ replay. Title and caption replace {client}
-// with the bank's name so it reads as the bank's own keyboard.
+// with the bank's name so it reads as the bank's own keyboard. For regulator
+// decks we swap to *_regulator variants that read "del banco" with correct
+// grammar (no {client} interpolation needed).
 export const KeyboardDemoSlide: SlideDef = {
   id: 'keyboard-demo',
   variant: 'light',
   Body: ({client}: SlideContext) => {
     const {t} = useI18n();
+    const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
     return (
       <DemoShell
         label={t('kb_label')}
         kicker={t('kb_kicker')}
-        title={fillClient(t('kb_title'))}
-        caption={fillClient(t('kb_explanation'))}
+        title={
+          isRegulator ? t('kb_title_regulator') : fillClient(t('kb_title'))
+        }
+        caption={
+          isRegulator
+            ? t('kb_explanation_regulator')
+            : fillClient(t('kb_explanation'))
+        }
         right={<VideoPhone src="/deck/videos/keyboard.mp4" />}
       />
     );

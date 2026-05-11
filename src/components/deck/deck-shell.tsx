@@ -85,6 +85,14 @@ function FullscreenButton() {
 export type DeckClient = {
   slug: string;
   name: string;
+  /** Label shown in the deck chrome (header + footer). Falls back to `name`
+   *  when null. Regulator decks use this to display "CNBV", "Banxico", etc.
+   *  while `name` stays as the in-slide-copy "el banco". */
+  display_name: string | null;
+  /** 'client' = customized for a bank/fintech. 'regulator' = generic deck
+   *  for regulators (CNBV, Banxico, SHCP) — uses "el banco" copy and the
+   *  magic default brand color. */
+  kind: 'client' | 'regulator';
   brand_color: string | null;
   logo_url: string | null;
   app_icon_url: string | null;
@@ -353,6 +361,11 @@ function DeckShellInner({
   const variant = current?.variant ?? 'light';
   const isDark = variant === 'dark';
 
+  // Header + footer mark show display_name if present (regulator decks use
+  // this for "CNBV" / "Banxico" while client.name stays as "el banco" for
+  // in-slide copy). Falls back to name for standard client decks.
+  const chromeLabel = client.display_name ?? client.name;
+
   const showNameGate = nameReady && !visitorName;
 
   return (
@@ -367,9 +380,9 @@ function DeckShellInner({
           <span className="bar" aria-hidden>|</span>
           {client.logo_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={client.logo_url} alt={client.name} className="client-logo" />
+            <img src={client.logo_url} alt={chromeLabel} className="client-logo" />
           ) : (
-            <span className="client-name">{client.name}</span>
+            <span className="client-name">{chromeLabel}</span>
           )}
         </div>
         <div className="deck-header-actions">
@@ -398,7 +411,7 @@ function DeckShellInner({
                 <span className="deck-mark-small">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/deck/logos/icon.svg" alt="" aria-hidden />
-                  <span>magic | {client.name}</span>
+                  <span>magic | {chromeLabel}</span>
                 </span>
                 <span className="deck-slide-num">
                   {String(index + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}

@@ -1,7 +1,14 @@
+export type ClientKind = 'client' | 'regulator';
+
 export type Client = {
   id: string;
   slug: string;
   name: string;
+  /** Optional label shown in the deck chrome (header + footer). Falls back to
+   *  `name` when null. Useful for regulator decks where `name` is generic
+   *  ("el banco") but the chrome should identify the audience (CNBV, Banxico). */
+  display_name: string | null;
+  kind: ClientKind;
   brand_color: string | null;
   logo_url: string | null;
   app_icon_url: string | null;

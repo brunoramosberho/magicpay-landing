@@ -9,15 +9,14 @@ export const SecuritySlide: SlideDef = {
   variant: 'dark',
   Body: ({client}: SlideContext) => {
     const {t} = useI18n();
+    const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
+    const sec2Title = isRegulator
+      ? t('sec_2_title_regulator')
+      : fillClient(t('sec_2_title'));
     const items = [
       {key: '1', icon: '🛡️', ttl: t('sec_1_title'), desc: t('sec_1_desc')},
-      {
-        key: '2',
-        icon: '🔐',
-        ttl: fillClient(t('sec_2_title')),
-        desc: t('sec_2_desc')
-      },
+      {key: '2', icon: '🔐', ttl: sec2Title, desc: t('sec_2_desc')},
       {key: '3', icon: '🔗', ttl: t('sec_3_title'), desc: t('sec_3_desc')},
       {key: '4', icon: '⚖️', ttl: t('sec_4_title'), desc: t('sec_4_desc')}
     ];
@@ -164,7 +163,11 @@ export const BenefitsSlide: SlideDef = {
   variant: 'light',
   Body: ({client}: SlideContext) => {
     const {t} = useI18n();
+    const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
+    const title = isRegulator
+      ? t('ben_title_regulator')
+      : fillClient(t('ben_title'));
     const items = [
       {icon: '👑', ttl: t('ben_1_title'), desc: t('ben_1_desc')},
       {icon: '🚀', ttl: t('ben_2_title'), desc: t('ben_2_desc')},
@@ -176,7 +179,7 @@ export const BenefitsSlide: SlideDef = {
         <div className="ben-head">
           <p className="deck-eyebrow">{t('ben_label')}</p>
           <p className="deck-kicker">{t('ben_kicker')}</p>
-          <h1 className="deck-title-1">{fillClient(t('ben_title'))}</h1>
+          <h1 className="deck-title-1">{title}</h1>
         </div>
         <div className="ben-grid">
           {items.map((it, i) => (

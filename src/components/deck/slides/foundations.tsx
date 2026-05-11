@@ -13,6 +13,7 @@ export const CoverSlide: SlideDef = {
   bare: true,
   Body: ({client}: SlideContext) => {
     const {t} = useI18n();
+    const isRegulator = client.kind === 'regulator';
     const initial = client.name.charAt(0).toUpperCase();
     return (
       <div className="cover-frame">
@@ -20,8 +21,24 @@ export const CoverSlide: SlideDef = {
         <div className="cover-content">
           <div className="cover-left">
             <div className="cover-pill">
-              <span className="pill-letter" style={{background: 'var(--brand)'}}>
-                {initial}
+              <span
+                className="pill-letter"
+                style={{background: 'var(--brand)'}}
+              >
+                {isRegulator ? (
+                  // For regulator decks the "client" is a generic "el banco"
+                  // — using the first letter ("E") looks like an accident.
+                  // Swap to the magic mark so the pill still has a glyph.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src="/deck/logos/icon.svg"
+                    alt=""
+                    aria-hidden
+                    className="pill-magic"
+                  />
+                ) : (
+                  initial
+                )}
               </span>
               <span className="pill-text">{t('cover_kicker')}</span>
             </div>
@@ -30,7 +47,9 @@ export const CoverSlide: SlideDef = {
               <span className="cover-for-line">
                 {t('cover_for')}{' '}
                 <span className="cover-bank" style={{color: 'var(--brand)'}}>
-                  {client.name}
+                  {isRegulator
+                    ? t('cover_regulator_audience')
+                    : client.name}
                 </span>
               </span>
             </h1>
@@ -123,6 +142,11 @@ export const CoverSlide: SlideDef = {
             align-items: center;
             justify-content: center;
             font: 500 14px/1 var(--mp-font-display);
+          }
+          .pill-magic {
+            width: 60%;
+            height: 60%;
+            filter: brightness(0) invert(1);
           }
           .cover-title {
             font: 500 clamp(48px, 7.5vw, 110px) / 0.98 var(--mp-font-display);
@@ -1458,7 +1482,11 @@ export const WhatIsMagicSlide: SlideDef = {
   variant: 'light',
   Body: ({client}: SlideContext) => {
     const {t} = useI18n();
+    const isRegulator = client.kind === 'regulator';
     const appIcon = client.app_icon_url ?? client.logo_url;
+    const b1Title = isRegulator
+      ? t('magic_b1_title_regulator')
+      : t('magic_b1_title');
     return (
       <div className="magic-frame">
         <div className="magic-head">
@@ -1487,7 +1515,7 @@ export const WhatIsMagicSlide: SlideDef = {
         </div>
         <div className="magic-bullets">
           {[
-            {n: 1, ttl: t('magic_b1_title'), desc: t('magic_b1_desc')},
+            {n: 1, ttl: b1Title, desc: t('magic_b1_desc')},
             {n: 2, ttl: t('magic_b2_title'), desc: t('magic_b2_desc')},
             {n: 3, ttl: t('magic_b3_title'), desc: t('magic_b3_desc')}
           ].map((b) => (

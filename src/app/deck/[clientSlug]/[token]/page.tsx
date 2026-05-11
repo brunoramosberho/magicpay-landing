@@ -50,6 +50,8 @@ export default async function DeckPage({
       client={{
         slug: client.slug,
         name: client.name,
+        display_name: client.display_name ?? null,
+        kind: client.kind === 'regulator' ? 'regulator' : 'client',
         brand_color: client.brand_color ?? null,
         logo_url: client.logo_url ?? null,
         app_icon_url: client.app_icon_url ?? null,
