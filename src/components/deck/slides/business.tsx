@@ -114,6 +114,44 @@ export const SecuritySlide: SlideDef = {
               grid-template-columns: 1fr;
             }
           }
+          @media (max-width: 640px) {
+            .sec-frame {
+              height: auto;
+              gap: 16px;
+            }
+            .sec-head {
+              gap: 4px;
+            }
+            .sec-kicker {
+              font-size: 16px;
+              margin-bottom: 2px;
+            }
+            .sec-title {
+              font-size: clamp(22px, 6.5vw, 28px);
+              line-height: 1.18;
+            }
+            .sec-grid {
+              gap: 10px;
+            }
+            .sec-card {
+              padding: 14px;
+              gap: 10px;
+              border-radius: var(--mp-radius-md);
+            }
+            .sec-icon {
+              width: 38px;
+              height: 38px;
+              font-size: 20px;
+              border-radius: 10px;
+            }
+            .sec-card h3 {
+              font-size: 15px;
+            }
+            .sec-card p {
+              font-size: 13px;
+              line-height: 1.45;
+            }
+          }
         `}</style>
       </div>
     );
@@ -203,6 +241,34 @@ export const BenefitsSlide: SlideDef = {
           @media (max-width: 900px) {
             .ben-grid {
               grid-template-columns: 1fr;
+            }
+          }
+          @media (max-width: 640px) {
+            .ben-frame {
+              gap: 16px;
+            }
+            .ben-grid {
+              gap: 10px;
+            }
+            .ben-card {
+              gap: 12px;
+              padding: 14px;
+              border-radius: var(--mp-radius-md);
+              align-items: flex-start;
+            }
+            .ben-icon {
+              width: 40px;
+              height: 40px;
+              font-size: 22px;
+              border-radius: 10px;
+            }
+            .ben-body h3 {
+              font-size: 15px;
+              margin-bottom: 4px;
+            }
+            .ben-body p {
+              font-size: 13px;
+              line-height: 1.45;
             }
           }
         `}</style>
@@ -508,6 +574,56 @@ export const ImplementationSlide: SlideDef = {
               grid-template-columns: 1fr;
             }
           }
+          @media (max-width: 640px) {
+            .impl-frame {
+              padding: 18px 18px 28px;
+              gap: 16px;
+            }
+            .impl-top {
+              grid-template-columns: 1fr;
+              gap: 14px;
+            }
+            .impl-top :global(.deck-kicker) {
+              font-size: 16px;
+            }
+            .impl-title {
+              font-size: clamp(22px, 6.5vw, 28px) !important;
+            }
+            .impl-stats {
+              gap: 24px;
+            }
+            .impl-stat .num {
+              font-size: clamp(32px, 10vw, 44px);
+            }
+            .impl-stat .lbl {
+              font-size: 12px;
+            }
+            .impl-data {
+              padding: 14px;
+              border-radius: var(--mp-radius-md);
+            }
+            .impl-data-head {
+              gap: 10px;
+              flex-direction: column;
+            }
+            .impl-data-badge {
+              align-self: flex-start;
+            }
+            .cw-body {
+              font-size: 11px;
+              padding: 10px 14px 12px;
+            }
+            .impl-foot {
+              flex-direction: column;
+              align-items: stretch;
+              gap: 12px;
+            }
+            .docs-cta {
+              justify-content: center;
+              padding: 14px 20px;
+              font-size: 14px;
+            }
+          }
         `}</style>
       </div>
     );
@@ -653,6 +769,26 @@ export const RegulatorySlide: SlideDef = {
           @media (max-width: 900px) {
             .reg-list {
               grid-template-columns: 1fr;
+            }
+          }
+          @media (max-width: 640px) {
+            .reg-frame {
+              gap: 16px;
+            }
+            .reg-list {
+              gap: 8px;
+            }
+            .reg-list li {
+              padding: 12px 14px;
+              gap: 12px;
+              border-radius: var(--mp-radius-md);
+            }
+            .reg-num {
+              font-size: 18px;
+            }
+            .reg-text {
+              font-size: 13px;
+              line-height: 1.45;
             }
           }
         `}</style>

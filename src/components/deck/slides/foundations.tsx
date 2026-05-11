@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import {useI18n} from '../i18n-context';
 import {MagicKeyboard} from '../magic-keyboard';
 import type {Locale} from '@/lib/deck/i18n';
-import type {SlideContext, SlideDef} from '../deck-shell';
+import {useSlideNav, type SlideContext, type SlideDef} from '../deck-shell';
 
 // 01 — Cover (C1 design: off-white + soft brand glow + phone mockup)
 export const CoverSlide: SlideDef = {
@@ -236,6 +236,75 @@ export const CoverSlide: SlideDef = {
             }
             .cover-keyboard {
               order: -1;
+            }
+          }
+          @media (max-width: 640px) {
+            .cover-frame {
+              position: relative;
+              padding: 20px 18px 28px;
+              align-items: stretch;
+            }
+            .cover-glow {
+              top: -20vh;
+              right: -30vw;
+              width: 130vw;
+              height: 130vw;
+            }
+            .cover-content {
+              gap: 20px;
+            }
+            .cover-pill {
+              margin-bottom: 14px;
+              padding: 4px 12px 4px 4px;
+              gap: 8px;
+              font-size: 10px;
+            }
+            .pill-letter {
+              width: 22px;
+              height: 22px;
+              font-size: 12px;
+            }
+            .cover-title {
+              font-size: clamp(40px, 11vw, 60px);
+              margin-bottom: 14px;
+            }
+            .cover-for-line {
+              margin-top: 4px;
+            }
+            .cover-subtitle {
+              font-size: 14px;
+              line-height: 1.4;
+              margin-bottom: 14px;
+            }
+            .cover-meta {
+              font-size: 12px;
+            }
+            .cover-stage {
+              transform: scale(0.78);
+              transform-origin: top center;
+              width: 320px;
+              margin: 0 auto -50px;
+            }
+            .bubble {
+              font-size: 12px;
+              padding: 7px 11px;
+            }
+            .bubble.pay-link {
+              padding: 5px 11px 5px 5px;
+            }
+            .pl-icon {
+              width: 28px;
+              height: 28px;
+            }
+            .pl-icon :global(img) {
+              width: 16px;
+              height: 16px;
+            }
+            .pl-amount {
+              font-size: 12px;
+            }
+            .pl-url {
+              font-size: 10px;
             }
           }
         `}</style>
@@ -817,6 +886,30 @@ export const WhatsappSlide: SlideDef = {
               grid-template-columns: 1fr;
             }
           }
+          @media (max-width: 640px) {
+            .wa-frame {
+              gap: 16px;
+            }
+            .wa-stats {
+              grid-template-columns: repeat(3, 1fr);
+              gap: 8px;
+            }
+            .wa-stats :global(.deck-stat .num) {
+              font-size: clamp(28px, 9vw, 40px);
+              line-height: 1;
+            }
+            .wa-stats :global(.deck-stat .lbl) {
+              font-size: 11px;
+              line-height: 1.25;
+            }
+            .wa-chats {
+              gap: 10px;
+            }
+            .wa-quote {
+              font-size: 15px;
+              line-height: 1.45;
+            }
+          }
         `}</style>
       </div>
     );
@@ -947,44 +1040,31 @@ export const FlowSlide: SlideDef = {
     const steps = FLOW_STEPS[locale];
     const doneLabel = t('flow_done');
 
-    // Reveal rows one at a time. Right/Space/PageDown advances within the slide
-    // until all three rows are visible, then bubbles to the deck for the next
-    // slide. Left/PageUp peels rows back before going to the previous slide.
+    // Reveal rows one at a time. Next advances within the slide until all three
+    // rows are visible, then yields to the deck so it can move on to slide 07.
+    // Prev peels rows back before yielding to the deck. Both the keyboard
+    // arrows and the on-screen nav buttons (mobile + desktop) route through
+    // the deck's SlideNav interceptor, so this single source of truth handles
+    // every input method.
     const [revealed, setRevealed] = useState(1);
+    const {registerInterceptor} = useSlideNav();
 
     useEffect(() => {
-      const onKey = (e: KeyboardEvent) => {
-        const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
-        if (tag === 'input' || tag === 'textarea') return;
-        if (
-          e.key === 'ArrowRight' ||
-          e.key === ' ' ||
-          e.key === 'PageDown'
-        ) {
-          setRevealed((r) => {
-            if (r < 3) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              return r + 1;
-            }
-            return r;
-          });
-        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-          setRevealed((r) => {
-            if (r > 1) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              return r - 1;
-            }
-            return r;
-          });
+      return registerInterceptor((dir) => {
+        if (dir === 'next') {
+          if (revealed < 3) {
+            setRevealed(revealed + 1);
+            return true;
+          }
+          return false;
         }
-      };
-      // Capture phase so we run before the deck's bubble-phase listener and can
-      // stop it from advancing slides while we still have rows left to reveal.
-      window.addEventListener('keydown', onKey, true);
-      return () => window.removeEventListener('keydown', onKey, true);
-    }, []);
+        if (revealed > 1) {
+          setRevealed(revealed - 1);
+          return true;
+        }
+        return false;
+      });
+    }, [registerInterceptor, revealed]);
 
     const rows = [
       {
@@ -1050,6 +1130,16 @@ export const FlowSlide: SlideDef = {
             width: 100%;
             max-width: 700px;
             align-self: flex-start;
+          }
+          @media (max-width: 640px) {
+            .flow-frame {
+              gap: 18px;
+            }
+            .flow-rows {
+              max-width: none;
+              align-self: stretch;
+              gap: 14px;
+            }
           }
         `}</style>
       </div>
@@ -1320,6 +1410,43 @@ function FlowRow({
           opacity: 1;
           transform: scale(1);
         }
+        @media (max-width: 640px) {
+          .flow-row {
+            padding: 14px 14px;
+          }
+          .flow-row-head {
+            margin-bottom: 10px;
+            gap: 8px;
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          .flow-row-meta {
+            font-size: 11px;
+            padding-top: 0;
+          }
+          .flow-row-label {
+            font-size: 13px;
+            line-height: 1.25;
+          }
+          .flow-row-step {
+            font-size: 11px;
+          }
+          .flow-row-dots-wrap {
+            gap: 8px;
+          }
+          .flow-row-dots {
+            grid-template-columns: repeat(23, minmax(0, 1fr));
+            gap: 5px 3px;
+          }
+          .dot {
+            width: 7px;
+            height: 7px;
+          }
+          .paid {
+            width: 18px;
+            height: 18px;
+          }
+        }
       `}</style>
     </div>
   );
@@ -1497,6 +1624,60 @@ export const WhatIsMagicSlide: SlideDef = {
           @media (max-width: 900px) {
             .magic-bullets {
               grid-template-columns: 1fr;
+            }
+          }
+          @media (max-width: 640px) {
+            .magic-frame {
+              gap: 16px;
+            }
+            .magic-head-row {
+              gap: 14px;
+              align-items: flex-start;
+            }
+            .magic-head-text :global(.deck-kicker) {
+              font-size: 16px;
+              margin-bottom: 6px;
+            }
+            .magic-head-text :global(.deck-title-1) {
+              font-size: clamp(22px, 6.5vw, 28px);
+              line-height: 1.15;
+            }
+            .si-stack {
+              width: 56px;
+              height: 56px;
+            }
+            .si-caption {
+              font-size: 10px;
+            }
+            .magic-bullets {
+              gap: 10px;
+            }
+            .magic-bullet {
+              padding: 14px;
+              gap: 12px;
+            }
+            .bullet-num {
+              width: 28px;
+              height: 28px;
+              font-size: 14px;
+              border-radius: 8px;
+            }
+            .bullet-body h3 {
+              font-size: 15px;
+              margin-bottom: 4px;
+            }
+            .bullet-body p {
+              font-size: 13px;
+              line-height: 1.45;
+            }
+            .magic-modes {
+              gap: 4px;
+            }
+            .modes-label {
+              font-size: 11px;
+            }
+            .modes {
+              font-size: 22px;
             }
           }
         `}</style>

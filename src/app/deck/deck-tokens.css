@@ -176,6 +176,45 @@
   text-rendering: optimizeLegibility;
 }
 
+/* Mobile is meant as the "PDF replacement" view. We don't promise full
+   responsiveness, but each slide should be readable in portrait without
+   gymnastics. The shell allows vertical scroll on mobile so any slide that
+   overflows can be scrolled. */
+@media (max-width: 640px) {
+  .deck-root {
+    --pad-top: 24px;
+    --pad-bottom: 24px;
+    --pad-x: 18px;
+    --gap-title: 14px;
+    --gap-item: 10px;
+
+    --type-eyebrow: 11px;
+    --type-title: clamp(26px, 7.2vw, 34px);
+    --type-section-title: clamp(30px, 8.4vw, 40px);
+    --type-subtitle: clamp(20px, 5vw, 26px);
+    --type-body: clamp(14px, 3.8vw, 16px);
+    --type-stat: clamp(56px, 18vw, 84px);
+    --type-stat-sm: clamp(36px, 11vw, 52px);
+
+    --mp-body-xl: clamp(17px, 4.4vw, 20px);
+    --mp-body-lg: clamp(15px, 4vw, 18px);
+  }
+  /* Anchor every slide to at least the viewport height on mobile (100% of
+     .deck-main, which is flex:1 of the deck root). Going lower (e.g. 0)
+     collapses bare slides like Tap NFC whose content is position:absolute
+     and would otherwise have no height to anchor against. Slides whose body
+     overflows still grow past 100% — deck-main is overflow:auto. */
+  .deck-frame {
+    min-height: 100% !important;
+  }
+  /* Per-slide footer (magic | client mark + page number) is redundant on
+     mobile — the header already shows the branding and the bottom nav has
+     the slide counter. */
+  .deck-footer-note {
+    display: none !important;
+  }
+}
+
 .deck-root h1,
 .deck-root h2,
 .deck-root h3,

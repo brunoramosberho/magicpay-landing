@@ -145,6 +145,40 @@ function DemoShell({
             grid-template-columns: 1fr;
           }
         }
+        @media (max-width: 640px) {
+          .demo-frame {
+            padding: 20px 18px 28px;
+            gap: 18px;
+            height: auto;
+          }
+          .demo-left {
+            padding-top: 0;
+            gap: 8px;
+          }
+          .demo-left :global(.deck-kicker) {
+            font-size: 16px;
+            margin-bottom: 2px;
+          }
+          .demo-left :global(.deck-title-1) {
+            font-size: clamp(22px, 6.5vw, 28px);
+            line-height: 1.18;
+          }
+          .demo-left :global(.deck-lede) {
+            font-size: 14px;
+            line-height: 1.45;
+          }
+          .demo-right {
+            height: auto;
+          }
+          .demo-right :global(.deck-phone) {
+            max-height: none;
+          }
+          .demo-coming {
+            font-size: 12px;
+            padding: 6px 12px;
+            margin-top: 6px;
+          }
+        }
       `}</style>
     </div>
   );
@@ -259,6 +293,35 @@ export const ClaimDemoSlide: SlideDef = {
           @media (max-width: 900px) {
             .claim-frame {
               grid-template-columns: 1fr;
+            }
+          }
+          @media (max-width: 640px) {
+            .claim-frame {
+              padding: 18px 18px 28px;
+              gap: 16px;
+              height: auto;
+            }
+            .claim-left {
+              gap: 14px;
+            }
+            .claim-head :global(.deck-kicker) {
+              font-size: 16px;
+              margin-bottom: 2px;
+            }
+            .claim-title {
+              font-size: clamp(22px, 6.5vw, 28px);
+            }
+            .claim-info {
+              gap: 8px;
+            }
+            .claim-right {
+              height: auto;
+              min-height: 0;
+            }
+            .claim-right :global(.claim-stage) {
+              transform: scale(0.85);
+              transform-origin: top center;
+              margin: 0 auto -40px;
             }
           }
         `}</style>
@@ -402,6 +465,55 @@ export const TapDemoSlide: SlideDef = {
             margin: 0;
             max-width: 580px;
           }
+          @media (max-width: 640px) {
+            /* Fit by WIDTH on portrait phones. The pre-rotation box is
+               landscape (100dvh × 100dvw) and we use object-fit:contain so
+               the video preserves its aspect — the horizontal letterbox of
+               the pre-rotation box becomes top/bottom black bars after the
+               90° rotation. That gives the user a full-width video with the
+               action centered, and small bands above/below instead of the
+               cover-style horizontal cropping that ate the corners. */
+            .tap-video {
+              top: 50%;
+              right: auto;
+              bottom: auto;
+              left: 50%;
+              width: 100dvh;
+              height: 100dvw;
+              max-width: none;
+              object-fit: contain;
+              transform: translate(-50%, -50%) rotate(-90deg);
+              transform-origin: center center;
+            }
+            /* The horizontal scrim made sense for left-aligned desktop copy.
+               Mobile text sits centered/top, so a vertical scrim reads better. */
+            .tap-scrim {
+              background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.72) 0%,
+                rgba(0, 0, 0, 0.45) 35%,
+                rgba(0, 0, 0, 0.15) 70%,
+                rgba(0, 0, 0, 0.55) 100%
+              );
+            }
+            .tap-content {
+              padding: 18px 18px 28px;
+              justify-content: flex-end;
+              max-width: none;
+            }
+            .tap-title {
+              font-size: clamp(28px, 8vw, 40px);
+              margin: 8px 0 10px;
+            }
+            .tap-caption {
+              font-size: 14px;
+              line-height: 1.45;
+              max-width: none;
+            }
+            .tap-kicker {
+              font-size: 16px;
+            }
+          }
         `}</style>
       </div>
     );
@@ -468,6 +580,26 @@ export const WhitelabelSlide: SlideDef = {
             color: var(--mp-fg-muted);
             margin: 0;
             max-width: 700px;
+          }
+          @media (max-width: 640px) {
+            .wl-frame {
+              height: auto;
+              padding: 18px 14px 28px;
+              gap: 14px;
+            }
+            .wl-head {
+              gap: 4px;
+            }
+            .wl-head :global(.deck-kicker) {
+              font-size: 16px;
+              margin-bottom: 2px;
+            }
+            .wl-title {
+              font-size: clamp(22px, 6.5vw, 28px);
+            }
+            .wl-caption {
+              font-size: 13px;
+            }
           }
         `}</style>
       </div>
@@ -661,6 +793,51 @@ function Customizer({initialColor}: {initialColor: string}) {
         }
         .preview-stage.dark {
           background: #0a0a0c;
+        }
+        @media (max-width: 640px) {
+          .cust {
+            grid-template-columns: 1fr;
+            gap: 16px;
+            padding: 14px;
+            border-radius: var(--mp-radius-md);
+          }
+          .cust-panel {
+            gap: 14px;
+            order: 2;
+          }
+          .cust-section {
+            gap: 8px;
+          }
+          .cust-presets {
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            justify-items: center;
+          }
+          /* PDF/mobile mode shows a curated 6-color palette — a longer swatch
+             list isn't useful on a 390px screen. */
+          .preset:nth-child(n+7) {
+            display: none;
+          }
+          .preset {
+            width: 36px;
+            height: 36px;
+          }
+          .preset .dot {
+            width: 28px;
+            height: 28px;
+          }
+          .cust-preview {
+            order: 1;
+            gap: 10px;
+          }
+          .preview-stage {
+            padding: 14px;
+            min-height: 320px;
+          }
+          .preview-stage :global(.kb-preview) {
+            transform: scale(0.92);
+            transform-origin: top center;
+          }
         }
       `}</style>
     </div>

@@ -1,11 +1,37 @@
 'use client';
 
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
 import {I18nProvider, useI18n} from './i18n-context';
 import {LanguageToggle} from './language-toggle';
 import {SectionsMenu} from './sections-menu';
 import {VisitorNameGate} from './visitor-name-gate';
+
+// Slides can intercept the deck's prev/next navigation when they have
+// "sub-steps" of their own (e.g. revealing rows one at a time). The shell
+// registers a single interceptor and falls back to slide navigation when the
+// slide returns false. The same interceptor handles keyboard arrows AND the
+// on-screen nav buttons / swipe gestures.
+export type SlideNavDir = 'next' | 'prev';
+type SlideNavInterceptor = (dir: SlideNavDir) => boolean;
+
+const SlideNavContext = createContext<{
+  registerInterceptor: (fn: SlideNavInterceptor) => () => void;
+} | null>(null);
+
+export function useSlideNav() {
+  const ctx = useContext(SlideNavContext);
+  if (!ctx) throw new Error('useSlideNav must be used inside DeckShell');
+  return ctx;
+}
 
 const VISITOR_NAME_KEY = 'mgic_deck_visitor_name';
 
@@ -250,16 +276,42 @@ function DeckShellInner({
     [index, post, slides]
   );
 
+  // Single-slot interceptor: the active slide can claim prev/next before the
+  // deck navigates. Cleared whenever the slide changes so leftover handlers
+  // can't trap navigation on a different slide.
+  const interceptorRef = useRef<SlideNavInterceptor | null>(null);
+  const registerInterceptor = useCallback(
+    (fn: SlideNavInterceptor) => {
+      interceptorRef.current = fn;
+      return () => {
+        if (interceptorRef.current === fn) interceptorRef.current = null;
+      };
+    },
+    []
+  );
+  useEffect(() => {
+    // Slide changed — previous interceptor (if any) is stale.
+    interceptorRef.current = null;
+  }, [index]);
+
+  const tryAdvance = useCallback(
+    (dir: SlideNavDir) => {
+      if (interceptorRef.current?.(dir)) return;
+      goTo(dir === 'next' ? index + 1 : index - 1);
+    },
+    [goTo, index]
+  );
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
       if (tag === 'input' || tag === 'textarea') return;
       if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
         e.preventDefault();
-        goTo(index + 1);
+        tryAdvance('next');
       } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
         e.preventDefault();
-        goTo(index - 1);
+        tryAdvance('prev');
       } else if (e.key === 'f' || e.key === 'F') {
         e.preventDefault();
         if (document.fullscreenElement) {
@@ -277,7 +329,12 @@ function DeckShellInner({
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [goTo, index, slides.length]);
+  }, [goTo, tryAdvance, slides.length]);
+
+  const navContextValue = useMemo(
+    () => ({registerInterceptor}),
+    [registerInterceptor]
+  );
 
   const brand = client.brand_color || '#306FF6';
   const cssVars = useMemo(
@@ -292,6 +349,7 @@ function DeckShellInner({
   const showNameGate = nameReady && !visitorName;
 
   return (
+    <SlideNavContext.Provider value={navContextValue}>
     <div className="deck-root" style={cssVars}>
       {showNameGate && <VisitorNameGate brand={brand} onSubmit={submitName} />}
       <header className="deck-header">
@@ -346,7 +404,7 @@ function DeckShellInner({
 
       <nav className="deck-nav" aria-label="Slide navigation">
         <button
-          onClick={() => goTo(index - 1)}
+          onClick={() => tryAdvance('prev')}
           disabled={index === 0}
           className="nav-btn"
           aria-label="Previous slide"
@@ -366,8 +424,13 @@ function DeckShellInner({
             />
           ))}
         </div>
+        {/* Mobile-only slide counter — replaces the dot row + the slide's
+            internal footer-note. The branding is already in the top header. */}
+        <span className="deck-nav-counter" aria-live="polite">
+          {String(index + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
+        </span>
         <button
-          onClick={() => goTo(index + 1)}
+          onClick={() => tryAdvance('next')}
           disabled={index === slides.length - 1}
           className="nav-btn primary"
           style={{background: brand}}
@@ -535,7 +598,86 @@ function DeckShellInner({
           width: 18px;
           border-radius: 999px;
         }
+        /* Counter is mobile-only — desktop keeps the dot row. */
+        .deck-nav-counter {
+          display: none;
+        }
+
+        /* ---------- Mobile: PDF-replacement layout ----------
+           On phones we don't try to keep the strict 16:9 single-screen
+           constraint. Each slide can grow taller than the viewport and the
+           deck-main becomes a vertical scroll surface. The chrome shrinks so
+           the slide owns as much vertical real estate as possible. */
+        @media (max-width: 640px) {
+          .deck-header {
+            --deck-header-h: 48px;
+            height: 48px;
+            flex: 0 0 48px;
+            padding: 0 14px;
+          }
+          .deck-header-mark :global(.brand-icon) {
+            width: 18px;
+            height: 18px;
+          }
+          .deck-header-mark .brand-name,
+          .deck-header-mark .client-name {
+            font-size: 13px;
+          }
+          .deck-header-mark .client-logo {
+            height: 18px;
+          }
+          .deck-header-actions {
+            gap: 8px;
+          }
+          .deck-main {
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+          }
+          .deck-slide {
+            position: relative;
+            inset: auto;
+            overflow: visible;
+            min-height: 100%;
+          }
+          .deck-slide :global(.deck-frame),
+          .deck-slide > :global(div) {
+            height: auto;
+            max-height: none;
+            min-height: 100%;
+          }
+          /* (Slide-internal footer is hidden via deck-tokens.css global rule
+             since the :global() selector from styled-jsx didn't always reach
+             motion.section's children reliably.) */
+          .deck-nav {
+            --deck-nav-h: 52px;
+            height: 52px;
+            flex: 0 0 52px;
+            padding: 0 12px;
+            gap: 8px;
+          }
+          .nav-btn {
+            padding: 8px 14px;
+            font-size: 16px;
+            min-width: 48px;
+          }
+          /* 19 micro-dots are noisy on a 390px viewport. Replace with the
+             numeric counter that used to live inside the slide. */
+          .dots {
+            display: none;
+          }
+          .deck-nav-counter {
+            display: inline-flex;
+            flex: 1;
+            justify-content: center;
+            font: 500 12px/1 var(--mp-font-body);
+            color: var(--mp-fg-muted);
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.04em;
+          }
+        }
       `}</style>
     </div>
+    </SlideNavContext.Provider>
   );
 }
