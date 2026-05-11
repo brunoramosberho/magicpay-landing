@@ -199,6 +199,7 @@ export const ClosingSlide: SlideDef = {
   bare: true,
   Body: ({client}: SlideContext) => {
     const {t} = useI18n();
+    const appIcon = client.app_icon_url ?? client.logo_url;
     return (
       <div className="close-frame">
         <div className="close-glow" aria-hidden />
@@ -233,6 +234,18 @@ export const ClosingSlide: SlideDef = {
               </a>
             </div>
           </div>
+          {appIcon && (
+            <div className="sdk-integration" aria-hidden>
+              <div className="si-stack">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={appIcon} alt="" className="si-app" />
+                <span className="si-magic-badge">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/deck/logos/icon.svg" alt="" />
+                </span>
+              </div>
+            </div>
+          )}
         </div>
         <style jsx>{`
           .close-frame {
@@ -317,6 +330,58 @@ export const ClosingSlide: SlideDef = {
           }
           .contact-value:hover {
             text-decoration: underline;
+          }
+          /* Same SDK-integration stack as slide 07 — app icon with a magic
+             badge clipped onto the corner. Reinforces that the relationship
+             ends with magic living inside the client's app. */
+          .sdk-integration {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: clamp(8px, 1.5vh, 16px);
+          }
+          .si-stack {
+            position: relative;
+            width: clamp(72px, 7vw, 104px);
+            height: clamp(72px, 7vw, 104px);
+          }
+          .si-app {
+            width: 100%;
+            height: 100%;
+            border-radius: 28%;
+            object-fit: cover;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
+              0 2px 6px rgba(0, 0, 0, 0.06);
+          }
+          .si-magic-badge {
+            position: absolute;
+            right: -8px;
+            bottom: -8px;
+            width: 38%;
+            height: 38%;
+            border-radius: 30%;
+            background: var(--brand);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px
+                color-mix(in srgb, var(--brand) 35%, transparent),
+              0 0 0 4px var(--mp-bg);
+          }
+          .si-magic-badge :global(img) {
+            width: 60%;
+            height: 60%;
+            filter: brightness(0) invert(1);
+          }
+          @media (max-width: 640px) {
+            .si-stack {
+              width: 64px;
+              height: 64px;
+            }
+            .sdk-integration {
+              gap: 8px;
+            }
           }
         `}</style>
       </div>

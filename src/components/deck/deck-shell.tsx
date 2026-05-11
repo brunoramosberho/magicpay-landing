@@ -70,6 +70,13 @@ function FullscreenButton() {
         .fs-btn:hover {
           color: var(--mp-ink);
         }
+        /* Fullscreen isn't useful on mobile (Safari + standalone PWA quirks)
+           and just adds clutter — hide it on phones. */
+        @media (max-width: 640px) {
+          .fs-btn {
+            display: none;
+          }
+        }
       `}</style>
     </button>
   );
