@@ -554,7 +554,10 @@ export const WhitelabelSlide: SlideDef = {
           <h1 className="wl-title">{t('wl_title')}</h1>
           <p className="wl-caption">{t('wl_caption')}</p>
         </div>
-        <Customizer initialColor={client.brand_color ?? '#306FF6'} />
+        <Customizer
+          initialColor={client.brand_color ?? '#306FF6'}
+          clientName={client.name}
+        />
         <style jsx>{`
           .wl-frame {
             height: 100%;
@@ -614,14 +617,20 @@ const PRESETS = [
   '#003087', '#FF4C5E', '#1E365B', '#242424', '#EA1D25', '#D8322A', '#2B6BE4', '#5FCE87', '#FFE04B', '#B6F687'
 ];
 
-function Customizer({initialColor}: {initialColor: string}) {
+function Customizer({
+  initialColor,
+  clientName
+}: {
+  initialColor: string;
+  clientName: string;
+}) {
   const [primary, setPrimary] = useState(initialColor);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   return (
     <div className="cust">
       <div className="cust-panel">
-        <div className="cust-section">
+        <div className="cust-section cust-colors">
           <div className="cust-label">COLORES</div>
           <div className="cust-row">
             <span className="cust-tag">LIGHT</span>
@@ -671,7 +680,12 @@ function Customizer({initialColor}: {initialColor: string}) {
           </button>
         </div>
         <div className={`preview-stage ${theme}`}>
-          <MagicKeyboard amount="320" color={primary} theme={theme} />
+          <MagicKeyboard
+            amount="320"
+            color={primary}
+            theme={theme}
+            recipientName={`${clientName} | Jonathan Moore`}
+          />
         </div>
       </div>
 
@@ -807,6 +821,11 @@ function Customizer({initialColor}: {initialColor: string}) {
           }
           .cust-section {
             gap: 8px;
+          }
+          /* The hex inputs + LIGHT/DARK rows are too fiddly on a phone;
+             keep only the preset swatches. */
+          .cust-colors {
+            display: none;
           }
           .cust-presets {
             grid-template-columns: repeat(6, 1fr);
