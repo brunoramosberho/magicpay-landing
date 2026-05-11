@@ -1115,7 +1115,7 @@ export const FlowSlide: SlideDef = {
         meta: t('flow_magic_meta'),
         taps: 3,
         kind: 'brand' as const,
-        stepMs: 450,
+        stepMs: 110,
         steps: steps.magic
       }
     ];
