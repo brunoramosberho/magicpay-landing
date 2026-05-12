@@ -1,15 +1,464 @@
 'use client';
 
 // Interactive claim flow — replicates the magicpay_web_claim "Cobrar transferencia"
-// UI inside an iPhone frame. Two modes: "1ra vez" (full form, auto-fills CLABE → name →
-// switches to DIMO → fills phone → CODI lookup → auto-claims with loading state) and
-// "2da vez" (saved account, single tap). User interactions cancel the autoplay.
+// UI inside an iPhone frame. Two modes: "1ra vez" (full form) and "2da vez"
+// (saved account, single tap). Per-country: México keeps the rich CODI-lookup
+// autoplay; other corridors render a country-specific form (no autoplay, just
+// the right rail names and field shapes — UPI for India, IBAN/Bizum for EU…).
 // Uses var(--brand) so colors follow the client's brand_color.
 
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 
 type Mode = 'first' | 'returning';
 type Method = 'clabe' | 'dimo';
+
+// ---------- Country corridor configs ----------
+// Each country defines the currency it pays out in, a list of "rails" the
+// recipient can choose between (e.g. ACH/Zelle in the US), and the saved
+// account preview shown on the "2da vez" screen. Mexico is the canonical case
+// — it keeps a separate, richer flow that drives a real CODI lookup. Other
+// countries render a generic form for the same Reclamar flow.
+
+type CountryCode = 'mx' | 'us' | 'co' | 'br' | 'eu' | 'ph' | 'in';
+
+type CountryFieldDef = {
+  key: string;
+  label: string;
+  placeholder: string;
+  inputMode?: 'numeric' | 'tel' | 'email' | 'text';
+  maxLength?: number;
+  /** Minimum input length (digits/chars) to count the field as filled. */
+  minLength?: number;
+  /** If 'numeric', strip non-digits as the user types. */
+  filter?: 'digits' | 'none';
+};
+
+type CountryMethodDef = {
+  key: string;
+  label: string;
+  /** Either an emoji or null (then `badge` is rendered as a styled pill). */
+  icon: string | null;
+  /** Single-letter badge style icon when `icon` is null (e.g. 'D' for Dimo). */
+  badge?: string;
+  badgeColor?: string;
+  fields: CountryFieldDef[];
+};
+
+type SavedAccountPreview = {
+  /** Emoji shown in the small card icon */
+  cardIcon: string;
+  /** Primary identifier line (e.g. "************0163", "bruno@ybl") */
+  primary: string;
+  /** Secondary line — usually the bank / network name. */
+  secondary: string;
+  /** Holder name shown below */
+  accountName: string;
+  /** Account tail used in the Receipt (last 4 digits) */
+  accountTail: string;
+};
+
+type CountryConfig = {
+  code: CountryCode;
+  flag: string;
+  label: string;        // shown in the chip
+  /** Currency rendered next to amounts */
+  currency: {symbol: string; code: string};
+  /** Display amount on the demo screens for this country */
+  amount: string;
+  /** Sender name shown on the receive screens */
+  senderName: string;
+  methods: CountryMethodDef[];
+  saved: SavedAccountPreview;
+};
+
+const COUNTRIES: CountryConfig[] = [
+  {
+    code: 'mx',
+    flag: '🇲🇽',
+    label: 'México',
+    currency: {symbol: '$', code: 'MXN'},
+    amount: '150.00',
+    senderName: 'Bruno A. R. B.',
+    methods: [
+      {
+        key: 'clabe',
+        label: 'CLABE/Tarjeta',
+        icon: '🏦',
+        fields: [
+          {
+            key: 'account',
+            label: 'Cuenta destino',
+            placeholder: 'CLABE (18) o Tarjeta (16)',
+            inputMode: 'numeric',
+            maxLength: 20,
+            minLength: 16,
+            filter: 'digits'
+          },
+          {
+            key: 'name',
+            label: 'Nombre completo del titular',
+            placeholder: 'Como aparece en tu cuenta'
+          }
+        ]
+      },
+      {
+        key: 'dimo',
+        label: 'Dimo®',
+        icon: null,
+        badge: 'D',
+        badgeColor: 'linear-gradient(135deg,#4ade80,#22c55e)',
+        fields: [
+          {
+            key: 'phone',
+            label: 'Número de teléfono',
+            placeholder: '10 dígitos',
+            inputMode: 'tel',
+            maxLength: 10,
+            minLength: 10,
+            filter: 'digits'
+          }
+        ]
+      }
+    ],
+    saved: {
+      cardIcon: '💳',
+      primary: '****************0163',
+      secondary: '',           // Filled at render time with clientName
+      accountName: 'Bruno Ramos Berho',
+      accountTail: '0163'
+    }
+  },
+  {
+    code: 'us',
+    flag: '🇺🇸',
+    label: 'United States',
+    currency: {symbol: '$', code: 'USD'},
+    amount: '50.00',
+    senderName: 'Bruno A. R. B.',
+    methods: [
+      {
+        key: 'ach',
+        label: 'ACH (Bank)',
+        icon: '🏦',
+        fields: [
+          {
+            key: 'routing',
+            label: 'Routing number',
+            placeholder: '9 digits',
+            inputMode: 'numeric',
+            maxLength: 9,
+            minLength: 9,
+            filter: 'digits'
+          },
+          {
+            key: 'account',
+            label: 'Account number',
+            placeholder: '8–12 digits',
+            inputMode: 'numeric',
+            maxLength: 12,
+            minLength: 6,
+            filter: 'digits'
+          }
+        ]
+      },
+      {
+        key: 'zelle',
+        label: 'Zelle',
+        icon: null,
+        badge: 'Z',
+        badgeColor: 'linear-gradient(135deg,#a855f7,#7c3aed)',
+        fields: [
+          {
+            key: 'identifier',
+            label: 'Email or US phone',
+            placeholder: 'name@email.com or +1 555…',
+            inputMode: 'email',
+            minLength: 6
+          }
+        ]
+      }
+    ],
+    saved: {
+      cardIcon: '💳',
+      primary: '************6411',
+      secondary: 'Chase · ACH',
+      accountName: 'Bruno R. Berho',
+      accountTail: '6411'
+    }
+  },
+  {
+    code: 'co',
+    flag: '🇨🇴',
+    label: 'Colombia',
+    currency: {symbol: '$', code: 'COP'},
+    amount: '180.000',
+    senderName: 'Bruno A. R. B.',
+    methods: [
+      {
+        key: 'bank',
+        label: 'Cuenta bancaria',
+        icon: '🏦',
+        fields: [
+          {
+            key: 'account',
+            label: 'Número de cuenta',
+            placeholder: '10–11 dígitos',
+            inputMode: 'numeric',
+            maxLength: 11,
+            minLength: 9,
+            filter: 'digits'
+          },
+          {
+            key: 'name',
+            label: 'Nombre del titular',
+            placeholder: 'Como aparece en tu cuenta'
+          }
+        ]
+      },
+      {
+        key: 'nequi',
+        label: 'Nequi',
+        icon: null,
+        badge: 'N',
+        badgeColor: 'linear-gradient(135deg,#e879f9,#c026d3)',
+        fields: [
+          {
+            key: 'phone',
+            label: 'Número Nequi',
+            placeholder: '10 dígitos',
+            inputMode: 'tel',
+            maxLength: 10,
+            minLength: 10,
+            filter: 'digits'
+          }
+        ]
+      }
+    ],
+    saved: {
+      cardIcon: '📱',
+      primary: '+57 ***-***-7321',
+      secondary: 'Nequi',
+      accountName: 'Bruno R. Berho',
+      accountTail: '7321'
+    }
+  },
+  {
+    code: 'br',
+    flag: '🇧🇷',
+    label: 'Brasil',
+    currency: {symbol: 'R$', code: 'BRL'},
+    amount: '75,00',
+    senderName: 'Bruno A. R. B.',
+    methods: [
+      {
+        key: 'pix',
+        label: 'Chave Pix',
+        icon: null,
+        badge: 'P',
+        badgeColor: 'linear-gradient(135deg,#00b894,#00897b)',
+        fields: [
+          {
+            key: 'key',
+            label: 'CPF, e-mail, telefone ou chave aleatória',
+            placeholder: 'bruno@email.com',
+            inputMode: 'text',
+            minLength: 5
+          }
+        ]
+      },
+      {
+        key: 'bank',
+        label: 'Conta bancária',
+        icon: '🏦',
+        fields: [
+          {
+            key: 'bank',
+            label: 'Banco (código)',
+            placeholder: '260 (Nubank)',
+            inputMode: 'numeric',
+            maxLength: 4,
+            minLength: 3,
+            filter: 'digits'
+          },
+          {
+            key: 'account',
+            label: 'Conta + dígito',
+            placeholder: '1234567-8',
+            inputMode: 'text',
+            minLength: 6
+          }
+        ]
+      }
+    ],
+    saved: {
+      cardIcon: '🔑',
+      primary: 'bruno@email.com',
+      secondary: 'Pix · Nubank',
+      accountName: 'Bruno R. Berho',
+      accountTail: '5582'
+    }
+  },
+  {
+    code: 'eu',
+    flag: '🇪🇺',
+    label: 'Europa',
+    currency: {symbol: '€', code: 'EUR'},
+    amount: '15,00',
+    senderName: 'Bruno A. R. B.',
+    methods: [
+      {
+        key: 'iban',
+        label: 'IBAN (SEPA)',
+        icon: '🏦',
+        fields: [
+          {
+            key: 'iban',
+            label: 'IBAN',
+            placeholder: 'ES91 2100 0418 4502 0005 1332',
+            inputMode: 'text',
+            minLength: 15
+          }
+        ]
+      },
+      {
+        key: 'bizum',
+        label: 'Bizum',
+        icon: null,
+        badge: 'B',
+        badgeColor: 'linear-gradient(135deg,#22d3ee,#0e7490)',
+        fields: [
+          {
+            key: 'phone',
+            label: 'Móvil',
+            placeholder: '+34 612 345 678',
+            inputMode: 'tel',
+            minLength: 9
+          }
+        ]
+      }
+    ],
+    saved: {
+      cardIcon: '💳',
+      primary: 'ES** **** **** **** **** 1332',
+      secondary: 'CaixaBank · SEPA',
+      accountName: 'Bruno R. Berho',
+      accountTail: '1332'
+    }
+  },
+  {
+    code: 'ph',
+    flag: '🇵🇭',
+    label: 'Philippines',
+    currency: {symbol: '₱', code: 'PHP'},
+    amount: '500.00',
+    senderName: 'Bruno A. R. B.',
+    methods: [
+      {
+        key: 'gcash',
+        label: 'GCash',
+        icon: null,
+        badge: 'G',
+        badgeColor: 'linear-gradient(135deg,#3b82f6,#1d4ed8)',
+        fields: [
+          {
+            key: 'phone',
+            label: 'GCash mobile number',
+            placeholder: '+63 9XX XXX XXXX',
+            inputMode: 'tel',
+            minLength: 10
+          }
+        ]
+      },
+      {
+        key: 'bank',
+        label: 'Bank account',
+        icon: '🏦',
+        fields: [
+          {
+            key: 'bank',
+            label: 'Bank',
+            placeholder: 'BPI / BDO / UnionBank…',
+            inputMode: 'text',
+            minLength: 2
+          },
+          {
+            key: 'account',
+            label: 'Account number',
+            placeholder: '10–12 digits',
+            inputMode: 'numeric',
+            maxLength: 12,
+            minLength: 8,
+            filter: 'digits'
+          }
+        ]
+      }
+    ],
+    saved: {
+      cardIcon: '📱',
+      primary: '+63 9XX XXX 0987',
+      secondary: 'GCash',
+      accountName: 'Bruno R. Berho',
+      accountTail: '0987'
+    }
+  },
+  {
+    code: 'in',
+    flag: '🇮🇳',
+    label: 'India',
+    currency: {symbol: '₹', code: 'INR'},
+    amount: '750',
+    senderName: 'Bruno A. R. B.',
+    methods: [
+      {
+        key: 'upi',
+        label: 'UPI ID',
+        icon: null,
+        badge: 'U',
+        badgeColor: 'linear-gradient(135deg,#fb923c,#ea580c)',
+        fields: [
+          {
+            key: 'upi',
+            label: 'UPI ID',
+            placeholder: 'name@ybl / name@okhdfc',
+            inputMode: 'email',
+            minLength: 5
+          }
+        ]
+      },
+      {
+        key: 'bank',
+        label: 'Bank (IFSC)',
+        icon: '🏦',
+        fields: [
+          {
+            key: 'ifsc',
+            label: 'IFSC code',
+            placeholder: 'HDFC0001234',
+            inputMode: 'text',
+            maxLength: 11,
+            minLength: 11
+          },
+          {
+            key: 'account',
+            label: 'Account number',
+            placeholder: '9–18 digits',
+            inputMode: 'numeric',
+            maxLength: 18,
+            minLength: 9,
+            filter: 'digits'
+          }
+        ]
+      }
+    ],
+    saved: {
+      cardIcon: '🪙',
+      primary: 'bruno@ybl',
+      secondary: 'UPI · PhonePe',
+      accountName: 'Bruno R. Berho',
+      accountTail: 'ne@ybl'
+    }
+  }
+];
 
 export function ClaimDemo({
   brand: _brand,
@@ -23,16 +472,43 @@ export function ClaimDemo({
   clientAppIcon?: string;
 }) {
   const [mode, setMode] = useState<Mode>('first');
+  const [countryCode, setCountryCode] = useState<CountryCode>('mx');
   const userInteractedRef = useRef(false);
   const name = clientName ?? 'Stori';
+  const country = useMemo(
+    () => COUNTRIES.find((c) => c.code === countryCode) ?? COUNTRIES[0],
+    [countryCode]
+  );
 
   const switchMode = (m: Mode) => {
     userInteractedRef.current = true;
     setMode(m);
   };
 
+  const switchCountry = (c: CountryCode) => {
+    userInteractedRef.current = true;
+    setCountryCode(c);
+  };
+
   return (
     <div className="claim-stage">
+      <div className="claim-country" role="tablist" aria-label="Country">
+        {COUNTRIES.map((c) => (
+          <button
+            key={c.code}
+            role="tab"
+            aria-selected={c.code === countryCode}
+            className={`country-chip ${c.code === countryCode ? 'active' : ''}`}
+            onClick={() => switchCountry(c.code)}
+          >
+            <span className="country-flag" aria-hidden>
+              {c.flag}
+            </span>
+            <span className="country-label">{c.label}</span>
+          </button>
+        ))}
+      </div>
+
       <div className="claim-toggle" role="group" aria-label="Visit type">
         <button
           className={mode === 'first' ? 'active' : ''}
@@ -53,17 +529,30 @@ export function ClaimDemo({
           <div className="deck-phone-notch" />
           <div className="deck-phone-screen claim-screen">
             {mode === 'first' ? (
-              <FirstTimeClaim
-                userInteractedRef={userInteractedRef}
-                clientName={name}
-                clientLogo={clientLogo}
-                clientAppIcon={clientAppIcon}
-              />
+              country.code === 'mx' ? (
+                <FirstTimeClaim
+                  userInteractedRef={userInteractedRef}
+                  clientName={name}
+                  clientLogo={clientLogo}
+                  clientAppIcon={clientAppIcon}
+                  country={country}
+                />
+              ) : (
+                <GenericFirstTimeClaim
+                  key={country.code}
+                  country={country}
+                  clientName={name}
+                  clientLogo={clientLogo}
+                  clientAppIcon={clientAppIcon}
+                />
+              )
             ) : (
               <ReturningClaim
+                key={country.code}
                 clientName={name}
                 clientLogo={clientLogo}
                 clientAppIcon={clientAppIcon}
+                country={country}
               />
             )}
           </div>
@@ -80,6 +569,57 @@ export function ClaimDemo({
           gap: 10px;
           min-height: 0;
           padding: 0;
+        }
+        .claim-country {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 6px;
+          max-width: 100%;
+        }
+        .country-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: var(--mp-white);
+          border: 1px solid var(--mp-border-soft);
+          border-radius: var(--mp-radius-pill);
+          padding: 4px 10px 4px 6px;
+          font: 500 11px/1 var(--mp-font-body);
+          color: var(--mp-fg-muted);
+          cursor: pointer;
+          transition: all 160ms var(--mp-ease);
+        }
+        .country-chip:hover {
+          color: var(--mp-ink);
+          border-color: color-mix(in srgb, var(--brand) 35%, var(--mp-border-soft));
+        }
+        .country-chip.active {
+          background: var(--brand);
+          color: #fff;
+          border-color: var(--brand);
+          box-shadow: 0 2px 10px
+            color-mix(in srgb, var(--brand) 28%, transparent);
+        }
+        .country-flag {
+          font-size: 14px;
+          line-height: 1;
+        }
+        .country-label {
+          letter-spacing: 0.01em;
+        }
+        @media (max-width: 640px) {
+          .claim-country {
+            gap: 4px;
+          }
+          .country-chip {
+            padding: 3px 8px 3px 5px;
+            font-size: 10px;
+            gap: 4px;
+          }
+          .country-flag {
+            font-size: 12px;
+          }
         }
         .claim-toggle {
           display: inline-flex;
@@ -210,12 +750,17 @@ function FirstTimeClaim({
   userInteractedRef,
   clientName,
   clientLogo,
-  clientAppIcon
+  clientAppIcon,
+  country: _country
 }: {
   userInteractedRef: React.MutableRefObject<boolean>;
   clientName: string;
   clientLogo?: string;
   clientAppIcon?: string;
+  /** Currently unused — this component is MX-only and reads its own
+   *  Mexico-specific labels/sample. The prop exists so the parent can pass
+   *  consistent context if we ever fold this into the generic flow. */
+  country?: CountryConfig;
 }) {
   const [method, setMethod] = useState<Method>('clabe');
   const [account, setAccount] = useState('');
@@ -351,9 +896,12 @@ function FirstTimeClaim({
       <SuccessReceipt
         senderName="Bruno A. R. B."
         amount="150.00"
+        currencySymbol="$"
+        currencyCode="MXN"
         accountTail={acctTail}
         accountName={acctName}
         accountBank={acctBank}
+        accountPrimary={`002***********${acctTail}`}
         clientName={clientName}
         clientLogo={clientLogo}
         clientAppIcon={clientAppIcon}
@@ -787,17 +1335,367 @@ function Row({k, v}: {k: string; v: React.ReactNode}) {
   );
 }
 
+// ---------- Generic first-time claim (non-MX corridors) ----------
+// Lighter-weight cousin of FirstTimeClaim — no CODI lookup or autoplay. Reads
+// methods + fields from the country config and lights up Reclamar when each
+// field has enough characters to look complete. Each new country plugs in by
+// adding an entry to COUNTRIES.
+
+function GenericFirstTimeClaim({
+  country,
+  clientName,
+  clientLogo,
+  clientAppIcon
+}: {
+  country: CountryConfig;
+  clientName: string;
+  clientLogo?: string;
+  clientAppIcon?: string;
+}) {
+  const [methodKey, setMethodKey] = useState<string>(country.methods[0].key);
+  const [values, setValues] = useState<Record<string, string>>({});
+  const [claiming, setClaiming] = useState(false);
+  const [claimed, setClaimed] = useState(false);
+
+  const method =
+    country.methods.find((m) => m.key === methodKey) ?? country.methods[0];
+
+  const setValue = (key: string, raw: string) => {
+    const field = method.fields.find((f) => f.key === key);
+    let value = raw;
+    if (field?.filter === 'digits') value = raw.replace(/\D/g, '');
+    if (field?.maxLength) value = value.slice(0, field.maxLength);
+    setValues((v) => ({...v, [key]: value}));
+  };
+
+  const allFilled = method.fields.every((f) => {
+    const v = (values[f.key] ?? '').trim();
+    const min = f.minLength ?? 3;
+    return v.length >= min;
+  });
+
+  const triggerClaim = () => {
+    if (!allFilled || claiming) return;
+    setClaiming(true);
+    setTimeout(() => {
+      setClaiming(false);
+      setClaimed(true);
+    }, 1400);
+  };
+
+  // Reset when the method changes — each rail has different field shapes.
+  useEffect(() => {
+    setValues({});
+  }, [methodKey]);
+
+  if (claimed) {
+    // Build a meaningful accountPrimary from whatever the user typed.
+    const lastField = method.fields[method.fields.length - 1];
+    const lastValue = values[lastField.key] ?? '';
+    const tail = lastValue.slice(-4) || country.saved.accountTail;
+    const accountPrimary =
+      method.fields.length > 1
+        ? lastValue
+        : `${method.label} · ${lastValue}`;
+    return (
+      <SuccessReceipt
+        senderName={country.senderName}
+        amount={country.amount}
+        currencySymbol={country.currency.symbol}
+        currencyCode={country.currency.code}
+        accountTail={tail}
+        accountName={country.saved.accountName}
+        accountBank={method.label}
+        accountPrimary={accountPrimary}
+        clientName={clientName}
+        clientLogo={clientLogo}
+        clientAppIcon={clientAppIcon}
+      />
+    );
+  }
+
+  return (
+    <div className="ft">
+      <div className="ft-statusbar">
+        <span>9:41</span>
+        <span className="ft-icons">●●●●● 5G</span>
+      </div>
+      <ClientHeader name={clientName} logo={clientLogo} />
+      <div className="ft-pad">
+        <header className="ft-head">
+          <div className="ft-title-block">
+            <h1>Cobrar transferencia</h1>
+            <p>
+              Recibe este pago en {country.flag} {country.label}.
+            </p>
+          </div>
+          <span className="ft-badge">Pendiente</span>
+        </header>
+
+        <div className="ft-summary">
+          <div className="ft-amount">
+            {country.currency.symbol}
+            {country.amount}
+            <span className="ft-currency-code"> {country.currency.code}</span>
+          </div>
+          <div className="ft-rows">
+            <Row k="Concepto" v={<><span aria-hidden>🍽️</span> Comida</>} />
+            <Row k="De" v={country.senderName} />
+            <Row k="País destino" v={`${country.flag} ${country.label}`} />
+          </div>
+        </div>
+
+        <div
+          className="ft-tabs"
+          style={{
+            gridTemplateColumns: `repeat(${country.methods.length}, 1fr)`
+          }}
+        >
+          {country.methods.map((m) => (
+            <button
+              key={m.key}
+              className={`ft-tab ${m.key === methodKey ? 'active' : ''}`}
+              onClick={() => setMethodKey(m.key)}
+            >
+              {m.icon ? (
+                <span aria-hidden>{m.icon}</span>
+              ) : (
+                <span
+                  className="generic-badge"
+                  aria-hidden
+                  style={{background: m.badgeColor ?? 'var(--brand)'}}
+                >
+                  <span>{m.badge ?? m.label.charAt(0)}</span>
+                </span>
+              )}
+              {m.label}
+            </button>
+          ))}
+        </div>
+
+        {method.fields.map((f) => (
+          <div className="ft-field" key={f.key}>
+            <label>{f.label}</label>
+            <input
+              type={f.inputMode === 'email' ? 'email' : 'text'}
+              inputMode={f.inputMode}
+              placeholder={f.placeholder}
+              value={values[f.key] ?? ''}
+              maxLength={f.maxLength}
+              onChange={(e) => setValue(f.key, e.target.value)}
+            />
+          </div>
+        ))}
+
+        <button
+          className="ft-claim"
+          disabled={!allFilled || claiming}
+          onClick={triggerClaim}
+        >
+          {claiming ? (
+            <>
+              <span className="ft-claim-spinner" aria-hidden />
+              Procesando…
+            </>
+          ) : (
+            'Reclamar pago'
+          )}
+        </button>
+      </div>
+
+      <style jsx>{`
+        .ft {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          font-size: 13px;
+        }
+        .ft-statusbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 18px 4px;
+          font: 500 11px/1 var(--mp-font-ios);
+          color: #111;
+          background: #fff;
+        }
+        .ft-icons {
+          font-size: 9px;
+          letter-spacing: 1px;
+        }
+        .ft-pad {
+          flex: 1;
+          padding: 14px 16px 18px;
+          display: flex;
+          flex-direction: column;
+          gap: 13px;
+        }
+        .ft-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 10px;
+        }
+        .ft-title-block h1 {
+          font: 500 17px/1.2 var(--mp-font-ios);
+          margin: 0;
+          color: #111;
+        }
+        .ft-title-block p {
+          font: 400 12px/1.4 var(--mp-font-ios);
+          color: #777;
+          margin: 4px 0 0;
+        }
+        .ft-badge {
+          background: #fdecc8;
+          color: #c2772a;
+          font: 500 11px/1 var(--mp-font-ios);
+          padding: 4px 10px;
+          border-radius: 999px;
+          flex-shrink: 0;
+        }
+        .ft-summary {
+          background: #fff;
+          border: 1px solid #ececec;
+          border-radius: 14px;
+          padding: 14px;
+        }
+        .ft-amount {
+          font: 700 26px/1 var(--mp-font-ios);
+          color: #111;
+          text-align: right;
+          margin-bottom: 10px;
+        }
+        .ft-currency-code {
+          font-size: 12px;
+          font-weight: 500;
+          color: #888;
+          letter-spacing: 0.04em;
+        }
+        .ft-rows {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .ft-tabs {
+          display: grid;
+          gap: 6px;
+          background: #f3f4f6;
+          padding: 4px;
+          border-radius: 10px;
+        }
+        .ft-tab {
+          background: transparent;
+          border: 0;
+          padding: 8px 10px;
+          border-radius: 8px;
+          font: 500 12px/1.2 var(--mp-font-ios);
+          color: #555;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+        }
+        .ft-tab.active {
+          background: #fff;
+          color: #111;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .generic-badge {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .generic-badge span {
+          color: #fff;
+          font-size: 9px;
+          font-weight: 700;
+        }
+        .ft-field {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .ft-field label {
+          font: 500 11px/1 var(--mp-font-ios);
+          color: #444;
+        }
+        .ft-field input {
+          background: #f8f8f8;
+          border: 1px solid #e5e5e5;
+          border-radius: 10px;
+          padding: 11px 12px;
+          font: 400 13px/1 var(--mp-font-ios);
+          color: #111;
+          outline: none;
+          transition: border-color 120ms;
+        }
+        .ft-field input:focus {
+          border-color: var(--brand);
+          background: #fff;
+        }
+        .ft-field input::placeholder {
+          color: #999;
+        }
+        .ft-claim {
+          background: #e8e8e8;
+          color: #999;
+          border: 0;
+          padding: 14px;
+          border-radius: 12px;
+          font: 600 14px/1 var(--mp-font-ios);
+          margin-top: auto;
+          cursor: not-allowed;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          transition: all 180ms;
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+        }
+        .ft-claim:not(:disabled) {
+          background: var(--brand);
+          color: #fff;
+          cursor: pointer;
+          box-shadow: 0 4px 12px
+            color-mix(in srgb, var(--brand) 30%, transparent);
+        }
+        .ft-claim-spinner {
+          width: 14px;
+          height: 14px;
+          border: 2px solid rgba(255, 255, 255, 0.4);
+          border-top-color: #fff;
+          border-radius: 50%;
+          animation: spin 700ms linear infinite;
+          display: inline-block;
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 // ---------- 2da vez (returning) ----------
 // Saved-account claim screen → click Reclamar → loading → SuccessReceipt.
 
 function ReturningClaim({
   clientName,
   clientLogo,
-  clientAppIcon
+  clientAppIcon,
+  country
 }: {
   clientName: string;
   clientLogo?: string;
   clientAppIcon?: string;
+  country: CountryConfig;
 }) {
   const [claiming, setClaiming] = useState(false);
   const [claimed, setClaimed] = useState(false);
@@ -811,14 +1709,24 @@ function ReturningClaim({
     }, 1500);
   };
 
+  // Mexico's `secondary` is the client name (the bank) — other countries
+  // already encode the rail/bank in their config.
+  const savedBank =
+    country.code === 'mx' && !country.saved.secondary
+      ? clientName
+      : country.saved.secondary || clientName;
+
   if (claimed) {
     return (
       <SuccessReceipt
-        senderName="Bruno A. R. B."
-        amount="150.00"
-        accountTail="0163"
-        accountName="Bruno Ramos Berho"
-        accountBank={clientName}
+        senderName={country.senderName}
+        amount={country.amount}
+        currencySymbol={country.currency.symbol}
+        currencyCode={country.currency.code}
+        accountTail={country.saved.accountTail}
+        accountName={country.saved.accountName}
+        accountBank={savedBank}
+        accountPrimary={country.saved.primary}
         clientName={clientName}
         clientLogo={clientLogo}
         clientAppIcon={clientAppIcon}
@@ -828,11 +1736,10 @@ function ReturningClaim({
 
   return (
     <SavedAccountClaim
-      senderName="Bruno A. R. B."
-      amount="150.00"
-      accountTail="0163"
-      accountName="Bruno Ramos Berho"
-      accountBank={clientName}
+      senderName={country.senderName}
+      amount={country.amount}
+      currencySymbol={country.currency.symbol}
+      saved={{...country.saved, secondary: savedBank}}
       clientName={clientName}
       clientLogo={clientLogo}
       claiming={claiming}
@@ -845,9 +1752,8 @@ function ReturningClaim({
 function SavedAccountClaim({
   senderName,
   amount,
-  accountTail,
-  accountName,
-  accountBank,
+  currencySymbol,
+  saved,
   clientName,
   clientLogo,
   claiming,
@@ -855,9 +1761,8 @@ function SavedAccountClaim({
 }: {
   senderName: string;
   amount: string;
-  accountTail: string;
-  accountName: string;
-  accountBank: string;
+  currencySymbol: string;
+  saved: SavedAccountPreview;
   clientName: string;
   clientLogo?: string;
   claiming: boolean;
@@ -880,19 +1785,20 @@ function SavedAccountClaim({
         </h2>
         <p className="rc-sub">te envió un pago por:</p>
         <div className="rc-amount" style={{color: 'var(--brand)'}}>
-          ${amount}
+          {currencySymbol}
+          {amount}
         </div>
         <p className="rc-instr">
           El dinero se enviará a tu cuenta utilizada anteriormente:
         </p>
         <div className="rc-card" style={{borderColor: 'var(--brand)'}}>
           <div className="rc-card-icon" aria-hidden>
-            💳
+            {saved.cardIcon}
           </div>
           <div>
-            <div className="rc-card-num">****************{accountTail}</div>
-            <div className="rc-card-bank">{accountBank}</div>
-            <div className="rc-card-name">{accountName}</div>
+            <div className="rc-card-num">{saved.primary}</div>
+            <div className="rc-card-bank">{saved.secondary}</div>
+            <div className="rc-card-name">{saved.accountName}</div>
           </div>
         </div>
         <button
@@ -1050,29 +1956,38 @@ function SavedAccountClaim({
 function SuccessReceipt({
   senderName,
   amount,
+  currencySymbol,
+  currencyCode,
   accountTail,
   accountName,
   accountBank,
+  accountPrimary,
   clientName,
   clientLogo,
   clientAppIcon
 }: {
   senderName: string;
   amount: string;
+  currencySymbol: string;
+  currencyCode?: string;
   accountTail: string;
   accountName: string;
   accountBank: string;
+  /** Optional explicit account identifier line. Falls back to a masked tail. */
+  accountPrimary?: string;
   clientName: string;
   clientLogo?: string;
   clientAppIcon?: string;
 }) {
   const now = new Date();
-  const created = formatDateTime(new Date(now.getTime() - 60_000));
   const sent = formatDateTime(now);
   const trace = generateTraceCode();
-  const [intAmount, decAmount] = (amount.includes('.')
-    ? amount.split('.')
-    : [amount, '00']);
+  // Split amount on either '.' or ',' depending on the locale used in config
+  const splitMatch = amount.match(/^(.+?)([.,])(\d+)$/);
+  const intAmount = splitMatch ? splitMatch[1] : amount;
+  const decAmount = splitMatch ? splitMatch[3] : '00';
+  const decSep = splitMatch ? splitMatch[2] : '.';
+  const accountLine = accountPrimary || `***${accountTail}`;
 
   return (
     <div className="sr">
@@ -1094,15 +2009,22 @@ function SuccessReceipt({
               <h1>Resumen transferencia</h1>
             </div>
             <div className="sr-amount">
-              ${intAmount}
-              <span className="cents">.{decAmount}</span>
+              {currencySymbol}
+              {intAmount}
+              <span className="cents">
+                {decSep}
+                {decAmount}
+              </span>
+              {currencyCode && (
+                <span className="sr-amount-code"> {currencyCode}</span>
+              )}
             </div>
           </div>
           <div className="sr-rows">
             <SrRow k="De" v={senderName} />
             <SrRow k="Enviado a" v={accountName} />
-            <SrRow k="Cuenta" v={`002***********${accountTail}`} />
-            <SrRow k="Banco" v={accountBank} />
+            <SrRow k="Cuenta" v={accountLine} />
+            <SrRow k="Red / Banco" v={accountBank} />
             <SrRow k="Concepto" v={<><span aria-hidden>🍽️</span> Comida</>} />
             <SrRow k="Fecha" v={sent} />
             <SrRow k="Clave de rastreo" v={<code className="sr-trace">{trace}</code>} />
@@ -1220,6 +2142,13 @@ function SuccessReceipt({
         .sr-amount .cents {
           font-size: 14px;
           color: #555;
+        }
+        .sr-amount-code {
+          font-size: 11px;
+          font-weight: 500;
+          color: #888;
+          letter-spacing: 0.04em;
+          margin-left: 4px;
         }
         .sr-rows {
           display: flex;
