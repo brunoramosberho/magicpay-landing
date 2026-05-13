@@ -4,7 +4,6 @@ import {getCurrentSession} from '@/lib/deck/admin-auth';
 import {supabaseAdmin} from '@/lib/supabase/server';
 import {ClientLinks} from './client-links';
 import {ClientEdit} from './client-edit';
-import {SlideEngagementChart} from './slide-engagement-chart';
 import {SessionsList} from './sessions-list';
 import {LogoutButton} from '../../logout-button';
 
@@ -38,19 +37,12 @@ export default async function ClientDetailPage({params}: {params: Promise<Params
         .limit(50)
     : {data: []};
 
-  // Aggregate per-slide stats across sessions
+  // Pull events for the same set of sessions — used inside SessionsList to
+  // build the per-visitor slide breakdown when a row is expanded.
   const sessionIds = (sessions ?? []).map((s) => s.id);
   const {data: events} = sessionIds.length
     ? await sb.from('slide_events').select('*').in('session_id', sessionIds)
     : {data: []};
-
-  const slideStats = new Map<string, {views: number; totalMs: number}>();
-  for (const ev of events ?? []) {
-    const cur = slideStats.get(ev.slide_id) ?? {views: 0, totalMs: 0};
-    cur.views += 1;
-    cur.totalMs += ev.duration_ms ?? 0;
-    slideStats.set(ev.slide_id, cur);
-  }
 
   const totalSessions = sessions?.length ?? 0;
   const uniqueVisitors = new Set((sessions ?? []).map((s) => s.visitor_id).filter(Boolean)).size;
@@ -88,14 +80,47 @@ export default async function ClientDetailPage({params}: {params: Promise<Params
         </div>
       </header>
 
-      <section className="mb-10">
-        <ClientEdit client={client} />
-      </section>
-
-      <section className="grid grid-cols-3 gap-4 mb-12">
+      <section className="grid grid-cols-3 gap-4 mb-10">
         <Stat label="Sessions" value={totalSessions} />
         <Stat label="Unique visitors" value={uniqueVisitors} />
         <Stat label="Total time" value={formatDuration(totalTimeMs)} />
+      </section>
+
+      <section className="mb-12">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm uppercase tracking-wide text-zinc-400">Visitors</h2>
+          <span className="text-xs text-zinc-500">
+            Grouped by browser · most recent first
+          </span>
+        </div>
+        <SessionsList
+          sessions={(sessions ?? []).map((s) => ({
+            id: s.id,
+            link_id: s.link_id,
+            visitor_name: s.visitor_name,
+            visitor_id: s.visitor_id,
+            ip_city: s.ip_city,
+            ip_country: s.ip_country,
+            started_at: s.started_at,
+            total_duration_ms: s.total_duration_ms,
+            max_slide_index: s.max_slide_index
+          }))}
+          events={(events ?? []).map((e) => ({
+            session_id: e.session_id,
+            slide_id: e.slide_id,
+            slide_index: e.slide_index,
+            duration_ms: e.duration_ms,
+            entered_at: e.entered_at
+          }))}
+          recipientByLinkId={Object.fromEntries(
+            (links ?? []).map((l) => [l.id, l.recipient_name ?? null])
+          )}
+        />
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-sm uppercase tracking-wide text-zinc-400 mb-4">Share links</h2>
+        <ClientLinks clientId={client.id} clientSlug={client.slug} initialLinks={links ?? []} />
       </section>
 
       <section className="mb-12">
@@ -116,52 +141,9 @@ export default async function ClientDetailPage({params}: {params: Promise<Params
         </div>
       </section>
 
-      <section className="mb-12">
-        <h2 className="text-sm uppercase tracking-wide text-zinc-400 mb-4">Share links</h2>
-        <ClientLinks clientId={client.id} clientSlug={client.slug} initialLinks={links ?? []} />
-      </section>
-
-      <section className="mb-12">
-        <h2 className="text-sm uppercase tracking-wide text-zinc-400 mb-4">
-          Slide engagement
-        </h2>
-        {slideStats.size === 0 ? (
-          <p className="text-sm text-zinc-500">No views yet.</p>
-        ) : (
-          <SlideEngagementChart
-            data={Array.from(slideStats.entries()).map(([slideId, stat]) => ({
-              slideId,
-              views: stat.views,
-              totalMs: stat.totalMs
-            }))}
-          />
-        )}
-      </section>
-
       <section>
-        <h2 className="text-sm uppercase tracking-wide text-zinc-400 mb-4">Recent sessions</h2>
-        <SessionsList
-          sessions={(sessions ?? []).map((s) => ({
-            id: s.id,
-            link_id: s.link_id,
-            visitor_name: s.visitor_name,
-            visitor_id: s.visitor_id,
-            ip_city: s.ip_city,
-            ip_country: s.ip_country,
-            started_at: s.started_at,
-            total_duration_ms: s.total_duration_ms
-          }))}
-          events={(events ?? []).map((e) => ({
-            session_id: e.session_id,
-            slide_id: e.slide_id,
-            slide_index: e.slide_index,
-            duration_ms: e.duration_ms,
-            entered_at: e.entered_at
-          }))}
-          recipientByLinkId={Object.fromEntries(
-            (links ?? []).map((l) => [l.id, l.recipient_name ?? null])
-          )}
-        />
+        <h2 className="text-sm uppercase tracking-wide text-zinc-400 mb-4">Client details</h2>
+        <ClientEdit client={client} />
       </section>
     </div>
   );
