@@ -1,5 +1,66 @@
-// Magic SDK Docs — interactivity (tabs, copy, TOC, scroll-spy, FAQ, checklist, theme)
+// Magic SDK Docs — interactivity (tabs, copy, TOC, scroll-spy, FAQ, checklist, theme, i18n)
 (function () {
+  // --- Language toggle (es/en) ---
+  // The HTML defaults to Spanish. Translatable elements carry `data-en="..."`
+  // with the English replacement for innerHTML, or `data-en-<attr>="..."` for
+  // specific attributes (title, aria-label, etc).
+  var ATTR_PREFIX = 'data-en-';
+  var COPY_LABEL = { es: 'Copiar', en: 'Copy' };
+  var COPIED_LABEL = { es: 'Copiado', en: 'Copied' };
+
+  function detectInitialLocale() {
+    try {
+      var stored = localStorage.getItem('magic-docs-lang');
+      if (stored === 'es' || stored === 'en') return stored;
+    } catch (e) {}
+    var nav = (navigator.language || navigator.userLanguage || 'es').toLowerCase();
+    return nav.indexOf('es') === 0 ? 'es' : 'en';
+  }
+
+  var origCache = new WeakMap();
+  function rememberOriginal(el, key, value) {
+    var store = origCache.get(el);
+    if (!store) { store = {}; origCache.set(el, store); }
+    if (!(key in store)) store[key] = value;
+    return store[key];
+  }
+
+  function applyLocale(locale) {
+    // innerHTML swaps via data-en
+    document.querySelectorAll('[data-en]').forEach(function (el) {
+      var es = rememberOriginal(el, '__html', el.innerHTML);
+      el.innerHTML = locale === 'en' ? el.getAttribute('data-en') : es;
+    });
+    // Attribute swaps via data-en-<attr>
+    document.querySelectorAll('*').forEach(function (el) {
+      if (!el.attributes) return;
+      for (var i = 0; i < el.attributes.length; i++) {
+        var a = el.attributes[i];
+        if (a.name === 'data-en' || a.name.indexOf(ATTR_PREFIX) !== 0) continue;
+        var target = a.name.slice(ATTR_PREFIX.length);
+        var es = rememberOriginal(el, target, el.getAttribute(target) || '');
+        el.setAttribute(target, locale === 'en' ? a.value : es);
+      }
+    });
+    document.documentElement.setAttribute('lang', locale);
+    document.documentElement.setAttribute('data-lang', locale);
+    var label = document.getElementById('lang-toggle-label');
+    if (label) label.textContent = locale === 'en' ? 'ES' : 'EN';
+    window.__magicDocsLocale = locale;
+  }
+
+  var initialLocale = detectInitialLocale();
+  applyLocale(initialLocale);
+
+  var langToggle = document.getElementById('lang-toggle');
+  if (langToggle) {
+    langToggle.addEventListener('click', function () {
+      var next = (window.__magicDocsLocale || 'es') === 'en' ? 'es' : 'en';
+      applyLocale(next);
+      try { localStorage.setItem('magic-docs-lang', next); } catch (e) {}
+    });
+  }
+
   // --- Theme toggle (light/dark) ---
   var themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) {
@@ -33,10 +94,14 @@
       const active = card.querySelector('.code-pane.active') || card.querySelector('.code-pane');
       const text = active.innerText;
       navigator.clipboard.writeText(text).then(() => {
+        const locale = window.__magicDocsLocale === 'en' ? 'en' : 'es';
+        const orig = btn.innerHTML;
         btn.classList.add('copied');
-        const orig = btn.textContent;
-        btn.textContent = 'Copiado';
-        setTimeout(() => { btn.classList.remove('copied'); btn.textContent = orig; }, 1400);
+        btn.textContent = COPIED_LABEL[locale];
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = orig;
+        }, 1400);
       });
     });
   });
@@ -49,11 +114,16 @@
   });
 
   // --- Checklist ---
+  var CHECKLIST_DONE = { es: 'Listo', en: 'Done' };
+  var CHECKLIST_PENDING = { es: 'Pendiente', en: 'Pending' };
   document.querySelectorAll('.checklist-item').forEach(item => {
     item.addEventListener('click', () => {
       item.classList.toggle('checked');
       const status = item.querySelector('.checklist-status');
-      if (status) status.textContent = item.classList.contains('checked') ? 'Done' : 'Pending';
+      if (status) {
+        const locale = window.__magicDocsLocale === 'en' ? 'en' : 'es';
+        status.textContent = item.classList.contains('checked') ? CHECKLIST_DONE[locale] : CHECKLIST_PENDING[locale];
+      }
     });
   });
 
