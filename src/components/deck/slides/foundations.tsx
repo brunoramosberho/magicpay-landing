@@ -598,8 +598,11 @@ export const InfrastructureSlide: SlideDef = {
   }
 };
 
-// Real growth chart — SPEI / Pix / UPI, billions of transactions, log scale.
-// Data sources: Banxico (SPEI), Banco Central do Brasil (Pix), NPCI (UPI), 2015–2024.
+// Real growth chart — five real-time rails, billions of transactions, log scale.
+// Sources: Banxico (SPEI), Banco Central do Brasil (Pix), NPCI (UPI), ECB
+// payments statistics (SCT Inst — values estimated from published % of total
+// SCT count + ECB-reported +72% YoY for 2024), Bizum (banks consortium press +
+// 2024-2025 disclosures). 2015–2024 series.
 const CHART_DATA: Record<string, {year: number; value: number}[]> = {
   spei: [
     {year: 2015, value: 0.335},
@@ -630,6 +633,24 @@ const CHART_DATA: Record<string, {year: number; value: number}[]> = {
     {year: 2022, value: 74.0},
     {year: 2023, value: 117.6},
     {year: 2024, value: 165.0}
+  ],
+  sct_inst: [
+    {year: 2018, value: 0.04},
+    {year: 2019, value: 0.15},
+    {year: 2020, value: 0.4},
+    {year: 2021, value: 0.8},
+    {year: 2022, value: 1.4},
+    {year: 2023, value: 2.7},
+    {year: 2024, value: 5.0}
+  ],
+  bizum: [
+    {year: 2018, value: 0.05},
+    {year: 2019, value: 0.12},
+    {year: 2020, value: 0.25},
+    {year: 2021, value: 0.5},
+    {year: 2022, value: 0.7},
+    {year: 2023, value: 1.0},
+    {year: 2024, value: 1.1}
   ]
 };
 
@@ -653,10 +674,38 @@ function GrowthChart({caption}: {caption: string}) {
   const xTicks = [2015, 2017, 2019, 2021, 2024];
   const fmtTick = (t: number) => (t < 1 ? `${t}B` : `${t}B`);
 
-  const series: Array<{key: string; label: string; color: string; data: typeof CHART_DATA.spei}> = [
+  // Each series owns its own end-of-line label offset so we can manually pull
+  // SCT Inst and SPEI apart — both land near 5B in 2024 and would otherwise
+  // collide on a log scale (Δ ~3px between them).
+  const series: Array<{
+    key: string;
+    label: string;
+    color: string;
+    data: typeof CHART_DATA.spei;
+    labelDy?: number;
+  }> = [
     {key: 'upi', label: 'UPI · India', color: '#FF8A3D', data: CHART_DATA.upi},
     {key: 'pix', label: 'Pix · Brasil', color: '#22B574', data: CHART_DATA.pix},
-    {key: 'spei', label: 'SPEI · México', color: 'var(--brand)', data: CHART_DATA.spei}
+    {
+      key: 'sct_inst',
+      label: 'SCT Inst · Europa',
+      color: '#7C3AED',
+      data: CHART_DATA.sct_inst,
+      labelDy: -26
+    },
+    {
+      key: 'spei',
+      label: 'SPEI · México',
+      color: 'var(--brand)',
+      data: CHART_DATA.spei,
+      labelDy: 16
+    },
+    {
+      key: 'bizum',
+      label: 'Bizum · España',
+      color: '#06B6D4',
+      data: CHART_DATA.bizum
+    }
   ];
 
   const buildPath = (data: typeof CHART_DATA.spei) =>
@@ -737,13 +786,15 @@ function GrowthChart({caption}: {caption: string}) {
                   style={{animationDelay: `${sIdx * 200 + 1400 + i * 30}ms`}}
                 />
               ))}
-              {/* Latest value label */}
+              {/* Latest value label — series can override the default
+                  "-12 above the line" offset via labelDy to avoid collisions. */}
               {(() => {
                 const last = s.data[s.data.length - 1];
+                const dy = s.labelDy ?? -12;
                 return (
                   <text
                     x={xPos(last.year) - 4}
-                    y={yPos(last.value) - 12}
+                    y={yPos(last.value) + dy}
                     textAnchor="end"
                     fontSize="14"
                     fontWeight="600"
@@ -752,7 +803,9 @@ function GrowthChart({caption}: {caption: string}) {
                     className="series-label"
                     style={{animationDelay: `${sIdx * 200 + 1700}ms`}}
                   >
-                    {Math.round(last.value)}B
+                    {last.value < 1
+                      ? last.value.toFixed(1)
+                      : Math.round(last.value)}B
                   </text>
                 );
               })()}
@@ -874,11 +927,48 @@ export const WhatsappSlide: SlideDef = {
           </div>
         </div>
         <div className="wa-chats">
-          <ChatTile label="WhatsApp" big bg="#25D366" icon={<WhatsappIcon />} />
-          <ChatTile label="iMessage" bg="#0BA5EC" icon={<IMessageIcon />} />
-          <ChatTile label="Telegram" bg="#26A5E4" icon={<TelegramIcon />} />
-          <ChatTile label="Messenger" bg="linear-gradient(135deg,#0099FF,#A033FF,#FF4D9D)" icon={<MessengerIcon />} />
-          <ChatTile label="Instagram" bg="linear-gradient(135deg,#FFC93C,#FF6B6B,#A537FD)" icon={<InstagramIcon />} />
+          <ChatTile
+            label="WhatsApp"
+            big
+            bg="#25D366"
+            icon={<WhatsappIcon />}
+            markets={['🇲🇽', '🇧🇷', '🇪🇸', '🇮🇳', '🇮🇩']}
+            marketsExtra="+100"
+          />
+          <ChatTile
+            label="iMessage"
+            bg="#0BA5EC"
+            icon={<IMessageIcon />}
+            markets={['🇺🇸']}
+          />
+          <ChatTile
+            label="LINE"
+            bg="#06C755"
+            icon={<LineIcon />}
+            markets={['🇯🇵', '🇹🇭', '🇹🇼']}
+          />
+          <ChatTile
+            label="KakaoTalk"
+            bg="#FEE500"
+            icon={<KakaoIcon />}
+            markets={['🇰🇷']}
+          />
+          <ChatTile
+            label="Telegram"
+            bg="#26A5E4"
+            icon={<TelegramIcon />}
+            markets={['🇷🇺', '🇮🇷', '🇺🇦']}
+          />
+          <ChatTile
+            label="Messenger"
+            bg="linear-gradient(135deg,#0099FF,#A033FF,#FF4D9D)"
+            icon={<MessengerIcon />}
+          />
+          <ChatTile
+            label="Instagram"
+            bg="linear-gradient(135deg,#FFC93C,#FF6B6B,#A537FD)"
+            icon={<InstagramIcon />}
+          />
         </div>
         <p className="wa-quote">&ldquo;{t('wa_quote')}&rdquo;</p>
         <style jsx>{`
@@ -1844,19 +1934,33 @@ function ChatTile({
   label,
   big,
   bg,
-  icon
+  icon,
+  markets,
+  marketsExtra
 }: {
   label: string;
   big?: boolean;
   bg: string;
   icon: React.ReactNode;
+  /** Flag emojis for the markets where this chat is the dominant channel. */
+  markets?: string[];
+  /** Extra trailing token after the flags, e.g. "+100" or "y más". */
+  marketsExtra?: string;
 }) {
   return (
     <div className={`chat-tile ${big ? 'big' : ''}`}>
       <span className="chat-icon" style={{background: bg}}>
         {icon}
       </span>
-      <span className="chat-label">{label}</span>
+      <span className="chat-text">
+        <span className="chat-label">{label}</span>
+        {markets && markets.length > 0 && (
+          <span className="chat-markets" aria-hidden>
+            {markets.join(' ')}
+            {marketsExtra && <span className="chat-markets-extra"> {marketsExtra}</span>}
+          </span>
+        )}
+      </span>
       <style jsx>{`
         .chat-tile {
           display: flex;
@@ -1889,9 +1993,24 @@ function ChatTile({
           width: 44px;
           height: 44px;
         }
+        .chat-text {
+          display: inline-flex;
+          flex-direction: column;
+          gap: 2px;
+          min-width: 0;
+        }
         .chat-label {
           font: 500 clamp(13px, 1.1vw, 16px) / 1 var(--mp-font-body);
           color: var(--mp-ink);
+        }
+        .chat-markets {
+          font: 500 clamp(10px, 0.85vw, 12px) / 1 var(--mp-font-body);
+          color: var(--mp-fg-muted);
+          letter-spacing: 0.02em;
+        }
+        .chat-markets-extra {
+          color: var(--mp-fg-muted);
+          opacity: 0.8;
         }
       `}</style>
     </div>
@@ -1936,6 +2055,35 @@ function InstagramIcon() {
       <rect x="3" y="3" width="18" height="18" rx="5" />
       <circle cx="12" cy="12" r="4" />
       <circle cx="17.5" cy="6.5" r="0.6" fill="white" />
+    </svg>
+  );
+}
+
+// LINE: white wordmark on a green tile.
+function LineIcon() {
+  return (
+    <svg viewBox="0 0 32 24">
+      <text
+        x="16"
+        y="17"
+        textAnchor="middle"
+        fontSize="13"
+        fontWeight="800"
+        fill="white"
+        fontFamily="system-ui, -apple-system, sans-serif"
+        letterSpacing="-0.4"
+      >
+        LINE
+      </text>
+    </svg>
+  );
+}
+
+// KakaoTalk: brown speech-bubble glyph on the yellow tile.
+function KakaoIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="#3A1D1D">
+      <path d="M12 4C6.48 4 2 7.42 2 11.55c0 2.64 1.83 4.95 4.56 6.27l-.94 3.45c-.05.19.16.34.32.23l4.09-2.7c.65.1 1.3.15 1.97.15 5.52 0 10-3.42 10-7.55S17.52 4 12 4Z" />
     </svg>
   );
 }
