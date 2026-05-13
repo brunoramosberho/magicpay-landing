@@ -473,7 +473,9 @@ export function ClaimDemo({
 }) {
   const [mode, setMode] = useState<Mode>('first');
   const [countryCode, setCountryCode] = useState<CountryCode>('mx');
+  const [countryOpen, setCountryOpen] = useState(false);
   const userInteractedRef = useRef(false);
+  const countryWrapRef = useRef<HTMLDivElement>(null);
   const name = clientName ?? 'Stori';
   const country = useMemo(
     () => COUNTRIES.find((c) => c.code === countryCode) ?? COUNTRIES[0],
@@ -488,25 +490,96 @@ export function ClaimDemo({
   const switchCountry = (c: CountryCode) => {
     userInteractedRef.current = true;
     setCountryCode(c);
+    setCountryOpen(false);
   };
+
+  // Close the country popover on outside click / Escape.
+  useEffect(() => {
+    if (!countryOpen) return;
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      if (
+        countryWrapRef.current &&
+        !countryWrapRef.current.contains(e.target as Node)
+      ) {
+        setCountryOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setCountryOpen(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [countryOpen]);
 
   return (
     <div className="claim-stage">
-      <div className="claim-country" role="tablist" aria-label="Country">
-        {COUNTRIES.map((c) => (
-          <button
-            key={c.code}
-            role="tab"
-            aria-selected={c.code === countryCode}
-            className={`country-chip ${c.code === countryCode ? 'active' : ''}`}
-            onClick={() => switchCountry(c.code)}
+      <div className="claim-country" ref={countryWrapRef}>
+        <button
+          type="button"
+          className="country-trigger"
+          aria-haspopup="listbox"
+          aria-expanded={countryOpen}
+          onClick={() => setCountryOpen((v) => !v)}
+        >
+          <span className="country-flag" aria-hidden>
+            {country.flag}
+          </span>
+          <span className="country-label">{country.label}</span>
+          <svg
+            viewBox="0 0 12 12"
+            className={`country-chevron ${countryOpen ? 'open' : ''}`}
+            aria-hidden
           >
-            <span className="country-flag" aria-hidden>
-              {c.flag}
-            </span>
-            <span className="country-label">{c.label}</span>
-          </button>
-        ))}
+            <path
+              d="M2.5 4.5l3.5 3.5 3.5-3.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+        {countryOpen && (
+          <ul className="country-popup" role="listbox" aria-label="Country">
+            {COUNTRIES.map((c) => (
+              <li
+                key={c.code}
+                role="option"
+                aria-selected={c.code === countryCode}
+              >
+                <button
+                  type="button"
+                  className={c.code === countryCode ? 'is-active' : ''}
+                  onClick={() => switchCountry(c.code)}
+                >
+                  <span className="country-flag" aria-hidden>
+                    {c.flag}
+                  </span>
+                  <span className="country-popup-label">{c.label}</span>
+                  {c.code === countryCode && (
+                    <svg viewBox="0 0 16 16" className="country-check" aria-hidden>
+                      <path
+                        d="M3.5 8.5l3 3 6-7"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="claim-toggle" role="group" aria-label="Visit type">
@@ -571,54 +644,111 @@ export function ClaimDemo({
           padding: 0;
         }
         .claim-country {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 6px;
-          max-width: 100%;
+          position: relative;
+          flex-shrink: 0;
         }
-        .country-chip {
+        .country-trigger {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
           background: var(--mp-white);
           border: 1px solid var(--mp-border-soft);
           border-radius: var(--mp-radius-pill);
-          padding: 4px 10px 4px 6px;
-          font: 500 11px/1 var(--mp-font-body);
-          color: var(--mp-fg-muted);
-          cursor: pointer;
-          transition: all 160ms var(--mp-ease);
-        }
-        .country-chip:hover {
+          padding: 6px 12px 6px 10px;
+          font: 500 12px/1 var(--mp-font-body);
           color: var(--mp-ink);
+          cursor: pointer;
+          transition: border-color 160ms var(--mp-ease),
+            box-shadow 160ms var(--mp-ease);
+          min-width: 180px;
+          justify-content: space-between;
+        }
+        .country-trigger:hover {
           border-color: color-mix(in srgb, var(--brand) 35%, var(--mp-border-soft));
         }
-        .country-chip.active {
-          background: var(--brand);
-          color: #fff;
+        .country-trigger[aria-expanded='true'] {
           border-color: var(--brand);
-          box-shadow: 0 2px 10px
-            color-mix(in srgb, var(--brand) 28%, transparent);
+          box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 18%, transparent);
         }
         .country-flag {
-          font-size: 14px;
+          font-size: 16px;
           line-height: 1;
+          flex-shrink: 0;
         }
         .country-label {
+          flex: 1;
+          text-align: left;
           letter-spacing: 0.01em;
         }
+        .country-chevron {
+          width: 11px;
+          height: 11px;
+          color: var(--mp-fg-muted);
+          transition: transform 180ms var(--mp-ease);
+          flex-shrink: 0;
+        }
+        .country-chevron.open {
+          transform: rotate(180deg);
+        }
+        .country-popup {
+          position: absolute;
+          top: calc(100% + 6px);
+          left: 50%;
+          transform: translateX(-50%);
+          margin: 0;
+          padding: 4px;
+          list-style: none;
+          background: var(--mp-white);
+          border: 1px solid var(--mp-border-soft);
+          border-radius: var(--mp-radius-md);
+          box-shadow: var(--mp-shadow-md);
+          min-width: 200px;
+          z-index: 20;
+          max-height: 280px;
+          overflow-y: auto;
+        }
+        .country-popup li {
+          margin: 0;
+          padding: 0;
+        }
+        .country-popup button {
+          width: 100%;
+          background: transparent;
+          border: 0;
+          padding: 8px 10px;
+          font: 500 13px/1.1 var(--mp-font-body);
+          color: var(--mp-ink);
+          letter-spacing: 0.01em;
+          border-radius: var(--mp-radius-sm);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          cursor: pointer;
+          text-align: left;
+        }
+        .country-popup button:hover {
+          background: var(--mp-grey);
+        }
+        .country-popup button.is-active {
+          color: var(--brand);
+        }
+        .country-popup-label {
+          flex: 1;
+        }
+        .country-check {
+          width: 14px;
+          height: 14px;
+          color: var(--brand);
+          flex-shrink: 0;
+        }
         @media (max-width: 640px) {
-          .claim-country {
-            gap: 4px;
-          }
-          .country-chip {
-            padding: 3px 8px 3px 5px;
-            font-size: 10px;
-            gap: 4px;
-          }
-          .country-flag {
+          .country-trigger {
+            min-width: 160px;
+            padding: 6px 11px 6px 9px;
             font-size: 12px;
+          }
+          .country-popup {
+            min-width: 180px;
           }
         }
         .claim-toggle {

@@ -3,6 +3,19 @@
 import {useState} from 'react';
 import {useI18n} from './i18n-context';
 
+/**
+ * A name is valid if, after trimming, it contains at least two Unicode
+ * letter characters. This rejects empty strings, single dots, "a", "...",
+ * "12345", or emoji-only inputs, while still accepting accented names
+ * (José, Müller, محمد, …) and short hypocorisms ("Jo", "Ал").
+ */
+function isValidName(raw: string): boolean {
+  const trimmed = raw.trim();
+  if (trimmed.length < 2) return false;
+  const letters = trimmed.match(/\p{L}/gu) ?? [];
+  return letters.length >= 2;
+}
+
 export function VisitorNameGate({
   brand,
   onSubmit
@@ -12,10 +25,16 @@ export function VisitorNameGate({
 }) {
   const {t} = useI18n();
   const [name, setName] = useState('');
+  const [touched, setTouched] = useState(false);
+  const valid = isValidName(name);
+  // Only show the hint after the user has tried submitting or blurred a
+  // non-empty value — typing the first letter shouldn't trigger an error.
+  const showHint = touched && !valid && name.length > 0;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return;
+    setTouched(true);
+    if (!valid) return;
     onSubmit(name);
   };
 
@@ -29,22 +48,32 @@ export function VisitorNameGate({
         </div>
         <h2 className="name-gate-title">{t('name_title')}</h2>
         <p className="name-gate-subtitle">{t('name_subtitle')}</p>
-        <form onSubmit={handleSubmit} className="name-gate-form">
+        <form onSubmit={handleSubmit} className="name-gate-form" noValidate>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            onBlur={() => name.length > 0 && setTouched(true)}
             placeholder={t('name_placeholder')}
             maxLength={80}
             autoFocus
-            required
-            className="name-gate-input"
+            autoComplete="given-name"
+            className={`name-gate-input ${showHint ? 'is-invalid' : ''}`}
+            aria-invalid={showHint || undefined}
+            aria-describedby={showHint ? 'name-gate-hint' : undefined}
           />
+          <p
+            id="name-gate-hint"
+            className={`name-gate-hint ${showHint ? 'is-visible' : ''}`}
+            role={showHint ? 'alert' : undefined}
+          >
+            {t('name_hint')}
+          </p>
           <button
             type="submit"
             className="name-gate-cta"
             style={{background: brand}}
-            disabled={!name.trim()}
+            disabled={!valid}
           >
             {t('name_cta')}
           </button>
@@ -102,7 +131,7 @@ export function VisitorNameGate({
         .name-gate-form {
           display: flex;
           flex-direction: column;
-          gap: 10px;
+          gap: 8px;
         }
         .name-gate-input {
           width: 100%;
@@ -119,6 +148,26 @@ export function VisitorNameGate({
           border-color: var(--brand);
           box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 20%, transparent);
         }
+        .name-gate-input.is-invalid {
+          border-color: #e26b6b;
+        }
+        .name-gate-input.is-invalid:focus {
+          box-shadow: 0 0 0 3px rgba(226, 107, 107, 0.18);
+        }
+        .name-gate-hint {
+          font: 500 12px/1.4 var(--mp-font-body);
+          color: #c43e3e;
+          margin: 0;
+          padding: 0 2px;
+          min-height: 14px;
+          opacity: 0;
+          transform: translateY(-2px);
+          transition: opacity 160ms ease, transform 160ms ease;
+        }
+        .name-gate-hint.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
         .name-gate-cta {
           padding: 12px 16px;
           border: 0;
@@ -128,6 +177,7 @@ export function VisitorNameGate({
           cursor: pointer;
           box-shadow: var(--mp-shadow-cta);
           transition: opacity 120ms, transform 120ms;
+          margin-top: 4px;
         }
         .name-gate-cta:disabled {
           opacity: 0.5;

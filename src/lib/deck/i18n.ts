@@ -271,10 +271,12 @@ export const i18n = {
     sec_close: 'Cierre',
 
     // Visitor name gate (shown once per browser before the deck loads)
-    name_title: 'Antes de empezar',
-    name_subtitle: 'Cuéntanos quién está viendo la presentación.',
-    name_placeholder: 'Tu nombre completo',
-    name_cta: 'Continuar'
+    name_title: '¡Hola! 👋',
+    name_subtitle:
+      '¿Cómo te gustaría que te llamemos durante la presentación?',
+    name_placeholder: 'Tu nombre',
+    name_cta: 'Continuar',
+    name_hint: 'Escribe al menos tu nombre.'
   },
 
   en: {
@@ -524,10 +526,11 @@ export const i18n = {
     sec_pricing: 'Pricing',
     sec_close: 'Closing',
 
-    name_title: 'Before we start',
-    name_subtitle: 'Tell us who is viewing the presentation.',
-    name_placeholder: 'Your full name',
-    name_cta: 'Continue'
+    name_title: 'Hi there! 👋',
+    name_subtitle: 'How would you like us to address you during the deck?',
+    name_placeholder: 'Your first name',
+    name_cta: 'Continue',
+    name_hint: 'Please type at least your first name.'
   }
 } as const;
 
