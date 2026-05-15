@@ -1,13 +1,14 @@
 'use client';
 
 import {useI18n} from '../i18n-context';
+import {eyebrow} from '@/lib/deck/eyebrow';
 import type {SlideContext, SlideDef} from '../deck-shell';
 
 // 18 — Pricing (DB-driven; falls back to "to be defined" if a tier is null)
 export const PricingSlide: SlideDef = {
   id: 'pricing',
   variant: 'light',
-  Body: ({client}: SlideContext) => {
+  Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
     // Kickoff/monthly are big round numbers → no decimals.
     // Per-active-user is typically cents (e.g. $0.50) → always show 2 decimals.
@@ -55,7 +56,7 @@ export const PricingSlide: SlideDef = {
     return (
       <div className="price-frame">
         <div className="price-head">
-          <p className="deck-eyebrow">{t('price_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('price_label'))}</p>
           <p className="deck-kicker">{t('price_kicker')}</p>
           <h1 className="deck-title-1">{t('price_title')}</h1>
         </div>
@@ -401,7 +402,7 @@ export const ShortRecapSlide: SlideDef = {
   id: 'short-recap',
   variant: 'light',
   bare: true,
-  Body: ({client}: SlideContext) => {
+  Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
@@ -422,7 +423,7 @@ export const ShortRecapSlide: SlideDef = {
     return (
       <div className="sr-frame">
         <div className="sr-head">
-          <p className="deck-eyebrow">{t('short_recap_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('short_recap_label'))}</p>
           <p className="deck-kicker">{t('short_recap_kicker')}</p>
           <h1 className="sr-title">{title}</h1>
         </div>

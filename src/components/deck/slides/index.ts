@@ -44,9 +44,10 @@ export const deckSlides: SlideDef[] = [
 
 // Compact cold-share preview. Goal: give a flavour of what magic is without
 // revealing pricing, security details, or implementation depth. Skips the
-// intro arc (01–06) and the claim demo (10), and replaces the closing with a
+// intro arc (02–06) and the claim demo (10), and replaces the closing with a
 // 4-point recap that doubles as a CTA.
 export const shortDeckSlides: SlideDef[] = [
+  CoverSlide,             // Branded cover
   WhatIsMagicSlide,       // SDK explanation
   KeyboardDemoSlide,      // Keyboard video
   ThirtyXSlide,           // 30× faster

@@ -2,6 +2,7 @@
 
 import {useEffect, useState} from 'react';
 import {useI18n} from '../i18n-context';
+import {eyebrow} from '@/lib/deck/eyebrow';
 import {MagicKeyboard} from '../magic-keyboard';
 import type {Locale} from '@/lib/deck/i18n';
 import {useSlideNav, type SlideContext, type SlideDef} from '../deck-shell';
@@ -510,12 +511,12 @@ function BrandTag({tag}: {tag: string}) {
 export const InfrastructureSlide: SlideDef = {
   id: 'infrastructure',
   variant: 'light',
-  Body: () => {
+  Body: ({index}) => {
     const {t} = useI18n();
     return (
       <div className="infra-frame">
         <div className="infra-head">
-          <p className="deck-eyebrow">{t('infra_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('infra_label'))}</p>
           <p className="deck-kicker infra-kicker">{t('infra_kicker')}</p>
           <h1 className="infra-title">{t('infra_title')}</h1>
         </div>
@@ -903,12 +904,12 @@ function GrowthChart({caption}: {caption: string}) {
 export const WhatsappSlide: SlideDef = {
   id: 'whatsapp',
   variant: 'light',
-  Body: () => {
+  Body: ({index}) => {
     const {t} = useI18n();
     return (
       <div className="wa-frame">
         <div className="wa-head">
-          <p className="deck-eyebrow">{t('wa_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('wa_label'))}</p>
           <p className="deck-kicker">{t('wa_kicker')}</p>
           <h1 className="deck-title-1">{t('wa_title')}</h1>
         </div>
@@ -1034,11 +1035,11 @@ export const WhatsappSlide: SlideDef = {
 export const ProblemSlide: SlideDef = {
   id: 'problem',
   variant: 'dark',
-  Body: () => {
+  Body: ({index}) => {
     const {t} = useI18n();
     return (
       <div className="prob-frame deck-dot-grid">
-        <p className="deck-eyebrow">{t('prob_label')}</p>
+        <p className="deck-eyebrow">{eyebrow(index, t('prob_label'))}</p>
         <h1 className="prob-quote">
           {t('prob_quote')
             .split('\n')
@@ -1149,7 +1150,7 @@ const FLOW_STEPS: Record<
 export const FlowSlide: SlideDef = {
   id: 'flow',
   variant: 'light',
-  Body: () => {
+  Body: ({index}) => {
     const {t, locale} = useI18n();
     const steps = FLOW_STEPS[locale];
     const doneLabel = t('flow_done');
@@ -1213,7 +1214,7 @@ export const FlowSlide: SlideDef = {
     return (
       <div className="flow-frame">
         <div className="flow-head">
-          <p className="deck-eyebrow">{t('flow_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('flow_label'))}</p>
           <h1 className="deck-title-1">{t('flow_title')}</h1>
         </div>
         <div className="flow-rows">
@@ -1570,7 +1571,7 @@ function FlowRow({
 export const WhatIsMagicSlide: SlideDef = {
   id: 'what-is-magic',
   variant: 'light',
-  Body: ({client}: SlideContext) => {
+  Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const appIcon = client.app_icon_url ?? client.logo_url;
@@ -1582,7 +1583,7 @@ export const WhatIsMagicSlide: SlideDef = {
         <div className="magic-head">
           <div className="magic-head-row">
             <div className="magic-head-text">
-              <p className="deck-eyebrow">{t('magic_label')}</p>
+              <p className="deck-eyebrow">{eyebrow(index, t('magic_label'))}</p>
               <p className="deck-kicker">{t('magic_kicker')}</p>
               <h1 className="deck-title-1">{t('magic_title')}</h1>
             </div>
@@ -1808,13 +1809,13 @@ export const WhatIsMagicSlide: SlideDef = {
 export const ThirtyXSlide: SlideDef = {
   id: 'thirty-x',
   variant: 'light',
-  Body: () => {
+  Body: ({index}) => {
     const {t} = useI18n();
     return (
       <div className="x-frame">
         <div className="x-glow" aria-hidden />
         <div className="x-content">
-          <p className="deck-eyebrow">{t('thirtyx_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('thirtyx_label'))}</p>
           <div className="x-hero">
             <span className="x-big" style={{color: 'var(--brand)'}}>
               {t('thirtyx_big')}
