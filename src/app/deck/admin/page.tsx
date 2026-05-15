@@ -4,30 +4,18 @@ import {getCurrentSession} from '@/lib/deck/admin-auth';
 import {supabaseAdmin} from '@/lib/supabase/server';
 import {NewClientForm} from './new-client-form';
 import {LogoutButton} from './logout-button';
+import {RecentActivity, type ActivityRow} from './recent-activity';
+import type {PresentationLinkVariant} from '@/lib/deck/types';
 
 export const dynamic = 'force-dynamic';
 
-// Default visible-slide count after the route filters out the Bruno bio slide.
-// Used purely as a denominator for the "slide X / Y" depth indicator on the
-// activity feed. If you add/remove slides, bump this — wrong by one is fine.
-const VISIBLE_SLIDE_COUNT = 18;
-
-type ActivityRow = {
-  key: string;
-  visitorName: string;
-  isAnonymous: boolean;
-  clientId: string;
-  clientName: string;
-  clientSlug: string;
-  brandColor: string | null;
-  location: string | null;
-  sessionCount: number;
-  totalMs: number;
-  maxSlideIndex: number;
-  lastSeenAt: string;
-};
+// Cap on the number of grouped activity rows surfaced above-the-fold. The
+// raw query pulls a wider window so grouping has enough data to dedupe; we
+// only render the freshest few so the dashboard stays scannable.
+const ACTIVITY_LIMIT = 8;
 
 type RawSession = {
+  id: string;
   visitor_id: string | null;
   visitor_name: string | null;
   ip_city: string | null;
@@ -38,6 +26,7 @@ type RawSession = {
   link_id: string;
   link:
     | {
+        variant: string | null;
         client:
           | {
               id: string;
@@ -56,6 +45,7 @@ type RawSession = {
           | null;
       }
     | {
+        variant: string | null;
         client:
           | {
               id: string;
@@ -87,11 +77,14 @@ function groupActivity(sessions: RawSession[]): ActivityRow[] {
     const link = unwrap(s.link);
     const client = unwrap(link?.client ?? null);
     if (!client || client.archived_at) continue;
+    const variant: PresentationLinkVariant =
+      link?.variant === 'short' ? 'short' : 'full';
     const visitorName = s.visitor_name?.trim() || null;
-    // Different decks viewed by the same browser stay as separate rows — the
-    // signal "Bruno opened Stori AND CNBV" is more useful than "Bruno opened
-    // 2 decks".
-    const key = `${s.visitor_id ?? `n:${visitorName ?? 'anon'}:${s.link_id}`}::${client.id}`;
+    // Group by visitor + client + variant. Different decks viewed by the
+    // same browser stay separate ("Bruno opened Stori AND CNBV" matters);
+    // and Short vs Full of the same client also split so each row gets the
+    // right slide-count denominator and ordering.
+    const key = `${s.visitor_id ?? `n:${visitorName ?? 'anon'}:${s.link_id}`}::${client.id}::${variant}`;
     const location = s.ip_city
       ? s.ip_country
         ? `${s.ip_city}, ${s.ip_country}`
@@ -105,6 +98,7 @@ function groupActivity(sessions: RawSession[]): ActivityRow[] {
         existing.maxSlideIndex,
         s.max_slide_index ?? 0
       );
+      existing.sessionIds.push(s.id);
       if (s.started_at > existing.lastSeenAt) {
         existing.lastSeenAt = s.started_at;
         if (visitorName) {
@@ -122,41 +116,19 @@ function groupActivity(sessions: RawSession[]): ActivityRow[] {
         clientName: client.name,
         clientSlug: client.slug,
         brandColor: client.brand_color,
+        variant,
         location,
         sessionCount: 1,
         totalMs: s.total_duration_ms ?? 0,
         maxSlideIndex: s.max_slide_index ?? 0,
-        lastSeenAt: s.started_at
+        lastSeenAt: s.started_at,
+        sessionIds: [s.id]
       });
     }
   }
   return Array.from(map.values()).sort((a, b) =>
     b.lastSeenAt.localeCompare(a.lastSeenAt)
   );
-}
-
-function formatDuration(ms: number): string {
-  if (!ms || ms < 1000) return `${Math.max(0, Math.round(ms))}ms`;
-  const sec = Math.round(ms / 1000);
-  if (sec < 60) return `${sec}s`;
-  const min = Math.floor(sec / 60);
-  const remSec = sec % 60;
-  if (min < 60) return `${min}m ${remSec}s`;
-  const hr = Math.floor(min / 60);
-  const remMin = min % 60;
-  return `${hr}h ${remMin}m`;
-}
-
-function formatRelative(iso: string): string {
-  const diffMs = Date.now() - new Date(iso).getTime();
-  const diffMin = Math.floor(diffMs / 60_000);
-  if (diffMin < 1) return 'just now';
-  if (diffMin < 60) return `${diffMin}m ago`;
-  const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr}h ago`;
-  const diffDay = Math.floor(diffHr / 24);
-  if (diffDay < 7) return `${diffDay}d ago`;
-  return new Date(iso).toLocaleDateString();
 }
 
 export default async function AdminHome() {
@@ -174,21 +146,36 @@ export default async function AdminHome() {
     .order('created_at', {ascending: false});
 
   // Pull a wider window of recent sessions across every deck and let the
-  // visitor+client grouping deduplicate noisy repeat opens before we cap the
-  // visible list. Limit kept generous so the grouped list isn't half-empty
-  // when one visitor refreshes ten times.
+  // visitor+client+variant grouping deduplicate noisy repeat opens before we
+  // cap the visible list. Limit kept generous so the grouped list isn't
+  // half-empty when one visitor refreshes ten times.
   const {data: rawSessions} = await sb
     .from('deck_sessions')
     .select(
-      `visitor_id, visitor_name, ip_city, ip_country, started_at, total_duration_ms, max_slide_index, link_id,
+      `id, visitor_id, visitor_name, ip_city, ip_country, started_at, total_duration_ms, max_slide_index, link_id,
        link:presentation_links!inner(
+         variant,
          client:clients!inner(id, name, slug, brand_color, archived_at)
        )`
     )
     .order('started_at', {ascending: false})
     .limit(120);
 
-  const activity = groupActivity((rawSessions ?? []) as RawSession[]).slice(0, 20);
+  const activity = groupActivity((rawSessions ?? []) as RawSession[]).slice(
+    0,
+    ACTIVITY_LIMIT
+  );
+
+  // Pull slide_events for just the sessions belonging to the visible rows so
+  // the inline "expand → per-slide breakdown" UI doesn't need a follow-up
+  // round trip when the user clicks a row.
+  const visibleSessionIds = activity.flatMap((a) => a.sessionIds);
+  const {data: events} = visibleSessionIds.length
+    ? await sb
+        .from('slide_events')
+        .select('session_id, slide_id, slide_index, duration_ms, entered_at')
+        .in('session_id', visibleSessionIds)
+    : {data: []};
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
@@ -206,78 +193,10 @@ export default async function AdminHome() {
             Recent activity
           </h2>
           <span className="text-xs text-zinc-500">
-            Across all clients · most recent first
+            Top {ACTIVITY_LIMIT} · click a row to see the slide breakdown
           </span>
         </div>
-        {activity.length === 0 ? (
-          <p className="text-sm text-zinc-500">
-            No deck activity yet. Share a link and check back.
-          </p>
-        ) : (
-          <ul className="border border-zinc-900 rounded-md divide-y divide-zinc-900">
-            {activity.map((a) => {
-              const reachedSlideNumber = a.maxSlideIndex + 1;
-              const depthPct = Math.min(
-                100,
-                (reachedSlideNumber / VISIBLE_SLIDE_COUNT) * 100
-              );
-              return (
-                <li key={a.key}>
-                  <Link
-                    href={`/deck/admin/clients/${a.clientId}`}
-                    className="block px-4 py-3 text-sm hover:bg-zinc-950 transition-colors"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 text-zinc-200">
-                          <span className="font-medium truncate">
-                            {a.visitorName}
-                          </span>
-                          {a.sessionCount > 1 && (
-                            <span className="text-[10px] uppercase tracking-wide bg-zinc-800/70 text-zinc-400 rounded px-1.5 py-0.5">
-                              Returning · {a.sessionCount}×
-                            </span>
-                          )}
-                          {a.isAnonymous && (
-                            <span className="text-[10px] uppercase tracking-wide bg-zinc-800/40 text-zinc-500 rounded px-1.5 py-0.5">
-                              Anonymous
-                            </span>
-                          )}
-                        </div>
-                        <div className="mt-1 flex items-center flex-wrap gap-x-2 gap-y-0.5 text-xs text-zinc-500">
-                          <span className="inline-flex items-center gap-1.5 text-zinc-400">
-                            <span
-                              className="inline-block w-2 h-2 rounded-full shrink-0"
-                              style={{background: a.brandColor ?? '#3f3f46'}}
-                              aria-hidden
-                            />
-                            {a.clientName}
-                          </span>
-                          {a.location && <span>· {a.location}</span>}
-                          <span>· {formatRelative(a.lastSeenAt)}</span>
-                        </div>
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <div className="text-zinc-200 tabular-nums">
-                          {formatDuration(a.totalMs)}
-                        </div>
-                        <div className="text-[11px] text-zinc-500 tabular-nums mt-0.5">
-                          slide {reachedSlideNumber} / {VISIBLE_SLIDE_COUNT}
-                        </div>
-                        <div className="w-20 h-1 bg-zinc-900 rounded-full mt-1.5 overflow-hidden">
-                          <div
-                            className="h-full bg-emerald-500/70"
-                            style={{width: `${depthPct}%`}}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+        <RecentActivity rows={activity} events={events ?? []} />
       </section>
 
       <section className="mb-12">

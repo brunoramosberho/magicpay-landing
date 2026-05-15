@@ -139,16 +139,19 @@ function VariantPicker({
 }
 
 function LinkRow({link, clientSlug}: {link: PresentationLink; clientSlug: string}) {
-  const [copied, setCopied] = useState<'full' | 'nobio' | null>(null);
+  const [copied, setCopied] = useState<'main' | 'bio' | null>(null);
   const [origin, setOrigin] = useState('');
   useEffect(() => {
     setOrigin(window.location.origin);
   }, []);
   const baseUrl = `${origin}/deck/${clientSlug}/${link.token}`;
-  const noBioUrl = `${baseUrl}?bio=0`;
+  // Default deck route already hides the bio slide. Offer the explicit
+  // ?bio=1 URL as a secondary option for warm intros where Bruno wants the
+  // background slide included.
+  const withBioUrl = `${baseUrl}?bio=1`;
   const isShort = link.variant === 'short';
 
-  const copy = async (url: string, kind: 'full' | 'nobio') => {
+  const copy = async (url: string, kind: 'main' | 'bio') => {
     await navigator.clipboard.writeText(url);
     setCopied(kind);
     setTimeout(() => setCopied(null), 1500);
@@ -183,19 +186,19 @@ function LinkRow({link, clientSlug}: {link: PresentationLink; clientSlug: string
       </div>
       <div className="shrink-0 flex gap-2">
         <button
-          onClick={() => copy(baseUrl, 'full')}
+          onClick={() => copy(baseUrl, 'main')}
           className="text-sm text-zinc-300 hover:text-zinc-50"
-          title={isShort ? 'Short preview deck' : 'Full deck (with bio slide)'}
+          title={isShort ? 'Short preview deck' : 'Full deck (no bio slide)'}
         >
-          {copied === 'full' ? 'Copied!' : 'Copy'}
+          {copied === 'main' ? 'Copied!' : 'Copy'}
         </button>
         {!isShort && (
           <button
-            onClick={() => copy(noBioUrl, 'nobio')}
+            onClick={() => copy(withBioUrl, 'bio')}
             className="text-sm text-zinc-500 hover:text-zinc-200"
-            title="Skip bio slide"
+            title="Include the Bruno bio slide"
           >
-            {copied === 'nobio' ? 'Copied!' : 'Copy (no bio)'}
+            {copied === 'bio' ? 'Copied!' : 'Copy (with bio)'}
           </button>
         )}
       </div>
