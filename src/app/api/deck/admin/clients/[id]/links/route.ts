@@ -14,12 +14,19 @@ export async function POST(
 
   const {id} = await ctx.params;
 
-  let body: {recipient_name?: string; recipient_email?: string; notes?: string};
+  let body: {
+    recipient_name?: string;
+    recipient_email?: string;
+    notes?: string;
+    variant?: string;
+  };
   try {
     body = await req.json();
   } catch {
     body = {};
   }
+
+  const variant = body.variant === 'short' ? 'short' : 'full';
 
   const sb = supabaseAdmin();
   const token = generateToken();
@@ -28,6 +35,7 @@ export async function POST(
     .insert({
       client_id: id,
       token,
+      variant,
       recipient_name: body.recipient_name ?? null,
       recipient_email: body.recipient_email ?? null,
       notes: body.notes ?? null,

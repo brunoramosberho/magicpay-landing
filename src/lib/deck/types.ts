@@ -1,5 +1,10 @@
 export type ClientKind = 'client' | 'regulator';
 
+/** Which deck a presentation_link serves. 'full' = the standard 18-slide deck.
+ *  'short' = compact cold-share preview (what-is-magic → keyboard → 30x → tap
+ *  → voice → recap). Same client can have both kinds of links. */
+export type PresentationLinkVariant = 'full' | 'short';
+
 export type Client = {
   id: string;
   slug: string;
@@ -26,6 +31,7 @@ export type PresentationLink = {
   id: string;
   client_id: string;
   token: string;
+  variant: PresentationLinkVariant;
   recipient_name: string | null;
   recipient_email: string | null;
   notes: string | null;

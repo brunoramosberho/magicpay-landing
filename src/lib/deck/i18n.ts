@@ -261,6 +261,26 @@ export const i18n = {
     close_email: 'bruno@mgic.me',
     close_url: 'mgic.me',
 
+    // Short-deck recap (only used by the 'short' variant)
+    short_recap_label: 'En resumen',
+    short_recap_kicker: '¿Qué es magic, en una sola pantalla?',
+    short_recap_title: 'Un SDK dentro del app de {client}.',
+    short_recap_title_regulator: 'Un SDK dentro del app del banco.',
+    short_recap_1_title: 'Vive dentro del app de {client}',
+    short_recap_1_title_regulator: 'Vive dentro del app del banco',
+    short_recap_1_desc:
+      'magic es un SDK que se integra con tu iOS, Android o React Native existente. No es una app nueva ni una migración.',
+    short_recap_2_title: 'No tocamos dinero ni datos sensibles',
+    short_recap_2_desc:
+      'El banco mantiene custodia, autenticación, KYC/AML y la ejecución del pago. magic solo orquesta la experiencia.',
+    short_recap_3_title: 'Cualquier banco, cualquier riel',
+    short_recap_3_desc:
+      'Funciona sobre los rieles que ya usa el banco: SPEI, Pix, SCT Inst, UPI, Bizum. Si el banco lo soporta, magic lo soporta.',
+    short_recap_4_title: 'Se integra en un sprint',
+    short_recap_4_desc:
+      'Tres servicios que exponer (login, autorización, claim). 45 min para el primer pago de prueba; sprint completo para producción.',
+    short_recap_cta: 'Hablemos del piloto',
+
     // Section navigator (header dropdown)
     sec_menu: 'Secciones',
     sec_intro: 'Inicio',
@@ -519,6 +539,25 @@ export const i18n = {
     close_name: 'Bruno Ramos',
     close_email: 'bruno@mgic.me',
     close_url: 'mgic.me',
+
+    short_recap_label: 'In short',
+    short_recap_kicker: 'What is magic, on a single screen?',
+    short_recap_title: 'An SDK inside the {client} app.',
+    short_recap_title_regulator: "An SDK inside the bank's app.",
+    short_recap_1_title: 'Lives inside the {client} app',
+    short_recap_1_title_regulator: "Lives inside the bank's app",
+    short_recap_1_desc:
+      'magic is an SDK that drops into your existing iOS, Android or React Native app. Not a new app, not a migration.',
+    short_recap_2_title: "We don't touch money or sensitive data",
+    short_recap_2_desc:
+      'The bank keeps custody, authentication, KYC/AML, and the actual payment execution. magic only orchestrates the experience.',
+    short_recap_3_title: 'Any bank, any rail',
+    short_recap_3_desc:
+      'Runs on the rails the bank already uses — SPEI, Pix, SCT Inst, UPI, Bizum. If the bank supports it, magic supports it.',
+    short_recap_4_title: 'Ships in one sprint',
+    short_recap_4_desc:
+      'Three services to expose (login, authorize, claim). 45 minutes to a first test payment; one sprint to production.',
+    short_recap_cta: "Let's talk about a pilot",
 
     // Section navigator (header dropdown)
     sec_menu: 'Sections',

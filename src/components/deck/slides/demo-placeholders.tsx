@@ -7,6 +7,7 @@
 
 import {useState} from 'react';
 import {useI18n} from '../i18n-context';
+import {eyebrow} from '@/lib/deck/eyebrow';
 import {VideoPhone} from '../video-phone';
 import {MagicKeyboard} from '../magic-keyboard';
 import {ClaimDemo} from '../claim-demo';
@@ -191,13 +192,13 @@ function DemoShell({
 export const KeyboardDemoSlide: SlideDef = {
   id: 'keyboard-demo',
   variant: 'light',
-  Body: ({client}: SlideContext) => {
+  Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
     return (
       <DemoShell
-        label={t('kb_label')}
+        label={eyebrow(index, t('kb_label'))}
         kicker={t('kb_kicker')}
         title={
           isRegulator ? t('kb_title_regulator') : fillClient(t('kb_title'))
@@ -219,13 +220,13 @@ export const KeyboardDemoSlide: SlideDef = {
 export const ClaimDemoSlide: SlideDef = {
   id: 'claim-demo',
   variant: 'light',
-  Body: ({client}: SlideContext) => {
+  Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
     return (
       <div className="claim-frame">
         <div className="claim-left">
           <div className="claim-head">
-            <p className="deck-eyebrow">{t('claim_label')}</p>
+            <p className="deck-eyebrow">{eyebrow(index, t('claim_label'))}</p>
             <p className="deck-kicker">{t('claim_kicker')}</p>
             <h1 className="claim-title">{t('claim_title')}</h1>
           </div>
@@ -394,7 +395,7 @@ export const TapDemoSlide: SlideDef = {
   id: 'tap-demo',
   variant: 'dark',
   bare: true,
-  Body: () => {
+  Body: ({index}) => {
     const {t} = useI18n();
     return (
       <div className="tap-frame">
@@ -409,7 +410,7 @@ export const TapDemoSlide: SlideDef = {
         />
         <div className="tap-scrim" aria-hidden />
         <div className="tap-content">
-          <p className="deck-eyebrow tap-eyebrow">{t('tap_label')}</p>
+          <p className="deck-eyebrow tap-eyebrow">{eyebrow(index, t('tap_label'))}</p>
           <p className="deck-kicker tap-kicker">{t('tap_kicker')}</p>
           <h1 className="tap-title">{t('tap_title')}</h1>
           <p className="tap-caption">{t('tap_caption')}</p>
@@ -533,11 +534,11 @@ export const TapDemoSlide: SlideDef = {
 export const VoiceDemoSlide: SlideDef = {
   id: 'voice-demo',
   variant: 'light',
-  Body: () => {
+  Body: ({index}) => {
     const {t} = useI18n();
     return (
       <DemoShell
-        label={t('voice_label')}
+        label={eyebrow(index, t('voice_label'))}
         kicker={t('voice_kicker')}
         title={t('voice_title')}
         caption={t('voice_try')}
@@ -553,12 +554,12 @@ export const VoiceDemoSlide: SlideDef = {
 export const WhitelabelSlide: SlideDef = {
   id: 'whitelabel',
   variant: 'grey',
-  Body: ({client}: SlideContext) => {
+  Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
     return (
       <div className="wl-frame">
         <div className="wl-head">
-          <p className="deck-eyebrow">{t('wl_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('wl_label'))}</p>
           <p className="deck-kicker">{t('wl_kicker')}</p>
           <h1 className="wl-title">{t('wl_title')}</h1>
           <p className="wl-caption">{t('wl_caption')}</p>

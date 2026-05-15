@@ -1,13 +1,14 @@
 'use client';
 
 import {useI18n} from '../i18n-context';
+import {eyebrow} from '@/lib/deck/eyebrow';
 import type {SlideContext, SlideDef} from '../deck-shell';
 
 // 18 — Pricing (DB-driven; falls back to "to be defined" if a tier is null)
 export const PricingSlide: SlideDef = {
   id: 'pricing',
   variant: 'light',
-  Body: ({client}: SlideContext) => {
+  Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
     // Kickoff/monthly are big round numbers → no decimals.
     // Per-active-user is typically cents (e.g. $0.50) → always show 2 decimals.
@@ -55,7 +56,7 @@ export const PricingSlide: SlideDef = {
     return (
       <div className="price-frame">
         <div className="price-head">
-          <p className="deck-eyebrow">{t('price_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('price_label'))}</p>
           <p className="deck-kicker">{t('price_kicker')}</p>
           <h1 className="deck-title-1">{t('price_title')}</h1>
         </div>
@@ -386,6 +387,224 @@ export const ClosingSlide: SlideDef = {
             }
             .sdk-integration {
               gap: 8px;
+            }
+          }
+        `}</style>
+      </div>
+    );
+  }
+};
+
+// Short-deck recap. Only used by the 'short' variant — replaces ClosingSlide.
+// Four bullet points (SDK inside bank app · no money/data · any bank-rail ·
+// ships in a sprint) plus contact info. Single slide, no excess.
+export const ShortRecapSlide: SlideDef = {
+  id: 'short-recap',
+  variant: 'light',
+  bare: true,
+  Body: ({client, index}: SlideContext) => {
+    const {t} = useI18n();
+    const isRegulator = client.kind === 'regulator';
+    const fillClient = (s: string) => s.replaceAll('{client}', client.name);
+    const points = [
+      {
+        title: isRegulator
+          ? t('short_recap_1_title_regulator')
+          : fillClient(t('short_recap_1_title')),
+        desc: t('short_recap_1_desc')
+      },
+      {title: t('short_recap_2_title'), desc: t('short_recap_2_desc')},
+      {title: t('short_recap_3_title'), desc: t('short_recap_3_desc')},
+      {title: t('short_recap_4_title'), desc: t('short_recap_4_desc')}
+    ];
+    const title = isRegulator
+      ? t('short_recap_title_regulator')
+      : fillClient(t('short_recap_title'));
+    return (
+      <div className="sr-frame">
+        <div className="sr-head">
+          <p className="deck-eyebrow">{eyebrow(index, t('short_recap_label'))}</p>
+          <p className="deck-kicker">{t('short_recap_kicker')}</p>
+          <h1 className="sr-title">{title}</h1>
+        </div>
+        <ul className="sr-points">
+          {points.map((p, i) => (
+            <li key={i} className="sr-point">
+              <span className="sr-num" style={{color: 'var(--brand)'}}>
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div className="sr-point-text">
+                <h3>{p.title}</h3>
+                <p>{p.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div className="sr-contact">
+          <p className="sr-cta">{t('short_recap_cta')}</p>
+          <div className="sr-contact-rows">
+            <div className="sr-contact-row">
+              <span className="sr-contact-label">{t('close_name')}</span>
+              <a href={`mailto:${t('close_email')}`} className="sr-contact-value">
+                {t('close_email')}
+              </a>
+            </div>
+            <div className="sr-contact-row">
+              <span className="sr-contact-label">Web</span>
+              <a
+                href={`https://${t('close_url')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sr-contact-value"
+                style={{color: 'var(--brand)'}}
+              >
+                {t('close_url')}
+              </a>
+            </div>
+          </div>
+        </div>
+        <style jsx>{`
+          .sr-frame {
+            height: 100%;
+            padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            gap: clamp(32px, 4vw, 64px);
+            align-items: center;
+            min-height: 0;
+          }
+          .sr-head {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+          }
+          .sr-title {
+            font: 500 clamp(36px, 4.4vw, 64px) / 1.05 var(--mp-font-display);
+            letter-spacing: -0.02em;
+            margin: 6px 0 0;
+            color: var(--mp-ink);
+          }
+          .sr-points {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(14px, 1.8vh, 22px);
+          }
+          .sr-point {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: clamp(14px, 1.4vw, 20px);
+            align-items: baseline;
+          }
+          .sr-num {
+            font: 500 clamp(18px, 1.6vw, 22px) / 1
+              ui-monospace, 'SF Mono', Menlo, monospace;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.04em;
+          }
+          .sr-point-text h3 {
+            font: 500 clamp(17px, 1.4vw, 21px) / 1.25 var(--mp-font-display);
+            color: var(--mp-ink);
+            margin: 0 0 4px;
+            letter-spacing: -0.01em;
+          }
+          .sr-point-text p {
+            font: 400 clamp(13px, 1.05vw, 15px) / 1.5 var(--mp-font-body);
+            color: var(--mp-fg-muted);
+            margin: 0;
+          }
+          /* Contact card sits below the points column on desktop. We hijack
+             the grid by making it span both columns via grid-column. */
+          .sr-contact {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: clamp(16px, 2vw, 22px) clamp(20px, 2.5vw, 28px);
+            background: var(--mp-grey);
+            border: 1px solid var(--mp-border-soft);
+            border-radius: var(--mp-radius-lg);
+          }
+          .sr-cta {
+            font: 500 clamp(15px, 1.2vw, 18px) / 1.2 var(--mp-font-display);
+            color: var(--mp-ink);
+            margin: 0;
+          }
+          .sr-contact-rows {
+            display: flex;
+            gap: clamp(16px, 2vw, 32px);
+            flex-wrap: wrap;
+          }
+          .sr-contact-row {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+          }
+          .sr-contact-label {
+            font: 500 10px/1 var(--mp-font-body);
+            color: var(--mp-fg-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+          }
+          .sr-contact-value {
+            font: 500 14px/1 var(--mp-font-body);
+            color: var(--mp-ink);
+            text-decoration: none;
+          }
+          .sr-contact-value:hover {
+            text-decoration: underline;
+          }
+          @media (max-width: 900px) {
+            .sr-frame {
+              grid-template-columns: 1fr;
+              align-content: start;
+              gap: 24px;
+            }
+          }
+          @media (max-width: 640px) {
+            .sr-frame {
+              padding: 20px 18px 28px;
+              gap: 18px;
+              height: auto;
+            }
+            .sr-head :global(.deck-kicker) {
+              font-size: 16px;
+              margin-bottom: 2px;
+            }
+            .sr-title {
+              font-size: clamp(24px, 7vw, 32px);
+            }
+            .sr-points {
+              gap: 14px;
+            }
+            .sr-point {
+              gap: 12px;
+            }
+            .sr-num {
+              font-size: 15px;
+            }
+            .sr-point-text h3 {
+              font-size: 16px;
+            }
+            .sr-point-text p {
+              font-size: 13px;
+              line-height: 1.45;
+            }
+            .sr-contact {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 12px;
+              padding: 14px 16px;
+            }
+            .sr-cta {
+              font-size: 15px;
+            }
+            .sr-contact-rows {
+              gap: 14px;
             }
           }
         `}</style>

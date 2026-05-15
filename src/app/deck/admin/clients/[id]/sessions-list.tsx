@@ -1,37 +1,8 @@
 'use client';
 
 import {useMemo, useState} from 'react';
-import {deckSlides} from '@/components/deck/slides';
-
-const SLIDE_LABELS: Record<string, string> = {
-  cover: '01 Cover',
-  background: '02 Background',
-  infrastructure: '03 Infraestructura',
-  whatsapp: '04 WhatsApp',
-  problem: '05 Problema',
-  flow: '06 Flow',
-  'what-is-magic': '07 Solución',
-  'keyboard-demo': '08 Teclado',
-  'thirty-x': '09 30x',
-  'claim-demo': '10 Claim',
-  'tap-demo': '11 Tap',
-  'voice-demo': '12 Voz',
-  whitelabel: '13 White-label',
-  security: '14 Seguridad',
-  benefits: '15 Beneficios',
-  implementation: '16 Implementación',
-  regulatory: '17 Regulatorio',
-  pricing: '18 Pricing',
-  closing: '19 Cierre'
-};
-
-const SLIDE_ORDER: Record<string, number> = Object.fromEntries(
-  deckSlides.map((s, i) => [s.id, i])
-);
-// `deckSlides` reflects the *route-filtered* order (no Bruno bio by default),
-// so a slide_id that's missing here falls back to a high index — keeps it at
-// the bottom of the per-visitor breakdown rather than crashing.
-const SLIDE_COUNT = deckSlides.length;
+import {getSlideLabel, getSlideOrder, getSlideTotal} from '@/lib/deck/slide-labels';
+import type {PresentationLinkVariant} from '@/lib/deck/types';
 
 export type SessionRow = {
   id: string;
@@ -92,6 +63,9 @@ type VisitorRow = {
   nameSource: 'visitor' | 'link' | 'unknown';
   /** Link-level recipient name when available and different from display name */
   linkRecipient: string | null;
+  /** Variant of the link — different rows per variant so the depth indicator
+   *  (slide X / Y) and slide ordering stay accurate. */
+  variant: PresentationLinkVariant;
   location: string | null;
   sessionCount: number;
   totalMs: number;
@@ -105,17 +79,22 @@ type VisitorRow = {
 
 function groupByVisitor(
   sessions: SessionRow[],
-  recipientByLinkId: Record<string, string | null>
+  recipientByLinkId: Record<string, string | null>,
+  variantByLinkId: Record<string, PresentationLinkVariant>
 ): VisitorRow[] {
   const map = new Map<string, VisitorRow>();
   for (const s of sessions) {
     const linkRecipient = recipientByLinkId[s.link_id] ?? null;
+    const variant = variantByLinkId[s.link_id] ?? 'full';
     const visitorName = s.visitor_name?.trim() || null;
     // Prefer visitor_id; if absent, fall back to a name-derived key so people
-    // who skipped the name gate at least show up as separate rows.
-    const key = s.visitor_id
+    // who skipped the name gate at least show up as separate rows. Variant
+    // is part of the key so a person who opened both Short and Full of the
+    // same client gets two rows with their own correct depth indicators.
+    const baseKey = s.visitor_id
       ? `v:${s.visitor_id}`
       : `n:${visitorName ?? 'unknown'}:${s.link_id}`;
+    const key = `${baseKey}::${variant}`;
     const location = formatLocation(s.ip_city, s.ip_country);
     const existing = map.get(key);
     if (existing) {
@@ -149,6 +128,7 @@ function groupByVisitor(
         name,
         nameSource,
         linkRecipient,
+        variant,
         location,
         sessionCount: 1,
         totalMs: s.total_duration_ms ?? 0,
@@ -167,17 +147,19 @@ function groupByVisitor(
 export function SessionsList({
   sessions,
   events,
-  recipientByLinkId
+  recipientByLinkId,
+  variantByLinkId
 }: {
   sessions: SessionRow[];
   events: EventRow[];
   recipientByLinkId: Record<string, string | null>;
+  variantByLinkId: Record<string, PresentationLinkVariant>;
 }) {
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
 
   const visitors = useMemo(
-    () => groupByVisitor(sessions, recipientByLinkId),
-    [sessions, recipientByLinkId]
+    () => groupByVisitor(sessions, recipientByLinkId, variantByLinkId),
+    [sessions, recipientByLinkId, variantByLinkId]
   );
 
   const eventsBySession = useMemo(() => {
@@ -201,8 +183,8 @@ export function SessionsList({
         const events = v.sessionIds.flatMap(
           (sid) => eventsBySession.get(sid) ?? []
         );
-        const reachedSlideNumber = v.maxSlideIndex + 1;
-        const slideTotal = SLIDE_COUNT;
+        const slideTotal = getSlideTotal(v.variant);
+        const reachedSlideNumber = Math.min(v.maxSlideIndex + 1, slideTotal);
         const depthPct = Math.min(100, (reachedSlideNumber / slideTotal) * 100);
         const showsLinkRecipient =
           v.nameSource === 'visitor' &&
@@ -227,6 +209,7 @@ export function SessionsList({
                       ▸
                     </span>
                     <span className="font-medium truncate">{v.name}</span>
+                    <VariantTag variant={v.variant} />
                     {v.sessionCount > 1 && (
                       <span className="text-[10px] uppercase tracking-wide bg-zinc-800/70 text-zinc-400 rounded px-1.5 py-0.5">
                         Returning · {v.sessionCount}×
@@ -264,7 +247,7 @@ export function SessionsList({
             </button>
             {isOpen && (
               <div className="px-4 pb-4 pt-2 ml-6 border-t border-zinc-900/60 bg-zinc-950/40">
-                <VisitorBreakdown events={events} />
+                <VisitorBreakdown events={events} variant={v.variant} />
               </div>
             )}
           </li>
@@ -274,7 +257,29 @@ export function SessionsList({
   );
 }
 
-function VisitorBreakdown({events}: {events: EventRow[]}) {
+export function VariantTag({variant}: {variant: PresentationLinkVariant}) {
+  const isShort = variant === 'short';
+  return (
+    <span
+      className={`text-[10px] uppercase tracking-wide rounded px-1.5 py-0.5 ${
+        isShort
+          ? 'bg-amber-500/15 text-amber-300'
+          : 'bg-zinc-800/70 text-zinc-400'
+      }`}
+      title={isShort ? '6-slide preview' : 'Full 18-slide deck'}
+    >
+      {isShort ? 'Short' : 'Full'}
+    </span>
+  );
+}
+
+export function VisitorBreakdown({
+  events,
+  variant
+}: {
+  events: EventRow[];
+  variant: PresentationLinkVariant;
+}) {
   const rows = useMemo(() => {
     const byId = new Map<string, {totalMs: number; visits: number}>();
     for (const ev of events) {
@@ -286,13 +291,13 @@ function VisitorBreakdown({events}: {events: EventRow[]}) {
     return Array.from(byId.entries())
       .map(([slideId, stat]) => ({
         slideId,
-        label: SLIDE_LABELS[slideId] ?? slideId,
-        order: SLIDE_ORDER[slideId] ?? 999,
+        label: getSlideLabel(slideId, variant),
+        order: getSlideOrder(slideId, variant),
         totalMs: stat.totalMs,
         visits: stat.visits
       }))
       .sort((a, b) => a.order - b.order);
-  }, [events]);
+  }, [events, variant]);
 
   const max = useMemo(() => {
     const values = rows.map((r) => r.totalMs);

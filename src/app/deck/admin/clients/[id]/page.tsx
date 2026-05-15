@@ -115,6 +115,9 @@ export default async function ClientDetailPage({params}: {params: Promise<Params
           recipientByLinkId={Object.fromEntries(
             (links ?? []).map((l) => [l.id, l.recipient_name ?? null])
           )}
+          variantByLinkId={Object.fromEntries(
+            (links ?? []).map((l) => [l.id, l.variant === 'short' ? 'short' : 'full'])
+          )}
         />
       </section>
 

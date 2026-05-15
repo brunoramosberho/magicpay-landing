@@ -1,7 +1,7 @@
 import {notFound} from 'next/navigation';
 import {supabaseAdmin} from '@/lib/supabase/server';
 import {DeckShell} from '@/components/deck/deck-shell';
-import {deckSlides} from '@/components/deck/slides';
+import {deckSlides, shortDeckSlides} from '@/components/deck/slides';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,12 +20,14 @@ export default async function DeckPage({
   // Slide 2 (Bruno bio / "background") is skipped by default. Append `?bio=1`
   // (or `bio=true`) to include it. Anything else — including `?bio=0` — keeps
   // the slide hidden. Slide numbers auto-renumber based on the filtered array.
+  // Short-variant links ignore ?bio entirely since the short deck has no bio
+  // slide to toggle.
   const includeBio = bio === '1' || bio === 'true';
   const sb = supabaseAdmin();
 
   const {data: link} = await sb
     .from('presentation_links')
-    .select('id, token, revoked_at, expires_at, client:clients(*)')
+    .select('id, token, variant, revoked_at, expires_at, client:clients(*)')
     .eq('token', token)
     .maybeSingle();
 
@@ -37,9 +39,12 @@ export default async function DeckPage({
   // Edge case: empty join returns []; link.client[0] is undefined.
   if (!client || client.slug !== clientSlug) notFound();
 
-  const slides = includeBio
-    ? deckSlides
-    : deckSlides.filter((_, i) => i !== 1);
+  const isShort = link.variant === 'short';
+  const slides = isShort
+    ? shortDeckSlides
+    : includeBio
+      ? deckSlides
+      : deckSlides.filter((_, i) => i !== 1);
   // Slide files use 'use client', so the SlideDef objects arrive on the server
   // as client references — `s.id` reads as undefined here. We therefore filter
   // by index (background is at position 1) instead of by id.

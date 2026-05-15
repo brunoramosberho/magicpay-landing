@@ -1,13 +1,14 @@
 'use client';
 
 import {useI18n} from '../i18n-context';
+import {eyebrow} from '@/lib/deck/eyebrow';
 import type {SlideContext, SlideDef} from '../deck-shell';
 
 // 14 — Security (visual cards with icons)
 export const SecuritySlide: SlideDef = {
   id: 'security',
   variant: 'dark',
-  Body: ({client}: SlideContext) => {
+  Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
@@ -23,7 +24,7 @@ export const SecuritySlide: SlideDef = {
     return (
       <div className="sec-frame deck-dot-grid">
         <div className="sec-head">
-          <p className="deck-eyebrow">{t('sec_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('sec_label'))}</p>
           <p className="sec-kicker">{t('sec_kicker')}</p>
           <h1 className="sec-title">{t('sec_title')}</h1>
         </div>
@@ -161,7 +162,7 @@ export const SecuritySlide: SlideDef = {
 export const BenefitsSlide: SlideDef = {
   id: 'benefits',
   variant: 'light',
-  Body: ({client}: SlideContext) => {
+  Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
@@ -177,7 +178,7 @@ export const BenefitsSlide: SlideDef = {
     return (
       <div className="ben-frame">
         <div className="ben-head">
-          <p className="deck-eyebrow">{t('ben_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('ben_label'))}</p>
           <p className="deck-kicker">{t('ben_kicker')}</p>
           <h1 className="deck-title-1">{title}</h1>
         </div>
@@ -284,13 +285,13 @@ export const BenefitsSlide: SlideDef = {
 export const ImplementationSlide: SlideDef = {
   id: 'implementation',
   variant: 'light',
-  Body: () => {
+  Body: ({index}) => {
     const {t} = useI18n();
     return (
       <div className="impl-frame">
         <div className="impl-top">
           <div className="impl-head">
-            <p className="deck-eyebrow">{t('impl_label')}</p>
+            <p className="deck-eyebrow">{eyebrow(index, t('impl_label'))}</p>
             <p className="deck-kicker">{t('impl_kicker')}</p>
             <h1 className="deck-title-1 impl-title">{t('impl_title')}</h1>
           </div>
@@ -717,13 +718,13 @@ function ServiceCard({
 export const RegulatorySlide: SlideDef = {
   id: 'regulatory',
   variant: 'grey',
-  Body: () => {
+  Body: ({index}) => {
     const {t} = useI18n();
     const bullets = [t('reg_1'), t('reg_2'), t('reg_3'), t('reg_4'), t('reg_5'), t('reg_6')];
     return (
       <div className="reg-frame">
         <div className="reg-head">
-          <p className="deck-eyebrow">{t('reg_label')}</p>
+          <p className="deck-eyebrow">{eyebrow(index, t('reg_label'))}</p>
           <p className="deck-kicker">{t('reg_kicker')}</p>
           <h1 className="deck-title-1">{t('reg_title')}</h1>
         </div>
