@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
     create_initial_link?: boolean;
     recipient_name?: string;
     recipient_email?: string;
+    initial_link_variant?: string;
   };
   try {
     body = await req.json();
@@ -76,11 +77,13 @@ export async function POST(req: NextRequest) {
   let link: {token: string; id: string} | null = null;
   if (body.create_initial_link !== false) {
     const token = generateToken();
+    const variant = body.initial_link_variant === 'short' ? 'short' : 'full';
     const {data: linkRow, error: linkErr} = await sb
       .from('presentation_links')
       .insert({
         client_id: client.id,
         token,
+        variant,
         recipient_name: body.recipient_name ?? null,
         recipient_email: body.recipient_email ?? null,
         created_by: session.email
