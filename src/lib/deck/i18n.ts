@@ -255,13 +255,13 @@ export const i18n = {
 
     // 17 Regulatory
     reg_label: '17 — Regulatorio',
-    reg_kicker: 'Por qué magic no requiere autorización regulatoria',
+    reg_kicker: 'Cómo encaja magic en el marco regulatorio',
     reg_title: 'Regulación, resuelta',
     reg_1: 'magic solo integra tecnología — no es entidad financiera, no opera ni custodia fondos.',
     reg_2: 'Tu banco ejecuta los pagos y cumple con KYC/AML — magic no interviene en regulación.',
     reg_3: 'magic no almacena credenciales ni hace clearing — solo transmite instrucciones.',
     reg_4: 'Todo ocurre dentro del entorno seguro de tu banco.',
-    reg_5: 'No requiere autorización previa, siempre que el banco mantenga su cumplimiento.',
+    reg_5: 'El cumplimiento regulatorio lo mantiene el banco; magic opera como capa de tecnología dentro de ese marco.',
     reg_6: 'Basado en la Ley Fintech. magic no es IFPE, transmisor de dinero ni agregador.',
 
     // 18 Pricing
@@ -562,14 +562,14 @@ export const i18n = {
     impl_docs_url: 'mgic.me/docs',
 
     reg_label: '17 — Regulatory',
-    reg_kicker: "Why magic doesn't require regulatory authorisation",
+    reg_kicker: 'How magic fits into the regulatory framework',
     reg_title: 'Regulation, solved',
     reg_1:
       "magic only integrates technology — it isn't a financial entity, doesn't operate or hold funds.",
     reg_2: "Your bank executes payments and complies with KYC/AML — magic doesn't intervene.",
     reg_3: "magic doesn't store credentials or do clearing — only transmits instructions.",
     reg_4: "Everything happens within your bank's secure environment.",
-    reg_5: 'No prior authorization needed, as long as the bank maintains its compliance.',
+    reg_5: 'Regulatory compliance sits with the bank; magic operates as a technology layer within that framework.',
     reg_6: 'Based on the Fintech Law. magic is not an IFPE, money transmitter, or aggregator.',
 
     price_label: '18 — Pricing',
