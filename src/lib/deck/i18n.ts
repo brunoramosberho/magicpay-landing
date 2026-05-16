@@ -121,17 +121,17 @@ export const i18n = {
     kbw_login_sub: 'Autenticación dentro del app del banco',
     kbw_success_title: 'Liga generada exitosamente',
     kbw_step_0:
-      'Llega un mensaje pidiendo una transferencia. El teclado del sistema (QWERTY) está activo en WhatsApp.',
+      'Llega un mensaje en WhatsApp pidiendo una transferencia.',
     kbw_step_1:
-      'Toca el globo para cambiar de teclado. magic aparece como un teclado más del sistema — vive dentro del app del banco.',
+      'Se hace el cambio del teclado, y se selecciona el teclado de {client}.',
     kbw_step_2:
       'Se activa el teclado magic, integrado en el app del banco. Funciona en cualquier app de mensajería sin tocar su código.',
     kbw_step_3:
-      'Captura el monto y toca enviar. El SDK pide autenticación al app del banco — magic nunca ve credenciales.',
+      'Se abre el teclado, forma parte de la misma aplicación de {client}. Se captura el monto a enviar.',
     kbw_step_4:
-      'Face ID se ejecuta dentro del app de {client}. La sesión y autorización las maneja el banco.',
+      'Se inicia sesión de {client}. Es la misma sesión y autorización que el app.',
     kbw_step_5:
-      'El banco genera un token dinámico. magic solo orquesta — no toca dinero ni datos sensibles.',
+      'Se genera un token dinámico como segundo factor de autorización, ligado directamente al dispositivo.',
     kbw_step_6:
       'Liga de pago lista y enviada en la conversación. Una sola interacción, sin salir del chat.',
     kbw_loader_title: 'Generando liga de pago…',
@@ -438,17 +438,17 @@ export const i18n = {
     kbw_login_sub: "Authentication inside the bank's app",
     kbw_success_title: 'Link generated successfully',
     kbw_step_0:
-      'A message asks for a transfer. The default QWERTY keyboard is active in WhatsApp.',
+      'A WhatsApp message asks for a transfer.',
     kbw_step_1:
-      'Tap the globe to switch keyboards. magic shows up as another system keyboard — it lives inside the bank app.',
+      'Keyboards are switched and the {client} keyboard is picked.',
     kbw_step_2:
       "The magic keyboard activates, embedded in the bank's app. Works in any messaging app without touching its code.",
     kbw_step_3:
-      'Type the amount and tap send. The SDK asks the bank app to authenticate — magic never sees credentials.',
+      'The keyboard opens — it lives inside the {client} app. The amount is typed in.',
     kbw_step_4:
-      'Face ID runs inside the {client} app. Session and authorisation belong to the bank.',
+      "Signing in to {client}. Same session and authorisation as the app.",
     kbw_step_5:
-      "The bank issues a dynamic token. magic only orchestrates — never touches money or sensitive data.",
+      'A dynamic token is issued as a second authorisation factor, bound to the device.',
     kbw_step_6:
       'Payment link generated and sent in the conversation. One interaction, without leaving the chat.',
     kbw_loader_title: 'Generating payment link…',

@@ -64,18 +64,18 @@ export function KeyboardWalkthrough({
     });
   }, [registerInterceptor, step]);
 
-  const captions = useMemo(
-    () => [
+  const captions = useMemo(() => {
+    const fillClient = (s: string) => s.replaceAll('{client}', clientName);
+    return [
       t('kbw_step_0'),
       t('kbw_step_1'),
       t('kbw_step_2'),
       t('kbw_step_3'),
-      t('kbw_step_4').replace('{client}', clientName),
+      t('kbw_step_4'),
       t('kbw_step_5'),
       t('kbw_step_6')
-    ],
-    [t, clientName]
-  );
+    ].map(fillClient);
+  }, [t, clientName]);
 
   return (
     <div className="kbw-wrap">
