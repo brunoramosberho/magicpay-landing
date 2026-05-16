@@ -406,6 +406,10 @@ export const ShortRecapSlide: SlideDef = {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
+    const appIcon = client.app_icon_url ?? client.logo_url;
+    const integrationLabel = isRegulator
+      ? 'SDK integrado en el banco'
+      : `SDK integrado en ${client.name}`;
     const points = [
       {
         title: isRegulator
@@ -426,6 +430,19 @@ export const ShortRecapSlide: SlideDef = {
           <p className="deck-eyebrow">{eyebrow(index, t('short_recap_label'))}</p>
           <p className="deck-kicker">{t('short_recap_kicker')}</p>
           <h1 className="sr-title">{title}</h1>
+          {appIcon && (
+            <div className="sr-sdk" aria-hidden>
+              <div className="si-stack">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={appIcon} alt="" className="si-app" />
+                <span className="si-magic-badge">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/deck/logos/icon.svg" alt="" />
+                </span>
+              </div>
+              <span className="si-caption">{integrationLabel}</span>
+            </div>
+          )}
         </div>
         <ul className="sr-points">
           {points.map((p, i) => (
@@ -484,6 +501,54 @@ export const ShortRecapSlide: SlideDef = {
             letter-spacing: -0.02em;
             margin: 6px 0 0;
             color: var(--mp-ink);
+          }
+          /* Same composition as slide 07 — app icon with magic badge clipped
+             on the corner, plus a "SDK integrado en {client}" caption — so
+             the recap closes with the exact same visual handshake. */
+          .sr-sdk {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: clamp(16px, 2.4vh, 28px);
+          }
+          .si-stack {
+            position: relative;
+            width: clamp(80px, 7vw, 112px);
+            height: clamp(80px, 7vw, 112px);
+          }
+          .si-app {
+            width: 100%;
+            height: 100%;
+            border-radius: 28%;
+            object-fit: cover;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
+              0 2px 6px rgba(0, 0, 0, 0.06);
+          }
+          .si-magic-badge {
+            position: absolute;
+            right: -8px;
+            bottom: -8px;
+            width: 38%;
+            height: 38%;
+            border-radius: 30%;
+            background: var(--brand);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px
+                color-mix(in srgb, var(--brand) 35%, transparent),
+              0 0 0 4px var(--mp-bg);
+          }
+          .si-magic-badge :global(img) {
+            width: 60%;
+            height: 60%;
+            filter: brightness(0) invert(1);
+          }
+          .si-caption {
+            font: 500 clamp(12px, 1vw, 14px) / 1.2 var(--mp-font-body);
+            color: var(--mp-fg-muted);
+            letter-spacing: 0.02em;
           }
           .sr-points {
             list-style: none;
@@ -577,6 +642,17 @@ export const ShortRecapSlide: SlideDef = {
             }
             .sr-title {
               font-size: clamp(24px, 7vw, 32px);
+            }
+            .sr-sdk {
+              margin-top: 8px;
+              gap: 8px;
+            }
+            .si-stack {
+              width: 64px;
+              height: 64px;
+            }
+            .si-caption {
+              font-size: 12px;
             }
             .sr-points {
               gap: 14px;
