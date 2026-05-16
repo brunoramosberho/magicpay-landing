@@ -1224,20 +1224,13 @@ export const KeyboardVideoLiveSlide: SlideDef = {
             max-width: 540px;
           }
           @media (max-width: 640px) {
-            /* Landscape source on a portrait viewport: same rotation
-               trick the Tap slide uses so the action fills the width
-               and we get small black bars instead of cover-cropping. */
+            /* Landscape source on a portrait viewport: keep the video
+               upright and let it fill the height — the left and right
+               edges crop slightly, but the action stays readable
+               instead of being rotated 90°. */
             .kbv-video {
-              top: 50%;
-              right: auto;
-              bottom: auto;
-              left: 50%;
-              width: 100dvh;
-              height: 100dvw;
-              max-width: none;
-              object-fit: contain;
-              transform: translate(-50%, -50%) rotate(-90deg);
-              transform-origin: center center;
+              object-fit: cover;
+              object-position: center;
             }
             .kbv-scrim {
               background: linear-gradient(
