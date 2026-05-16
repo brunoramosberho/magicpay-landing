@@ -5,7 +5,7 @@
 // with a replay button. Slide 11 (tap) shows a static image until the user provides video.
 // Slide 13 (white-label) is a live customizer matching mgic.me/docs#customization.
 
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useI18n} from '../i18n-context';
 import {eyebrow} from '@/lib/deck/eyebrow';
 import {VideoPhone} from '../video-phone';
@@ -704,6 +704,40 @@ function Customizer({
 }) {
   const [primary, setPrimary] = useState(initialColor);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  // Auto-cycle through the preset palette so the slide animates itself
+  // — the presenter doesn't have to keep clicking to demo the live
+  // theming. Pauses for ~8s after any manual pick so the audience can
+  // sit with a specific colour, then resumes from there.
+  const [autoCycle, setAutoCycle] = useState(true);
+  const pauseTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!autoCycle) return;
+    const id = window.setInterval(() => {
+      setPrimary((prev) => {
+        const i = PRESETS.findIndex(
+          (p) => p.toLowerCase() === prev.toLowerCase()
+        );
+        return PRESETS[(i + 1) % PRESETS.length];
+      });
+    }, 3000);
+    return () => window.clearInterval(id);
+  }, [autoCycle]);
+
+  useEffect(() => {
+    return () => {
+      if (pauseTimerRef.current) window.clearTimeout(pauseTimerRef.current);
+    };
+  }, []);
+
+  const pickColor = (c: string) => {
+    setPrimary(c);
+    setAutoCycle(false);
+    if (pauseTimerRef.current) window.clearTimeout(pauseTimerRef.current);
+    pauseTimerRef.current = window.setTimeout(() => {
+      setAutoCycle(true);
+    }, 8000);
+  };
 
   return (
     <div className="cust">
@@ -712,12 +746,12 @@ function Customizer({
           <div className="cust-label">COLORES</div>
           <div className="cust-row">
             <span className="cust-tag">LIGHT</span>
-            <ColorInput value={primary} onChange={setPrimary} />
+            <ColorInput value={primary} onChange={pickColor} />
             <ColorInput value="#FFFFFF" disabled onChange={() => {}} />
           </div>
           <div className="cust-row">
             <span className="cust-tag">DARK</span>
-            <ColorInput value={primary} onChange={setPrimary} />
+            <ColorInput value={primary} onChange={pickColor} />
             <ColorInput value="#FFFFFF" disabled onChange={() => {}} />
           </div>
           <div className="cust-row-meta">
@@ -732,7 +766,7 @@ function Customizer({
               <button
                 key={c}
                 className={`preset ${c.toLowerCase() === primary.toLowerCase() ? 'active' : ''}`}
-                onClick={() => setPrimary(c)}
+                onClick={() => pickColor(c)}
                 aria-label={`Set color ${c}`}
               >
                 <span className="dot" style={{background: c}} />

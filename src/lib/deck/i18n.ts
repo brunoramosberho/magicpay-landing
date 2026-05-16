@@ -255,7 +255,7 @@ export const i18n = {
 
     // 17 Regulatory
     reg_label: '17 — Regulatorio',
-    reg_kicker: 'Por qué no se requiere permiso de CNBV o Banxico',
+    reg_kicker: 'Por qué magic no requiere autorización regulatoria',
     reg_title: 'Regulación, resuelta',
     reg_1: 'magic solo integra tecnología — no es entidad financiera, no opera ni custodia fondos.',
     reg_2: 'Tu banco ejecuta los pagos y cumple con KYC/AML — magic no interviene en regulación.',
@@ -562,7 +562,7 @@ export const i18n = {
     impl_docs_url: 'mgic.me/docs',
 
     reg_label: '17 — Regulatory',
-    reg_kicker: 'Why no CNBV or Banxico permit is required',
+    reg_kicker: "Why magic doesn't require regulatory authorisation",
     reg_title: 'Regulation, solved',
     reg_1:
       "magic only integrates technology — it isn't a financial entity, doesn't operate or hold funds.",
