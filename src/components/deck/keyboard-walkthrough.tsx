@@ -80,7 +80,7 @@ export function KeyboardWalkthrough({
   return (
     <div className="kbw-wrap">
       <div className="kbw-stage">
-        <ChatBubbles step={step} chromeLabel={chromeLabel} brand={brand} />
+        <ChatPanel step={step} chromeLabel={chromeLabel} brand={brand} />
         <KeyboardSurface
           step={step}
           clientName={clientName}
@@ -155,7 +155,7 @@ export function KeyboardWalkthrough({
           width: clamp(260px, 24vw, 340px);
           display: flex;
           flex-direction: column;
-          gap: 12px;
+          gap: 0;
           flex: 1;
           min-height: 0;
           justify-content: flex-end;
@@ -239,9 +239,13 @@ export function KeyboardWalkthrough({
   );
 }
 
-// --------------------------- Chat bubbles ---------------------------
+// --------------------------- Chat panel ---------------------------
+// Mock WhatsApp screen: fixed header (avatar + contact name + WhatsApp
+// label) and a conversation body with bubbles that animate in on the
+// first step. Tinted chat background so the bubbles read as bubbles and
+// don't blend into the slide.
 
-function ChatBubbles({
+function ChatPanel({
   step,
   chromeLabel,
   brand
@@ -251,70 +255,157 @@ function ChatBubbles({
   brand: string;
 }) {
   const {t} = useI18n();
+  const showTyping = step === 0;
   const linkSent = step === 6;
   return (
-    <div className="kbw-bubbles" aria-hidden>
-      <div className="kbw-bubble in">{t('kbw_chat_msg1')}</div>
-      <div className="kbw-bubble in">{t('kbw_chat_msg2')}</div>
-      {linkSent && (
-        <div className="kbw-bubble out kbw-bubble-link">
-          <span
-            className="kbw-link-icon"
-            style={{background: brand}}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/deck/logos/icon.svg" alt="" aria-hidden />
-          </span>
-          <span className="kbw-link-meta">
-            <span className="kbw-link-amount">$50 MXN</span>
-            <span className="kbw-link-sub">
-              {t('kbw_chat_via')} {chromeLabel}
-            </span>
+    <div className="kbw-chat" aria-hidden>
+      <div className="kbw-chat-header">
+        <span className="kbw-chat-avatar" aria-hidden>
+          {/* Soft warm gradient with the contact's initial — enough chat
+              context without a real photo we don't have rights to. */}
+          M
+        </span>
+        <div className="kbw-chat-id">
+          <span className="kbw-chat-name">{t('kbw_chat_contact')}</span>
+          <span className="kbw-chat-app">
+            <span className="kbw-chat-app-dot" aria-hidden />
+            WhatsApp
           </span>
         </div>
-      )}
+      </div>
+      <div className={`kbw-chat-body ${linkSent ? 'has-link' : ''}`}>
+        <div className="kbw-bubble in kbw-msg-1">{t('kbw_chat_msg1')}</div>
+        {showTyping ? (
+          <div className="kbw-typing" aria-label="typing">
+            <span />
+            <span />
+            <span />
+          </div>
+        ) : (
+          <div className="kbw-bubble in kbw-msg-2">{t('kbw_chat_msg2')}</div>
+        )}
+        {linkSent && (
+          <div className="kbw-bubble out kbw-bubble-link">
+            <span className="kbw-link-icon" style={{background: brand}}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/deck/logos/icon.svg" alt="" aria-hidden />
+            </span>
+            <span className="kbw-link-meta">
+              <span className="kbw-link-amount">$50 MXN</span>
+              <span className="kbw-link-sub">
+                {t('kbw_chat_via')} {chromeLabel}
+              </span>
+            </span>
+          </div>
+        )}
+      </div>
       <style jsx>{`
-        .kbw-bubbles {
+        .kbw-chat {
+          background: #ECE5DD;
+          border-radius: 22px 22px 0 0;
+          overflow: hidden;
+          box-shadow: 0 24px 80px rgba(0, 0, 0, 0.1),
+            0 8px 24px rgba(0, 0, 0, 0.06);
+        }
+        .kbw-chat-header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 14px;
+          background: #fff;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .kbw-chat-avatar {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #f59e0b, #ef4444);
+          color: #fff;
+          font: 700 14px/1
+            -apple-system, 'SF Pro', system-ui, sans-serif;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .kbw-chat-id {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 1px;
+          min-width: 0;
+        }
+        .kbw-chat-name {
+          font: 600 13px/1.15
+            -apple-system, 'SF Pro', system-ui, sans-serif;
+          color: #111;
+        }
+        .kbw-chat-app {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          font: 500 10px/1
+            -apple-system, 'SF Pro', system-ui, sans-serif;
+          color: #25D366;
+        }
+        .kbw-chat-app-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #25D366;
+        }
+        .kbw-chat-body {
+          padding: 10px 10px 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
           align-items: flex-start;
-          padding: 0 4px;
-          min-height: 90px;
+          min-height: 110px;
+          background-image: radial-gradient(
+              rgba(0, 0, 0, 0.025) 1px,
+              transparent 1px
+            );
+          background-size: 18px 18px;
         }
         .kbw-bubble {
-          padding: 9px 14px;
-          border-radius: 18px;
-          font: 400 13px/1.35
+          padding: 7px 11px 6px;
+          border-radius: 9px;
+          font: 400 12.5px/1.35
             -apple-system, 'SF Pro', system-ui, sans-serif;
-          max-width: 78%;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+          max-width: 80%;
+          box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+          opacity: 0;
         }
         .kbw-bubble.in {
           background: #fff;
           color: #111;
-          border-bottom-left-radius: 4px;
+          border-top-left-radius: 0;
         }
         .kbw-bubble.out {
           align-self: flex-end;
-          color: #fff;
-          border-bottom-right-radius: 4px;
-          background: var(--brand, #306FF6);
+          background: #DCF8C6;
+          color: #111;
+          border-top-right-radius: 0;
+        }
+        .kbw-msg-1 {
+          animation: kbw-bubble-in 0.32s cubic-bezier(0.16, 0.84, 0.32, 1.16)
+            0.1s forwards;
+        }
+        .kbw-msg-2 {
+          animation: kbw-bubble-in 0.32s cubic-bezier(0.16, 0.84, 0.32, 1.16)
+            forwards;
         }
         .kbw-bubble-link {
           padding: 8px 10px;
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          background: #fff;
-          color: #111;
-          border: 1px solid var(--mp-border-soft);
-          animation: kbw-pop 0.35s cubic-bezier(0.18, 0.74, 0.32, 1.34);
+          animation: kbw-bubble-in 0.36s cubic-bezier(0.16, 0.84, 0.32, 1.34)
+            forwards;
         }
         .kbw-link-icon {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
+          width: 30px;
+          height: 30px;
+          border-radius: 7px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -332,21 +423,55 @@ function ChatBubbles({
           gap: 1px;
         }
         .kbw-link-amount {
-          font: 600 13px/1.1
+          font: 600 12.5px/1.1
             -apple-system, 'SF Pro', system-ui, sans-serif;
-          color: #111;
         }
         .kbw-link-sub {
-          font-size: 10px;
-          color: rgba(0, 0, 0, 0.5);
+          font-size: 9.5px;
+          color: rgba(0, 0, 0, 0.55);
         }
-        @keyframes kbw-pop {
+        /* WhatsApp-style typing indicator — three dots inside a bubble */
+        .kbw-typing {
+          display: inline-flex;
+          align-items: center;
+          gap: 3px;
+          padding: 9px 11px;
+          background: #fff;
+          border-radius: 9px;
+          border-top-left-radius: 0;
+          box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+          animation: kbw-bubble-in 0.3s ease-out forwards;
+        }
+        .kbw-typing span {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: rgba(0, 0, 0, 0.4);
+          animation: kbw-typing-bounce 1.2s infinite ease-in-out;
+        }
+        .kbw-typing span:nth-child(2) {
+          animation-delay: 0.18s;
+        }
+        .kbw-typing span:nth-child(3) {
+          animation-delay: 0.36s;
+        }
+        @keyframes kbw-bubble-in {
           0% {
-            transform: translateY(8px) scale(0.94);
             opacity: 0;
+            transform: translateY(6px) scale(0.96);
           }
           100% {
+            opacity: 1;
             transform: translateY(0) scale(1);
+          }
+        }
+        @keyframes kbw-typing-bounce {
+          0%, 60%, 100% {
+            transform: translateY(0);
+            opacity: 0.35;
+          }
+          30% {
+            transform: translateY(-3px);
             opacity: 1;
           }
         }
@@ -372,23 +497,32 @@ function KeyboardSurface({
   brand: string;
   onAdvance: () => void;
 }) {
+  // Pasos 0, 1: QWERTY (paso 1 le pone un selector flotando arriba).
+  // Pasos 2, 3: magic keyboard normal con tap targets.
+  // Pasos 4–6: magic keyboard congelado mostrando estado adentro (login
+  //   → loader → success). El paso 4 añade un modal Face ID flotando
+  //   ENCIMA del teclado (no lo reemplaza).
+  const showQwerty = step === 0 || step === 1;
+  const showMagic = step >= 2;
+  const magicAmount = step === 2 ? '0' : '50';
+  const magicStatus: 'idle' | 'login' | 'loading' | 'success' =
+    step === 4 ? 'login' : step === 5 ? 'loading' : step === 6 ? 'success' : 'idle';
+
   return (
     <div className="kbw-surface" style={{['--brand' as string]: brand}}>
-      {/* Messaging-app input bar — always visible, anchors the surface */}
-      <InputBar showSendArrow={false} />
+      <InputBar />
 
-      {/* Step-specific body */}
-      {(step === 0 || step === 1 || step === 6) && (
+      {showQwerty && (
         <Qwerty
           onTapGlobe={step === 0 ? onAdvance : undefined}
           pulseGlobe={step === 0}
         />
       )}
 
-      {(step === 2 || step === 3) && (
+      {showMagic && (
         <div className="kbw-magic-wrap">
           <MagicKeyboard
-            amount={step === 2 ? '0' : '50'}
+            amount={magicAmount}
             color={brand}
             showImessageBar={false}
             recipientName={senderLabel}
@@ -413,24 +547,31 @@ function KeyboardSurface({
               <span className="kbw-tap-pulse" aria-hidden />
             </button>
           )}
+          {magicStatus !== 'idle' && (
+            <MagicStatusPanel
+              status={magicStatus}
+              clientName={clientName}
+              brand={brand}
+              onTap={onAdvance}
+            />
+          )}
         </div>
       )}
 
-      {/* Step 1: keyboard picker pops over the bottom row of the QWERTY,
-          exactly like iOS does when you long-press the globe. */}
+      {/* Selector flota ENCIMA del QWERTY, anclado al globo, como iOS */}
       {step === 1 && (
         <KeyboardSelector chromeLabel={chromeLabel} onSelect={onAdvance} />
       )}
 
-      {/* Overlays cover the whole surface (chat stays untouched above) */}
-      {step === 4 && <FaceIdOverlay clientName={clientName} onTap={onAdvance} />}
-      {step === 5 && <LoaderOverlay brand={brand} onTap={onAdvance} />}
+      {/* Face ID es un modal SOBRE el teclado magic — el teclado queda
+          visible debajo en modo loading. */}
+      {step === 4 && <FaceIdModal clientName={clientName} onTap={onAdvance} />}
 
       <style jsx>{`
         .kbw-surface {
           position: relative;
           background: #fff;
-          border-radius: 22px;
+          border-radius: 0 0 22px 22px;
           overflow: hidden;
           box-shadow: 0 24px 80px rgba(0, 0, 0, 0.1),
             0 8px 24px rgba(0, 0, 0, 0.06);
@@ -507,7 +648,7 @@ function KeyboardSurface({
 
 // --------------------------- Input bar ---------------------------
 
-function InputBar({showSendArrow}: {showSendArrow: boolean}) {
+function InputBar() {
   return (
     <div className="kbw-input" aria-hidden>
       <span className="kbw-input-plus">
@@ -516,19 +657,11 @@ function InputBar({showSendArrow}: {showSendArrow: boolean}) {
         </svg>
       </span>
       <span className="kbw-input-field">Message</span>
-      {showSendArrow ? (
-        <span className="kbw-input-send" aria-hidden>
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-            <path d="M5 12l14-7-4 14-3-7-7-0z" />
-          </svg>
-        </span>
-      ) : (
-        <svg className="kbw-input-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <rect x="9" y="3" width="6" height="13" rx="3" />
-          <path d="M19 11v1a7 7 0 01-14 0v-1" />
-          <line x1="12" y1="20" x2="12" y2="23" />
-        </svg>
-      )}
+      <svg className="kbw-input-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <rect x="9" y="3" width="6" height="13" rx="3" />
+        <path d="M19 11v1a7 7 0 01-14 0v-1" />
+        <line x1="12" y1="20" x2="12" y2="23" />
+      </svg>
       <style jsx>{`
         .kbw-input {
           display: flex;
@@ -569,22 +702,6 @@ function InputBar({showSendArrow}: {showSendArrow: boolean}) {
           height: 16px;
           color: #8e8e93;
           flex-shrink: 0;
-        }
-        .kbw-input-send {
-          width: 26px;
-          height: 26px;
-          border-radius: 50%;
-          background: var(--brand, #306FF6);
-          color: #fff;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-        .kbw-input-send :global(svg) {
-          width: 14px;
-          height: 14px;
-          transform: translateX(-1px);
         }
       `}</style>
     </div>
@@ -846,7 +963,9 @@ function Qwerty({
 }
 
 // --------------------------- Keyboard selector ---------------------------
-// iOS-style picker that pops above the globe. Magic row is the tap target.
+// iOS-style picker that pops up from the globe of the QWERTY. Floats
+// OVER the keyboard — does not replace it — anchored to the bottom-left
+// where the globe sits, mimicking iOS's long-press menu.
 
 function KeyboardSelector({
   chromeLabel,
@@ -856,7 +975,7 @@ function KeyboardSelector({
   onSelect: () => void;
 }) {
   return (
-    <div className="kb-sel-wrap" aria-hidden>
+    <div className="kb-sel-anchor" aria-hidden>
       <div className="kb-sel">
         <div className="kb-sel-row">English (US)</div>
         <div className="kb-sel-row">Español (México)</div>
@@ -871,22 +990,27 @@ function KeyboardSelector({
         </button>
         <div className="kb-sel-row kb-sel-settings">Keyboard Settings…</div>
       </div>
+      <span className="kb-sel-tail" aria-hidden />
       <style jsx>{`
-        .kb-sel-wrap {
-          background: #d1d3da;
-          padding: 12px 14px 16px;
+        .kb-sel-anchor {
+          position: absolute;
+          left: 12px;
+          bottom: 50px;
+          z-index: 8;
+          animation: kb-sel-in 0.22s ease-out;
         }
         .kb-sel {
-          background: rgba(255, 255, 255, 0.92);
+          width: 230px;
+          background: rgba(255, 255, 255, 0.97);
           border-radius: 12px;
           overflow: hidden;
-          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18),
-            0 2px 4px rgba(0, 0, 0, 0.06);
+          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22),
+            0 2px 6px rgba(0, 0, 0, 0.08);
           backdrop-filter: blur(20px);
         }
         .kb-sel-row {
-          padding: 11px 14px;
-          font: 400 14px/1.1
+          padding: 9px 12px;
+          font: 400 12.5px/1.1
             -apple-system, 'SF Pro', system-ui, sans-serif;
           color: #111;
           border-bottom: 1px solid rgba(0, 0, 0, 0.06);
@@ -901,9 +1025,9 @@ function KeyboardSelector({
         .kb-sel-magic {
           width: 100%;
           text-align: left;
-          padding: 11px 14px;
+          padding: 10px 12px;
           color: #111;
-          font: 600 14px/1.1
+          font: 600 12.5px/1.15
             -apple-system, 'SF Pro', system-ui, sans-serif;
           background: color-mix(in srgb, var(--brand, #306FF6) 10%, transparent);
           border: 0;
@@ -914,8 +1038,8 @@ function KeyboardSelector({
           background: color-mix(in srgb, var(--brand, #306FF6) 18%, transparent);
         }
         .kb-sel-icon {
-          width: 24px;
-          height: 24px;
+          width: 22px;
+          height: 22px;
           border-radius: 6px;
           background: var(--brand, #306FF6);
           display: inline-flex;
@@ -943,6 +1067,28 @@ function KeyboardSelector({
         .kb-sel-settings {
           color: #007aff;
         }
+        /* Little tail pointing down at the globe button so it reads as
+           "popped from there" instead of floating randomly. */
+        .kb-sel-tail {
+          position: absolute;
+          left: 14px;
+          bottom: -6px;
+          width: 12px;
+          height: 12px;
+          background: rgba(255, 255, 255, 0.97);
+          transform: rotate(45deg);
+          box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.06);
+        }
+        @keyframes kb-sel-in {
+          from {
+            opacity: 0;
+            transform: translateY(6px) scale(0.96);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
         @keyframes kb-sel-pulse {
           0% {
             opacity: 0.9;
@@ -961,62 +1107,267 @@ function KeyboardSelector({
   );
 }
 
-// --------------------------- Overlays ---------------------------
+// --------------------------- Magic status panel ---------------------------
+// Sits inside the magic keyboard, covering the keys + Send button while
+// leaving the toolbar ($50 pill) and bottom bar (globe/mic) visible.
+// Keeps the keyboard at exactly the same size — only the middle band
+// swaps out. Three variants:
+//   - login   → spinner + "Iniciando sesión en {client}"  (step 4)
+//   - loading → spinner + "Generando liga de pago…"        (step 5)
+//   - success → animated check + "Liga generada"           (step 6)
 
-function FaceIdOverlay({clientName, onTap}: {clientName: string; onTap: () => void}) {
+function MagicStatusPanel({
+  status,
+  clientName,
+  brand,
+  onTap
+}: {
+  status: 'login' | 'loading' | 'success';
+  clientName: string;
+  brand: string;
+  onTap: () => void;
+}) {
+  const {t} = useI18n();
+  const isSuccess = status === 'success';
+  const isLogin = status === 'login';
+  const title = isSuccess
+    ? t('kbw_success_title')
+    : isLogin
+      ? t('kbw_login_title').replace('{client}', clientName)
+      : t('kbw_loader_title');
+  const sub = isSuccess
+    ? t('kbw_success_sub')
+    : isLogin
+      ? t('kbw_login_sub')
+      : t('kbw_loader_sub');
+
   return (
     <button
       type="button"
-      className="kbw-fid"
+      className={`kbw-mstatus ${status}`}
       onClick={onTap}
       aria-label="Continue"
     >
-      <span className="kbw-fid-icon">
-        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <path d="M8 18V12a4 4 0 014-4h6M46 8h6a4 4 0 014 4v6M8 46v6a4 4 0 004 4h6M46 56h6a4 4 0 004-4v-6" />
-          <line x1="22" y1="24" x2="22" y2="30" />
-          <line x1="42" y1="24" x2="42" y2="30" />
-          <path d="M32 26v10l-3 2" />
-          <path d="M22 42c2.5 2 6 3 10 3s7.5-1 10-3" />
-        </svg>
+      <span className="kbw-mstatus-icon">
+        {isSuccess ? (
+          <span className="kbw-check" aria-hidden>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+              <circle cx="12" cy="12" r="11" fill="#22C55E" />
+              <path
+                d="M7 12.5l3.5 3.5L17 9"
+                stroke="#fff"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        ) : (
+          <span
+            className="kbw-spin"
+            style={{borderTopColor: brand}}
+            aria-hidden
+          />
+        )}
       </span>
-      <span className="kbw-fid-title">Face ID</span>
-      <span className="kbw-fid-sub">Iniciando sesión en {clientName}</span>
+      <span className="kbw-mstatus-text">
+        <span className="kbw-mstatus-title">{title}</span>
+        <span className="kbw-mstatus-sub">{sub}</span>
+      </span>
       <style jsx>{`
-        .kbw-fid {
+        /* The keys grid sits between the toolbar (~24px name bar + 44px
+           toolbar = 68px from top) and the bottom bar (~14px padding +
+           18px icons + 8px margin ≈ 40px from bottom). Leaves the $50
+           pill and globe/mic visible above and below. */
+        .kbw-mstatus {
           position: absolute;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.74);
-          backdrop-filter: blur(22px);
-          border: 0;
-          color: #fff;
+          left: 8px;
+          right: 8px;
+          top: 70px;
+          bottom: 38px;
+          background: #fff;
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          border-radius: 10px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 14px;
-          padding: 24px;
+          gap: 10px;
+          padding: 10px 14px;
           cursor: pointer;
-          z-index: 10;
-          animation: kbw-fade 0.25s ease-out;
+          z-index: 6;
+          animation: kbw-mstatus-in 0.28s ease-out;
+        }
+        .kbw-mstatus.success {
+          background: color-mix(in srgb, #22C55E 6%, #fff);
+          border-color: color-mix(in srgb, #22C55E 22%, transparent);
+          animation: kbw-mstatus-in 0.28s ease-out,
+            kbw-mstatus-success-glow 0.6s ease-out 0.1s;
+        }
+        .kbw-spin {
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          border: 2.5px solid rgba(0, 0, 0, 0.08);
+          border-top-color: var(--brand);
+          animation: kbw-spin 0.85s linear infinite;
+        }
+        .kbw-check {
+          width: 32px;
+          height: 32px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          animation: kbw-check-pop 0.42s cubic-bezier(0.18, 0.84, 0.32, 1.34);
+        }
+        .kbw-check :global(svg) {
+          width: 100%;
+          height: 100%;
+        }
+        .kbw-mstatus-text {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 2px;
+          text-align: center;
+        }
+        .kbw-mstatus-title {
+          font: 600 12px/1.2
+            -apple-system, 'SF Pro', system-ui, sans-serif;
+          color: #111;
+        }
+        .kbw-mstatus-sub {
+          font: 400 10px/1.35
+            -apple-system, 'SF Pro', system-ui, sans-serif;
+          color: rgba(0, 0, 0, 0.55);
+        }
+        @keyframes kbw-spin {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes kbw-mstatus-in {
+          from {
+            opacity: 0;
+            transform: scale(0.96);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        @keyframes kbw-check-pop {
+          0% {
+            transform: scale(0.2);
+            opacity: 0;
+          }
+          60% {
+            transform: scale(1.15);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+        @keyframes kbw-mstatus-success-glow {
+          0% {
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+          }
+          100% {
+            box-shadow: 0 0 0 16px rgba(34, 197, 94, 0);
+          }
+        }
+      `}</style>
+    </button>
+  );
+}
+
+// --------------------------- Face ID modal ---------------------------
+// Floats centered over the magic keyboard. Does NOT cover the chat
+// above and only dims the keyboard underneath — that keyboard is in its
+// "Iniciando sesión" loading state and stays visible.
+
+function FaceIdModal({clientName, onTap}: {clientName: string; onTap: () => void}) {
+  return (
+    <div className="kbw-fid-wrap" onClick={onTap} role="presentation">
+      <span className="kbw-fid-scrim" aria-hidden />
+      <button
+        type="button"
+        className="kbw-fid-card"
+        onClick={onTap}
+        aria-label="Continue"
+      >
+        <span className="kbw-fid-icon">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M8 18V12a4 4 0 014-4h6M46 8h6a4 4 0 014 4v6M8 46v6a4 4 0 004 4h6M46 56h6a4 4 0 004-4v-6" />
+            <line x1="22" y1="24" x2="22" y2="30" />
+            <line x1="42" y1="24" x2="42" y2="30" />
+            <path d="M32 26v10l-3 2" />
+            <path d="M22 42c2.5 2 6 3 10 3s7.5-1 10-3" />
+          </svg>
+        </span>
+        <span className="kbw-fid-title">Face ID</span>
+        <span className="kbw-fid-sub">Iniciando sesión en {clientName}</span>
+      </button>
+      <style jsx>{`
+        .kbw-fid-wrap {
+          position: absolute;
+          inset: 0;
+          z-index: 20;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 14px;
+          animation: kbw-fade 0.22s ease-out;
+        }
+        .kbw-fid-scrim {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.42);
+          backdrop-filter: blur(2px);
+        }
+        .kbw-fid-card {
+          position: relative;
+          width: 220px;
+          background: rgba(20, 22, 28, 0.96);
+          border-radius: 18px;
+          border: 0;
+          padding: 18px 16px 16px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+          color: #fff;
+          cursor: pointer;
+          box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45),
+            0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+          animation: kbw-fid-pop 0.28s cubic-bezier(0.16, 0.84, 0.32, 1.16);
         }
         .kbw-fid-icon :global(svg) {
-          width: 64px;
-          height: 64px;
+          width: 44px;
+          height: 44px;
           color: #fff;
-          animation: kbw-scan 1.6s ease-in-out infinite;
+          animation: kbw-fid-scan 1.6s ease-in-out infinite;
         }
         .kbw-fid-title {
-          font: 600 17px/1
+          font: 600 14px/1
             -apple-system, 'SF Pro', system-ui, sans-serif;
         }
         .kbw-fid-sub {
-          font: 400 13px/1.35
+          font: 400 11px/1.35
             -apple-system, 'SF Pro', system-ui, sans-serif;
           color: rgba(255, 255, 255, 0.7);
           text-align: center;
         }
-        @keyframes kbw-scan {
+        @keyframes kbw-fid-pop {
+          0% {
+            opacity: 0;
+            transform: scale(0.86);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        @keyframes kbw-fid-scan {
           0%, 100% { opacity: 0.55; }
           50% { opacity: 1; }
         }
@@ -1025,70 +1376,6 @@ function FaceIdOverlay({clientName, onTap}: {clientName: string; onTap: () => vo
           to { opacity: 1; }
         }
       `}</style>
-    </button>
-  );
-}
-
-function LoaderOverlay({brand, onTap}: {brand: string; onTap: () => void}) {
-  const {t} = useI18n();
-  return (
-    <button
-      type="button"
-      className="kbw-load"
-      onClick={onTap}
-      aria-label="Continue"
-    >
-      <span
-        className="kbw-load-spin"
-        style={{borderTopColor: brand}}
-        aria-hidden
-      />
-      <span className="kbw-load-title">{t('kbw_loader_title')}</span>
-      <span className="kbw-load-sub">{t('kbw_loader_sub')}</span>
-      <style jsx>{`
-        .kbw-load {
-          position: absolute;
-          inset: 0;
-          background: rgba(8, 12, 24, 0.85);
-          backdrop-filter: blur(20px);
-          border: 0;
-          color: #fff;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 14px;
-          padding: 24px;
-          cursor: pointer;
-          z-index: 10;
-          animation: kbw-fade 0.2s ease-out;
-        }
-        .kbw-load-spin {
-          width: 38px;
-          height: 38px;
-          border-radius: 50%;
-          border: 3px solid rgba(255, 255, 255, 0.16);
-          border-top-color: #fff;
-          animation: kbw-spin 0.9s linear infinite;
-        }
-        .kbw-load-title {
-          font: 600 14px/1
-            -apple-system, 'SF Pro', system-ui, sans-serif;
-        }
-        .kbw-load-sub {
-          font: 400 11px/1.4
-            -apple-system, 'SF Pro', system-ui, sans-serif;
-          color: rgba(255, 255, 255, 0.65);
-          text-align: center;
-        }
-        @keyframes kbw-spin {
-          to { transform: rotate(360deg); }
-        }
-        @keyframes kbw-fade {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-      `}</style>
-    </button>
+    </div>
   );
 }

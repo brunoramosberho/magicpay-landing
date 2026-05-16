@@ -112,10 +112,15 @@ export const i18n = {
 
     // 08 Keyboard walkthrough — captions for each step (0..6)
     kbw_visitor_fallback: 'Bruno R',
+    kbw_chat_contact: 'María',
     kbw_chat_via: 'vía',
     kbw_chat_msg1: '¿Me prestas para la comida? 🍣',
     kbw_chat_msg2: 'Son $50 MXN',
     kbw_restart_hint: 'Volver al inicio (limpia la conversación)',
+    kbw_login_title: 'Iniciando sesión en {client}',
+    kbw_login_sub: 'Autenticación dentro del app del banco',
+    kbw_success_title: 'Liga generada',
+    kbw_success_sub: 'Enviando al chat…',
     kbw_step_0:
       'Llega un mensaje pidiendo una transferencia. El teclado del sistema (QWERTY) está activo en WhatsApp.',
     kbw_step_1:
@@ -425,10 +430,15 @@ export const i18n = {
 
     // 08 Keyboard walkthrough — captions for each step (0..6)
     kbw_visitor_fallback: 'Bruno R',
+    kbw_chat_contact: 'María',
     kbw_chat_via: 'via',
     kbw_chat_msg1: 'Can you cover lunch? 🍣',
     kbw_chat_msg2: "It's $50 MXN",
     kbw_restart_hint: 'Start over (clears the conversation)',
+    kbw_login_title: 'Signing in to {client}',
+    kbw_login_sub: "Authentication inside the bank's app",
+    kbw_success_title: 'Link generated',
+    kbw_success_sub: 'Sending to the chat…',
     kbw_step_0:
       'A message asks for a transfer. The default QWERTY keyboard is active in WhatsApp.',
     kbw_step_1:
