@@ -478,17 +478,27 @@ function DeckShellInner({
           flex-direction: column;
           background: var(--mp-bg);
           overflow: hidden;
+          /* Anchor for the absolutely-positioned header + nav. They sit
+             above .deck-main with a soft frosted bg so dark slides
+             (videos, full-bleed images) bleed slightly through. */
+          position: relative;
         }
         .deck-header {
           --deck-header-h: 64px;
           height: 64px;
-          flex: 0 0 64px;
           padding: 0 clamp(20px, 3vw, 40px);
           display: flex;
           align-items: center;
           justify-content: space-between;
-          border-bottom: 1px solid var(--mp-border-soft);
-          background: var(--mp-bg);
+          border-bottom: 1px solid
+            color-mix(in srgb, var(--mp-border-soft) 60%, transparent);
+          background: color-mix(in srgb, var(--mp-bg) 78%, transparent);
+          backdrop-filter: blur(18px) saturate(180%);
+          -webkit-backdrop-filter: blur(18px) saturate(180%);
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
           z-index: 10;
         }
         .deck-header-mark {
@@ -573,13 +583,20 @@ function DeckShellInner({
         .deck-nav {
           --deck-nav-h: 56px;
           height: 56px;
-          flex: 0 0 56px;
           padding: 0 clamp(16px, 3vw, 32px);
           display: flex;
           align-items: center;
           justify-content: space-between;
-          border-top: 1px solid var(--mp-border-soft);
-          background: var(--mp-bg);
+          border-top: 1px solid
+            color-mix(in srgb, var(--mp-border-soft) 60%, transparent);
+          background: color-mix(in srgb, var(--mp-bg) 78%, transparent);
+          backdrop-filter: blur(18px) saturate(180%);
+          -webkit-backdrop-filter: blur(18px) saturate(180%);
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 10;
           gap: 16px;
         }
         .nav-btn {
@@ -639,6 +656,17 @@ function DeckShellInner({
            deck-main becomes a vertical scroll surface. The chrome shrinks so
            the slide owns as much vertical real estate as possible. */
         @media (max-width: 640px) {
+          /* On phones we drop the frosted overlay and let the chrome sit
+             in normal flex flow — each slide already hardcodes its mobile
+             padding (18–20px) which would clash with the desktop overlay
+             padding. Bonus: less work for the GPU on low-end phones. */
+          .deck-header,
+          .deck-nav {
+            position: static;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            background: var(--mp-bg);
+          }
           .deck-header {
             --deck-header-h: 48px;
             height: 48px;
