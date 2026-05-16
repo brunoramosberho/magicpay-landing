@@ -119,8 +119,7 @@ export const i18n = {
     kbw_restart_hint: 'Volver al inicio (limpia la conversación)',
     kbw_login_title: 'Iniciando sesión en {client}',
     kbw_login_sub: 'Autenticación dentro del app del banco',
-    kbw_success_title: 'Liga generada',
-    kbw_success_sub: 'Enviando al chat…',
+    kbw_success_title: 'Liga generada exitosamente',
     kbw_step_0:
       'Llega un mensaje pidiendo una transferencia. El teclado del sistema (QWERTY) está activo en WhatsApp.',
     kbw_step_1:
@@ -437,8 +436,7 @@ export const i18n = {
     kbw_restart_hint: 'Start over (clears the conversation)',
     kbw_login_title: 'Signing in to {client}',
     kbw_login_sub: "Authentication inside the bank's app",
-    kbw_success_title: 'Link generated',
-    kbw_success_sub: 'Sending to the chat…',
+    kbw_success_title: 'Link generated successfully',
     kbw_step_0:
       'A message asks for a transfer. The default QWERTY keyboard is active in WhatsApp.',
     kbw_step_1:

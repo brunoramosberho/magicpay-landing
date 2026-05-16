@@ -12,7 +12,8 @@ export function MagicKeyboard({
   showImessageBar = true,
   showNameBar = true,
   recipientName = 'Jonathan Moore',
-  recipientSub = 'Main Account'
+  recipientSub = 'Main Account',
+  keysSlot
 }: {
   amount?: string;
   color?: string;
@@ -22,6 +23,11 @@ export function MagicKeyboard({
   showNameBar?: boolean;
   recipientName?: string;
   recipientSub?: string;
+  /** When provided, replaces the numeric keys grid + Send button while
+   *  keeping the toolbar (back/dock/$/MXN) and the bottom bar (globe,
+   *  mic) intact. Use for in-keyboard loading or success states that
+   *  should preserve the keyboard's exact proportions. */
+  keysSlot?: React.ReactNode;
 }) {
   const accent = color ?? 'var(--brand)';
   const onAccent = onPrimary ?? '#FFFFFF';
@@ -81,6 +87,13 @@ export function MagicKeyboard({
             </svg>
           </div>
         </div>
+        {keysSlot ? (
+          /* Same vertical footprint as the keys grid (4 × 30px + 3 × 4px gap
+             = 132) + send (4 + 32) so swapping content keeps the keyboard
+             the exact same height. */
+          <div className="kb-keys-slot">{keysSlot}</div>
+        ) : (
+          <>
         <div className="kb-keys">
           {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0'].map((k) => (
             <div className="kb-key" key={k}>
@@ -100,6 +113,8 @@ export function MagicKeyboard({
           </svg>
           Send
         </div>
+          </>
+        )}
         <div className="kb-bottom-bar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <circle cx="12" cy="12" r="10" />
@@ -248,6 +263,17 @@ export function MagicKeyboard({
           grid-template-columns: repeat(3, 1fr);
           gap: 4px;
           margin: 1px 4px 0;
+        }
+        /* Replacement slot: occupies the exact same vertical space as
+           the keys grid + Send button (4 × 30px + 3 × 4px gap + 1px
+           margin + 4px send-margin + 32px send = 172px) so swapping
+           content keeps the keyboard's total height stable. */
+        .kb-keys-slot {
+          margin: 1px 4px 0;
+          height: 167px;
+          display: flex;
+          align-items: stretch;
+          justify-content: stretch;
         }
         .kb-key {
           height: 30px;

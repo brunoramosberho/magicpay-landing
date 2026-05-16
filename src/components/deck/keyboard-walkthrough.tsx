@@ -241,9 +241,11 @@ export function KeyboardWalkthrough({
 
 // --------------------------- Chat panel ---------------------------
 // Mock WhatsApp screen: fixed header (avatar + contact name + WhatsApp
-// label) and a conversation body with bubbles that animate in on the
-// first step. Tinted chat background so the bubbles read as bubbles and
-// don't blend into the slide.
+// label) and a conversation body with bubbles that auto-animate in on
+// step 0 (typing → msg1 → typing → msg2). Tinted chat background so
+// the bubbles read as bubbles and don't blend into the slide.
+
+type ChatStage = 'typing1' | 'msg1' | 'typing2' | 'msg2';
 
 function ChatPanel({
   step,
@@ -255,14 +257,39 @@ function ChatPanel({
   brand: string;
 }) {
   const {t} = useI18n();
-  const showTyping = step === 0;
+  const [chatStage, setChatStage] = useState<ChatStage>(
+    step === 0 ? 'typing1' : 'msg2'
+  );
+
+  // Auto-play the typing sequence whenever we land on step 0 (initial
+  // mount, backward nav, or restart). Other steps jump to the final
+  // state so both bubbles are always there as context.
+  useEffect(() => {
+    if (step !== 0) {
+      setChatStage('msg2');
+      return;
+    }
+    setChatStage('typing1');
+    const t1 = window.setTimeout(() => setChatStage('msg1'), 1100);
+    const t2 = window.setTimeout(() => setChatStage('typing2'), 1900);
+    const t3 = window.setTimeout(() => setChatStage('msg2'), 3300);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+      window.clearTimeout(t3);
+    };
+  }, [step]);
+
+  const showMsg1 =
+    chatStage === 'msg1' || chatStage === 'typing2' || chatStage === 'msg2';
+  const showMsg2 = chatStage === 'msg2';
+  const showTyping = chatStage === 'typing1' || chatStage === 'typing2';
   const linkSent = step === 6;
+
   return (
     <div className="kbw-chat" aria-hidden>
       <div className="kbw-chat-header">
         <span className="kbw-chat-avatar" aria-hidden>
-          {/* Soft warm gradient with the contact's initial — enough chat
-              context without a real photo we don't have rights to. */}
           M
         </span>
         <div className="kbw-chat-id">
@@ -274,15 +301,22 @@ function ChatPanel({
         </div>
       </div>
       <div className={`kbw-chat-body ${linkSent ? 'has-link' : ''}`}>
-        <div className="kbw-bubble in kbw-msg-1">{t('kbw_chat_msg1')}</div>
-        {showTyping ? (
-          <div className="kbw-typing" aria-label="typing">
+        {showMsg1 && (
+          <div key="msg1" className="kbw-bubble in kbw-anim-in">
+            {t('kbw_chat_msg1')}
+          </div>
+        )}
+        {showTyping && (
+          <div key="typing" className="kbw-typing kbw-anim-in" aria-label="typing">
             <span />
             <span />
             <span />
           </div>
-        ) : (
-          <div className="kbw-bubble in kbw-msg-2">{t('kbw_chat_msg2')}</div>
+        )}
+        {showMsg2 && (
+          <div key="msg2" className="kbw-bubble in kbw-anim-in">
+            {t('kbw_chat_msg2')}
+          </div>
         )}
         {linkSent && (
           <div className="kbw-bubble out kbw-bubble-link">
@@ -373,7 +407,6 @@ function ChatPanel({
             -apple-system, 'SF Pro', system-ui, sans-serif;
           max-width: 80%;
           box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
-          opacity: 0;
         }
         .kbw-bubble.in {
           background: #fff;
@@ -386,21 +419,19 @@ function ChatPanel({
           color: #111;
           border-top-right-radius: 0;
         }
-        .kbw-msg-1 {
-          animation: kbw-bubble-in 0.32s cubic-bezier(0.16, 0.84, 0.32, 1.16)
-            0.1s forwards;
-        }
-        .kbw-msg-2 {
-          animation: kbw-bubble-in 0.32s cubic-bezier(0.16, 0.84, 0.32, 1.16)
-            forwards;
+        /* Each bubble / typing element pops in when it mounts. The
+           sequence is driven by chatStage transitions in JS, not by
+           CSS delays — keys force a fresh mount so the animation
+           re-runs every time. */
+        .kbw-anim-in {
+          animation: kbw-bubble-in 0.3s cubic-bezier(0.16, 0.84, 0.32, 1.16)
+            both;
         }
         .kbw-bubble-link {
           padding: 8px 10px;
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          animation: kbw-bubble-in 0.36s cubic-bezier(0.16, 0.84, 0.32, 1.34)
-            forwards;
         }
         .kbw-link-icon {
           width: 30px;
@@ -526,6 +557,16 @@ function KeyboardSurface({
             color={brand}
             showImessageBar={false}
             recipientName={senderLabel}
+            keysSlot={
+              magicStatus === 'idle' ? undefined : (
+                <MagicSlotStatus
+                  status={magicStatus}
+                  clientName={clientName}
+                  brand={brand}
+                  onTap={onAdvance}
+                />
+              )
+            }
           />
           {step === 2 && (
             <button
@@ -546,14 +587,6 @@ function KeyboardSurface({
             >
               <span className="kbw-tap-pulse" aria-hidden />
             </button>
-          )}
-          {magicStatus !== 'idle' && (
-            <MagicStatusPanel
-              status={magicStatus}
-              clientName={clientName}
-              brand={brand}
-              onTap={onAdvance}
-            />
           )}
         </div>
       )}
@@ -1107,16 +1140,17 @@ function KeyboardSelector({
   );
 }
 
-// --------------------------- Magic status panel ---------------------------
-// Sits inside the magic keyboard, covering the keys + Send button while
-// leaving the toolbar ($50 pill) and bottom bar (globe/mic) visible.
-// Keeps the keyboard at exactly the same size — only the middle band
-// swaps out. Three variants:
+// --------------------------- Magic keys slot ---------------------------
+// Content for the MagicKeyboard's `keysSlot` — replaces the numeric keys
+// grid + Send button while the keyboard itself keeps its toolbar and
+// globe/mic row visible. The slot reserves the exact same height as the
+// keys + Send (167px) so the keyboard stays the same size. Three
+// variants:
 //   - login   → spinner + "Iniciando sesión en {client}"  (step 4)
 //   - loading → spinner + "Generando liga de pago…"        (step 5)
 //   - success → animated check + "Liga generada"           (step 6)
 
-function MagicStatusPanel({
+function MagicSlotStatus({
   status,
   clientName,
   brand,
@@ -1136,7 +1170,7 @@ function MagicStatusPanel({
       ? t('kbw_login_title').replace('{client}', clientName)
       : t('kbw_loader_title');
   const sub = isSuccess
-    ? t('kbw_success_sub')
+    ? null
     : isLogin
       ? t('kbw_login_sub')
       : t('kbw_loader_sub');
@@ -1144,11 +1178,11 @@ function MagicStatusPanel({
   return (
     <button
       type="button"
-      className={`kbw-mstatus ${status}`}
+      className={`kbw-slot ${status}`}
       onClick={onTap}
       aria-label="Continue"
     >
-      <span className="kbw-mstatus-icon">
+      <span className="kbw-slot-icon">
         {isSuccess ? (
           <span className="kbw-check" aria-hidden>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -1156,7 +1190,7 @@ function MagicStatusPanel({
               <path
                 d="M7 12.5l3.5 3.5L17 9"
                 stroke="#fff"
-                strokeWidth="2.4"
+                strokeWidth="2.6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -1165,86 +1199,87 @@ function MagicStatusPanel({
         ) : (
           <span
             className="kbw-spin"
-            style={{borderTopColor: brand}}
+            style={{
+              borderTopColor: brand,
+              borderRightColor: brand
+            }}
             aria-hidden
           />
         )}
       </span>
-      <span className="kbw-mstatus-text">
-        <span className="kbw-mstatus-title">{title}</span>
-        <span className="kbw-mstatus-sub">{sub}</span>
+      <span className="kbw-slot-text">
+        <span className="kbw-slot-title">{title}</span>
+        {sub && <span className="kbw-slot-sub">{sub}</span>}
       </span>
       <style jsx>{`
-        /* The keys grid sits between the toolbar (~24px name bar + 44px
-           toolbar = 68px from top) and the bottom bar (~14px padding +
-           18px icons + 8px margin ≈ 40px from bottom). Leaves the $50
-           pill and globe/mic visible above and below. */
-        .kbw-mstatus {
-          position: absolute;
-          left: 8px;
-          right: 8px;
-          top: 70px;
-          bottom: 38px;
+        .kbw-slot {
+          width: 100%;
+          height: 100%;
           background: #fff;
-          border: 1px solid rgba(0, 0, 0, 0.06);
+          border: 1px solid rgba(0, 0, 0, 0.05);
           border-radius: 10px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 10px;
-          padding: 10px 14px;
+          gap: 14px;
+          padding: 16px 18px;
           cursor: pointer;
-          z-index: 6;
-          animation: kbw-mstatus-in 0.28s ease-out;
+          animation: kbw-slot-in 0.28s ease-out;
         }
-        .kbw-mstatus.success {
-          background: color-mix(in srgb, #22C55E 6%, #fff);
-          border-color: color-mix(in srgb, #22C55E 22%, transparent);
-          animation: kbw-mstatus-in 0.28s ease-out,
-            kbw-mstatus-success-glow 0.6s ease-out 0.1s;
+        .kbw-slot.success {
+          background: color-mix(in srgb, #22C55E 7%, #fff);
+          border-color: color-mix(in srgb, #22C55E 24%, transparent);
+          animation: kbw-slot-in 0.28s ease-out,
+            kbw-slot-success-glow 0.7s ease-out 0.1s;
         }
-        .kbw-spin {
-          width: 26px;
-          height: 26px;
-          border-radius: 50%;
-          border: 2.5px solid rgba(0, 0, 0, 0.08);
-          border-top-color: var(--brand);
-          animation: kbw-spin 0.85s linear infinite;
-        }
-        .kbw-check {
-          width: 32px;
-          height: 32px;
+        .kbw-slot-icon {
           display: inline-flex;
           align-items: center;
           justify-content: center;
+        }
+        .kbw-spin {
+          display: block;
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          border: 3px solid rgba(0, 0, 0, 0.1);
+          /* borderTopColor + borderRightColor inlined to use brand */
+          animation: kbw-spin 0.85s linear infinite;
+        }
+        .kbw-check {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
           animation: kbw-check-pop 0.42s cubic-bezier(0.18, 0.84, 0.32, 1.34);
         }
         .kbw-check :global(svg) {
           width: 100%;
           height: 100%;
         }
-        .kbw-mstatus-text {
+        .kbw-slot-text {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 2px;
+          gap: 4px;
           text-align: center;
         }
-        .kbw-mstatus-title {
-          font: 600 12px/1.2
+        .kbw-slot-title {
+          font: 600 13px/1.25
             -apple-system, 'SF Pro', system-ui, sans-serif;
           color: #111;
         }
-        .kbw-mstatus-sub {
-          font: 400 10px/1.35
+        .kbw-slot-sub {
+          font: 400 11px/1.4
             -apple-system, 'SF Pro', system-ui, sans-serif;
           color: rgba(0, 0, 0, 0.55);
         }
         @keyframes kbw-spin {
           to { transform: rotate(360deg); }
         }
-        @keyframes kbw-mstatus-in {
+        @keyframes kbw-slot-in {
           from {
             opacity: 0;
             transform: scale(0.96);
@@ -1267,7 +1302,7 @@ function MagicStatusPanel({
             transform: scale(1);
           }
         }
-        @keyframes kbw-mstatus-success-glow {
+        @keyframes kbw-slot-success-glow {
           0% {
             box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
           }
