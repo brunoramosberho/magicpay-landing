@@ -5,11 +5,12 @@
 // with a replay button. Slide 11 (tap) shows a static image until the user provides video.
 // Slide 13 (white-label) is a live customizer matching mgic.me/docs#customization.
 
-import {useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useI18n} from '../i18n-context';
 import {eyebrow} from '@/lib/deck/eyebrow';
 import {VideoPhone} from '../video-phone';
 import {MagicKeyboard} from '../magic-keyboard';
+import {KeyboardWalkthrough} from '../keyboard-walkthrough';
 import {ClaimDemo} from '../claim-demo';
 import type {SlideContext, SlideDef} from '../deck-shell';
 
@@ -192,24 +193,91 @@ function DemoShell({
 export const KeyboardDemoSlide: SlideDef = {
   id: 'keyboard-demo',
   variant: 'light',
-  Body: ({client, index}: SlideContext) => {
+  Body: ({client, index, visitorName}: SlideContext) => {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
+    const chromeLabel = client.display_name ?? client.name;
+    const brand = client.brand_color ?? '#306FF6';
     return (
-      <DemoShell
-        label={eyebrow(index, t('kb_label'))}
-        kicker={t('kb_kicker')}
-        title={
-          isRegulator ? t('kb_title_regulator') : fillClient(t('kb_title'))
-        }
-        caption={
-          isRegulator
-            ? t('kb_explanation_regulator')
-            : fillClient(t('kb_explanation'))
-        }
-        right={<VideoPhone src="/deck/videos/keyboard.mp4" />}
-      />
+      <div className="kb-frame">
+        <div className="kb-left">
+          <p className="deck-eyebrow">{eyebrow(index, t('kb_label'))}</p>
+          <p className="deck-kicker">{t('kb_kicker')}</p>
+          <h1 className="deck-title-1">
+            {isRegulator ? t('kb_title_regulator') : fillClient(t('kb_title'))}
+          </h1>
+          <p className="deck-lede">
+            {isRegulator
+              ? t('kb_explanation_regulator')
+              : fillClient(t('kb_explanation'))}
+          </p>
+        </div>
+        <div className="kb-right">
+          <KeyboardWalkthrough
+            clientName={client.name}
+            chromeLabel={chromeLabel}
+            visitorName={visitorName}
+            brand={brand}
+          />
+        </div>
+        <style jsx>{`
+          .kb-frame {
+            padding: clamp(28px, 3.5vh, 56px) var(--pad-x) clamp(20px, 2.5vh, 36px);
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+            gap: clamp(32px, 4vw, 64px);
+            align-items: start;
+            height: 100%;
+            min-height: 0;
+          }
+          .kb-left {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-width: 0;
+            padding-top: clamp(16px, 3vh, 40px);
+          }
+          .kb-right {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            height: 100%;
+            min-height: 0;
+          }
+          @media (max-width: 900px) {
+            .kb-frame {
+              grid-template-columns: 1fr;
+            }
+          }
+          @media (max-width: 640px) {
+            .kb-frame {
+              padding: 20px 18px 28px;
+              gap: 18px;
+              height: auto;
+            }
+            .kb-left {
+              padding-top: 0;
+              gap: 8px;
+            }
+            .kb-left :global(.deck-kicker) {
+              font-size: 16px;
+              margin-bottom: 2px;
+            }
+            .kb-left :global(.deck-title-1) {
+              font-size: clamp(22px, 6.5vw, 28px);
+              line-height: 1.18;
+            }
+            .kb-left :global(.deck-lede) {
+              font-size: 14px;
+              line-height: 1.45;
+            }
+            .kb-right {
+              height: auto;
+            }
+          }
+        `}</style>
+      </div>
     );
   }
 };
@@ -636,6 +704,40 @@ function Customizer({
 }) {
   const [primary, setPrimary] = useState(initialColor);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  // Auto-cycle through the preset palette so the slide animates itself
+  // — the presenter doesn't have to keep clicking to demo the live
+  // theming. Pauses for ~8s after any manual pick so the audience can
+  // sit with a specific colour, then resumes from there.
+  const [autoCycle, setAutoCycle] = useState(true);
+  const pauseTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!autoCycle) return;
+    const id = window.setInterval(() => {
+      setPrimary((prev) => {
+        const i = PRESETS.findIndex(
+          (p) => p.toLowerCase() === prev.toLowerCase()
+        );
+        return PRESETS[(i + 1) % PRESETS.length];
+      });
+    }, 3000);
+    return () => window.clearInterval(id);
+  }, [autoCycle]);
+
+  useEffect(() => {
+    return () => {
+      if (pauseTimerRef.current) window.clearTimeout(pauseTimerRef.current);
+    };
+  }, []);
+
+  const pickColor = (c: string) => {
+    setPrimary(c);
+    setAutoCycle(false);
+    if (pauseTimerRef.current) window.clearTimeout(pauseTimerRef.current);
+    pauseTimerRef.current = window.setTimeout(() => {
+      setAutoCycle(true);
+    }, 8000);
+  };
 
   return (
     <div className="cust">
@@ -644,12 +746,12 @@ function Customizer({
           <div className="cust-label">COLORES</div>
           <div className="cust-row">
             <span className="cust-tag">LIGHT</span>
-            <ColorInput value={primary} onChange={setPrimary} />
+            <ColorInput value={primary} onChange={pickColor} />
             <ColorInput value="#FFFFFF" disabled onChange={() => {}} />
           </div>
           <div className="cust-row">
             <span className="cust-tag">DARK</span>
-            <ColorInput value={primary} onChange={setPrimary} />
+            <ColorInput value={primary} onChange={pickColor} />
             <ColorInput value="#FFFFFF" disabled onChange={() => {}} />
           </div>
           <div className="cust-row-meta">
@@ -664,7 +766,7 @@ function Customizer({
               <button
                 key={c}
                 className={`preset ${c.toLowerCase() === primary.toLowerCase() ? 'active' : ''}`}
-                onClick={() => setPrimary(c)}
+                onClick={() => pickColor(c)}
                 aria-label={`Set color ${c}`}
               >
                 <span className="dot" style={{background: c}} />
@@ -933,5 +1035,285 @@ function ColorInput({
         }
       `}</style>
     </label>
+  );
+}
+
+// ------------------------------------------------------------
+// Full deck only — silent video intro that plays before the
+// interactive demo. Landscape clip on desktop, portrait on phones.
+// Full-bleed video + a small slide-number eyebrow + kicker pinned to
+// the top-left. Same `dark + bare` chrome as the Tap slide.
+// ------------------------------------------------------------
+export const KeyboardIntroSlide: SlideDef = {
+  id: 'keyboard-intro',
+  variant: 'dark',
+  bare: true,
+  Body: ({client, index}: SlideContext) => {
+    const {t} = useI18n();
+    const isRegulator = client.kind === 'regulator';
+    const fillClient = (s: string) => s.replaceAll('{client}', client.name);
+    return (
+      <div className="kbi-frame">
+        <OrientationVideo
+          landscapeSrc="/deck/videos/keyboard-intro-landscape.mp4"
+          portraitSrc="/deck/videos/keyboard-intro-portrait.mp4"
+        />
+        <div className="kbi-scrim" aria-hidden />
+        <div className="kbi-title">
+          <p className="kbi-eyebrow">{eyebrow(index, t('kb_label'))}</p>
+          <h1 className="kbi-kicker">
+            {isRegulator ? t('kb_title_regulator') : fillClient(t('kb_title'))}
+          </h1>
+        </div>
+        <style jsx global>{`
+          [data-slide-id='keyboard-intro'] {
+            padding: 0 !important;
+          }
+        `}</style>
+        <style jsx>{`
+          .kbi-frame {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            background: #000;
+          }
+          .kbi-scrim {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+              180deg,
+              rgba(0, 0, 0, 0.5) 0%,
+              rgba(0, 0, 0, 0.18) 25%,
+              rgba(0, 0, 0, 0) 60%
+            );
+            pointer-events: none;
+            z-index: 1;
+          }
+          .kbi-title {
+            position: absolute;
+            top: clamp(20px, 3.5vh, 40px);
+            left: clamp(20px, 3vw, 44px);
+            color: #fff;
+            z-index: 2;
+            max-width: min(70%, 520px);
+          }
+          .kbi-eyebrow {
+            color: rgba(255, 255, 255, 0.75);
+            font: 500 12px/1 var(--mp-font-body);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin: 0 0 8px;
+          }
+          .kbi-kicker {
+            font: 500 clamp(20px, 2.2vw, 32px) / 1.18 var(--mp-font-display);
+            margin: 0;
+            letter-spacing: -0.01em;
+            color: #fff;
+          }
+          @media (max-width: 640px) {
+            .kbi-title {
+              top: 16px;
+              left: 16px;
+              max-width: calc(100% - 32px);
+            }
+            .kbi-kicker {
+              font-size: clamp(18px, 5.5vw, 22px);
+            }
+          }
+        `}</style>
+      </div>
+    );
+  }
+};
+
+// ------------------------------------------------------------
+// Short deck only — replaces the interactive walkthrough with a
+// single landscape clip styled like the Tap slide. Same eyebrow /
+// kicker / title / caption block, same scrim, same mobile rotation.
+// ------------------------------------------------------------
+export const KeyboardVideoLiveSlide: SlideDef = {
+  id: 'keyboard-live',
+  variant: 'dark',
+  bare: true,
+  Body: ({client, index}: SlideContext) => {
+    const {t} = useI18n();
+    const isRegulator = client.kind === 'regulator';
+    const fillClient = (s: string) => s.replaceAll('{client}', client.name);
+    return (
+      <div className="kbv-frame">
+        <video
+          className="kbv-video"
+          src="/deck/videos/keyboard-live.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden
+        />
+        <div className="kbv-scrim" aria-hidden />
+        <div className="kbv-content">
+          <p className="deck-eyebrow kbv-eyebrow">{eyebrow(index, t('kb_label'))}</p>
+          <p className="deck-kicker kbv-kicker">{t('kb_kicker')}</p>
+          <h1 className="kbv-title">
+            {isRegulator ? t('kb_title_regulator') : fillClient(t('kb_title'))}
+          </h1>
+          <p className="kbv-caption">
+            {isRegulator
+              ? t('kb_explanation_regulator')
+              : fillClient(t('kb_explanation'))}
+          </p>
+        </div>
+        <style jsx global>{`
+          [data-slide-id='keyboard-live'] {
+            padding: 0 !important;
+          }
+        `}</style>
+        <style jsx>{`
+          .kbv-frame {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            background: #000;
+          }
+          .kbv-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          .kbv-scrim {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+              90deg,
+              rgba(0, 0, 0, 0.7) 0%,
+              rgba(0, 0, 0, 0.45) 45%,
+              rgba(0, 0, 0, 0.15) 80%,
+              rgba(0, 0, 0, 0) 100%
+            );
+            pointer-events: none;
+          }
+          .kbv-content {
+            position: relative;
+            height: 100%;
+            padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 720px;
+            color: #fff;
+          }
+          .kbv-eyebrow {
+            color: rgba(255, 255, 255, 0.7);
+          }
+          .kbv-kicker {
+            color: var(--brand);
+            margin: 0;
+          }
+          .kbv-title {
+            font: 500 clamp(36px, 5vw, 64px) / 1.05 var(--mp-font-display);
+            letter-spacing: -0.02em;
+            margin: 12px 0 18px;
+            color: #fff;
+          }
+          .kbv-caption {
+            font: 400 clamp(15px, 1.3vw, 20px) / 1.5 var(--mp-font-body);
+            color: rgba(255, 255, 255, 0.85);
+            margin: 0;
+            max-width: 540px;
+          }
+          @media (max-width: 640px) {
+            /* Landscape source on a portrait viewport: same rotation
+               trick the Tap slide uses so the action fills the width
+               and we get small black bars instead of cover-cropping. */
+            .kbv-video {
+              top: 50%;
+              right: auto;
+              bottom: auto;
+              left: 50%;
+              width: 100dvh;
+              height: 100dvw;
+              max-width: none;
+              object-fit: contain;
+              transform: translate(-50%, -50%) rotate(-90deg);
+              transform-origin: center center;
+            }
+            .kbv-scrim {
+              background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.72) 0%,
+                rgba(0, 0, 0, 0.45) 35%,
+                rgba(0, 0, 0, 0.15) 70%,
+                rgba(0, 0, 0, 0.55) 100%
+              );
+            }
+            .kbv-content {
+              padding: 18px 18px 28px;
+              justify-content: flex-end;
+              max-width: none;
+            }
+            .kbv-title {
+              font-size: clamp(26px, 7.5vw, 36px);
+              margin: 8px 0 10px;
+            }
+            .kbv-caption {
+              font-size: 14px;
+              line-height: 1.45;
+              max-width: none;
+            }
+            .kbv-kicker {
+              font-size: 16px;
+            }
+          }
+        `}</style>
+      </div>
+    );
+  }
+};
+
+// Picks the right source for the keyboard intro depending on viewport
+// orientation. Keeps the player simple — autoplay muted loop with no
+// controls. Re-evaluates on resize so a window getting taller than
+// wide flips to the portrait clip.
+function OrientationVideo({
+  landscapeSrc,
+  portraitSrc
+}: {
+  landscapeSrc: string;
+  portraitSrc: string;
+}) {
+  const [src, setSrc] = useState(landscapeSrc);
+  useEffect(() => {
+    const update = () => {
+      const isPortrait = window.innerHeight > window.innerWidth;
+      setSrc(isPortrait ? portraitSrc : landscapeSrc);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, [landscapeSrc, portraitSrc]);
+  return (
+    <>
+      <video
+        key={src}
+        src={src}
+        autoPlay
+        loop
+        muted
+        playsInline
+        aria-hidden
+        className="ov-video"
+      />
+      <style jsx>{`
+        .ov-video {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      `}</style>
+    </>
   );
 }

@@ -106,6 +106,11 @@ export type SlideContext = {
   client: DeckClient;
   index: number;
   total: number;
+  /** Name the visitor typed into the gate. Used by slides that want to
+   *  personalize copy (e.g. the cover keyboard mock shows the bank as the
+   *  recipient and the visitor as the sender). `null` until the gate is
+   *  filled — slides should fall back to a tasteful default. */
+  visitorName: string | null;
 };
 
 export type SlideDef = {
@@ -404,7 +409,12 @@ function DeckShellInner({
             className={`deck-slide deck-frame variant-${variant}`}
           >
             {current && (
-              <current.Body client={client} index={index} total={slides.length} />
+              <current.Body
+                client={client}
+                index={index}
+                total={slides.length}
+                visitorName={visitorName}
+              />
             )}
             {!current?.bare && (
               <div className="deck-footer-note">

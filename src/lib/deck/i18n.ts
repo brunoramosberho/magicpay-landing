@@ -110,6 +110,33 @@ export const i18n = {
     kb_explanation_regulator:
       'El teclado es parte del app del banco. No requiere integración con WhatsApp ni con ninguna app de mensajería — funciona en todas.',
 
+    // 08 Keyboard walkthrough — captions for each step (0..6)
+    kbw_visitor_fallback: 'Bruno R',
+    kbw_chat_contact: 'María',
+    kbw_chat_via: 'vía',
+    kbw_chat_msg1: '¿Me prestas para la comida? 🍣',
+    kbw_chat_msg2: 'Son $50 MXN',
+    kbw_restart_hint: 'Volver al inicio (limpia la conversación)',
+    kbw_login_title: 'Iniciando sesión en {client}',
+    kbw_login_sub: 'Autenticación dentro del app del banco',
+    kbw_success_title: 'Liga generada exitosamente',
+    kbw_step_0:
+      'Llega un mensaje en WhatsApp pidiendo una transferencia.',
+    kbw_step_1:
+      'Se hace el cambio del teclado, y se selecciona el teclado de {client}.',
+    kbw_step_2:
+      'Se activa el teclado magic, integrado en el app del banco. Funciona en cualquier app de mensajería sin tocar su código.',
+    kbw_step_3:
+      'Se abre el teclado, forma parte de la misma aplicación de {client}. Se captura el monto a enviar.',
+    kbw_step_4:
+      'Se inicia sesión de {client}. Es la misma sesión y autorización que el app.',
+    kbw_step_5:
+      'Se genera un token dinámico como segundo factor de autorización, ligado directamente al dispositivo.',
+    kbw_step_6:
+      'Liga de pago lista y enviada en la conversación. Una sola interacción, sin salir del chat.',
+    kbw_loader_title: 'Generando liga de pago…',
+    kbw_loader_sub: 'Token dinámico · firma del banco',
+
     // 09 30x
     thirtyx_label: '09 — Velocidad',
     thirtyx_big: '30×',
@@ -228,13 +255,13 @@ export const i18n = {
 
     // 17 Regulatory
     reg_label: '17 — Regulatorio',
-    reg_kicker: 'Por qué no se requiere permiso de CNBV o Banxico',
+    reg_kicker: 'Cómo encaja magic en el marco regulatorio',
     reg_title: 'Regulación, resuelta',
     reg_1: 'magic solo integra tecnología — no es entidad financiera, no opera ni custodia fondos.',
     reg_2: 'Tu banco ejecuta los pagos y cumple con KYC/AML — magic no interviene en regulación.',
     reg_3: 'magic no almacena credenciales ni hace clearing — solo transmite instrucciones.',
     reg_4: 'Todo ocurre dentro del entorno seguro de tu banco.',
-    reg_5: 'No requiere autorización previa, siempre que el banco mantenga su cumplimiento.',
+    reg_5: 'El cumplimiento regulatorio lo mantiene el banco; magic opera como capa de tecnología dentro de ese marco.',
     reg_6: 'Basado en la Ley Fintech. magic no es IFPE, transmisor de dinero ni agregador.',
 
     // 18 Pricing
@@ -400,6 +427,33 @@ export const i18n = {
     kb_explanation_regulator:
       "The keyboard is part of the bank's app. No WhatsApp integration needed — works in any messaging app.",
 
+    // 08 Keyboard walkthrough — captions for each step (0..6)
+    kbw_visitor_fallback: 'Bruno R',
+    kbw_chat_contact: 'María',
+    kbw_chat_via: 'via',
+    kbw_chat_msg1: 'Can you cover lunch? 🍣',
+    kbw_chat_msg2: "It's $50 MXN",
+    kbw_restart_hint: 'Start over (clears the conversation)',
+    kbw_login_title: 'Signing in to {client}',
+    kbw_login_sub: "Authentication inside the bank's app",
+    kbw_success_title: 'Link generated successfully',
+    kbw_step_0:
+      'A WhatsApp message asks for a transfer.',
+    kbw_step_1:
+      'Keyboards are switched and the {client} keyboard is picked.',
+    kbw_step_2:
+      "The magic keyboard activates, embedded in the bank's app. Works in any messaging app without touching its code.",
+    kbw_step_3:
+      'The keyboard opens — it lives inside the {client} app. The amount is typed in.',
+    kbw_step_4:
+      "Signing in to {client}. Same session and authorisation as the app.",
+    kbw_step_5:
+      'A dynamic token is issued as a second authorisation factor, bound to the device.',
+    kbw_step_6:
+      'Payment link generated and sent in the conversation. One interaction, without leaving the chat.',
+    kbw_loader_title: 'Generating payment link…',
+    kbw_loader_sub: 'Dynamic token · bank-signed',
+
     thirtyx_label: '09 — Speed',
     thirtyx_big: '30×',
     thirtyx_kicker: 'faster',
@@ -508,14 +562,14 @@ export const i18n = {
     impl_docs_url: 'mgic.me/docs',
 
     reg_label: '17 — Regulatory',
-    reg_kicker: 'Why no CNBV or Banxico permit is required',
+    reg_kicker: 'How magic fits into the regulatory framework',
     reg_title: 'Regulation, solved',
     reg_1:
       "magic only integrates technology — it isn't a financial entity, doesn't operate or hold funds.",
     reg_2: "Your bank executes payments and complies with KYC/AML — magic doesn't intervene.",
     reg_3: "magic doesn't store credentials or do clearing — only transmits instructions.",
     reg_4: "Everything happens within your bank's secure environment.",
-    reg_5: 'No prior authorization needed, as long as the bank maintains its compliance.',
+    reg_5: 'Regulatory compliance sits with the bank; magic operates as a technology layer within that framework.',
     reg_6: 'Based on the Fintech Law. magic is not an IFPE, money transmitter, or aggregator.',
 
     price_label: '18 — Pricing',

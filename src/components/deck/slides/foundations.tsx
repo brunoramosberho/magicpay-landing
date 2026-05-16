@@ -12,10 +12,15 @@ export const CoverSlide: SlideDef = {
   id: 'cover',
   variant: 'light',
   bare: true,
-  Body: ({client}: SlideContext) => {
+  Body: ({client, visitorName}: SlideContext) => {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const initial = client.name.charAt(0).toUpperCase();
+    // First word of the gate name keeps the keyboard mock label tight on
+    // narrow viewports; falls back to the sample name if the gate was
+    // skipped or stored under an old session.
+    const visitorFirstName = visitorName?.trim().split(/\s+/)[0];
+    const senderLabel = visitorFirstName || 'Jonathan Moore';
     return (
       <div className="cover-frame">
         <div className="cover-glow" aria-hidden />
@@ -77,7 +82,7 @@ export const CoverSlide: SlideDef = {
               </div>
               <MagicKeyboard
                 amount="300"
-                recipientName={`${client.name} | Jonathan Moore`}
+                recipientName={`${client.name} | ${senderLabel}`}
               />
             </div>
           </div>
