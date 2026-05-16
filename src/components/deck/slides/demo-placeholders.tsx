@@ -10,6 +10,7 @@ import {useI18n} from '../i18n-context';
 import {eyebrow} from '@/lib/deck/eyebrow';
 import {VideoPhone} from '../video-phone';
 import {MagicKeyboard} from '../magic-keyboard';
+import {KeyboardWalkthrough} from '../keyboard-walkthrough';
 import {ClaimDemo} from '../claim-demo';
 import type {SlideContext, SlideDef} from '../deck-shell';
 
@@ -192,24 +193,91 @@ function DemoShell({
 export const KeyboardDemoSlide: SlideDef = {
   id: 'keyboard-demo',
   variant: 'light',
-  Body: ({client, index}: SlideContext) => {
+  Body: ({client, index, visitorName}: SlideContext) => {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
+    const chromeLabel = client.display_name ?? client.name;
+    const brand = client.brand_color ?? '#306FF6';
     return (
-      <DemoShell
-        label={eyebrow(index, t('kb_label'))}
-        kicker={t('kb_kicker')}
-        title={
-          isRegulator ? t('kb_title_regulator') : fillClient(t('kb_title'))
-        }
-        caption={
-          isRegulator
-            ? t('kb_explanation_regulator')
-            : fillClient(t('kb_explanation'))
-        }
-        right={<VideoPhone src="/deck/videos/keyboard.mp4" />}
-      />
+      <div className="kb-frame">
+        <div className="kb-left">
+          <p className="deck-eyebrow">{eyebrow(index, t('kb_label'))}</p>
+          <p className="deck-kicker">{t('kb_kicker')}</p>
+          <h1 className="deck-title-1">
+            {isRegulator ? t('kb_title_regulator') : fillClient(t('kb_title'))}
+          </h1>
+          <p className="deck-lede">
+            {isRegulator
+              ? t('kb_explanation_regulator')
+              : fillClient(t('kb_explanation'))}
+          </p>
+        </div>
+        <div className="kb-right">
+          <KeyboardWalkthrough
+            clientName={client.name}
+            chromeLabel={chromeLabel}
+            visitorName={visitorName}
+            brand={brand}
+          />
+        </div>
+        <style jsx>{`
+          .kb-frame {
+            padding: clamp(28px, 3.5vh, 56px) var(--pad-x) clamp(20px, 2.5vh, 36px);
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+            gap: clamp(32px, 4vw, 64px);
+            align-items: start;
+            height: 100%;
+            min-height: 0;
+          }
+          .kb-left {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-width: 0;
+            padding-top: clamp(16px, 3vh, 40px);
+          }
+          .kb-right {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            height: 100%;
+            min-height: 0;
+          }
+          @media (max-width: 900px) {
+            .kb-frame {
+              grid-template-columns: 1fr;
+            }
+          }
+          @media (max-width: 640px) {
+            .kb-frame {
+              padding: 20px 18px 28px;
+              gap: 18px;
+              height: auto;
+            }
+            .kb-left {
+              padding-top: 0;
+              gap: 8px;
+            }
+            .kb-left :global(.deck-kicker) {
+              font-size: 16px;
+              margin-bottom: 2px;
+            }
+            .kb-left :global(.deck-title-1) {
+              font-size: clamp(22px, 6.5vw, 28px);
+              line-height: 1.18;
+            }
+            .kb-left :global(.deck-lede) {
+              font-size: 14px;
+              line-height: 1.45;
+            }
+            .kb-right {
+              height: auto;
+            }
+          }
+        `}</style>
+      </div>
     );
   }
 };
