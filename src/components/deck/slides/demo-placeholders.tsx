@@ -295,6 +295,10 @@ export const ClaimDemoSlide: SlideDef = {
   variant: 'light',
   Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
+    // Regulator decks keep the CNBV logo in the deck chrome only. Inside the
+    // payment-link mockup the logo would misread as a specific bank's brand,
+    // so we drop it and let the mock fall back to the generic "el banco" label.
+    const isRegulator = client.kind === 'regulator';
     return (
       <div className="claim-frame">
         <div className="claim-left">
@@ -330,8 +334,8 @@ export const ClaimDemoSlide: SlideDef = {
           <ClaimDemo
             brand={client.brand_color ?? '#306FF6'}
             clientName={client.name}
-            clientLogo={client.logo_url ?? undefined}
-            clientAppIcon={client.app_icon_url ?? undefined}
+            clientLogo={isRegulator ? undefined : client.logo_url ?? undefined}
+            clientAppIcon={isRegulator ? undefined : client.app_icon_url ?? undefined}
           />
         </div>
         <style jsx>{`

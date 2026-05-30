@@ -6,6 +6,8 @@ import {useRouter} from 'next/navigation';
 type Client = {
   id: string;
   name: string;
+  display_name: string | null;
+  kind: string | null;
   brand_color: string | null;
   logo_url: string | null;
   app_icon_url: string | null;
@@ -25,6 +27,8 @@ export function ClientEdit({client}: {client: Client}) {
 
   const [form, setForm] = useState({
     name: client.name,
+    display_name: client.display_name ?? '',
+    kind: client.kind === 'regulator' ? 'regulator' : 'client',
     brand_color: client.brand_color ?? '#000000',
     logo_url: client.logo_url ?? '',
     app_icon_url: client.app_icon_url ?? '',
@@ -67,6 +71,8 @@ export function ClientEdit({client}: {client: Client}) {
       headers: {'content-type': 'application/json'},
       body: JSON.stringify({
         name: form.name,
+        display_name: form.display_name || null,
+        kind: form.kind,
         brand_color: form.brand_color,
         logo_url: form.logo_url || null,
         app_icon_url: form.app_icon_url || null,
@@ -125,6 +131,41 @@ export function ClientEdit({client}: {client: Client}) {
           />
         </Field>
       </div>
+
+      <fieldset className="border border-zinc-800 rounded-md p-4">
+        <legend className="text-xs uppercase tracking-wide text-zinc-400 px-2">
+          Audience
+        </legend>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Kind">
+            <select
+              value={form.kind}
+              onChange={(e) => set('kind', e.target.value)}
+              className="input"
+            >
+              <option value="client">client</option>
+              <option value="regulator">regulator</option>
+            </select>
+          </Field>
+          <Field label="Display name" hint="chrome label — falls back to Name">
+            <input
+              value={form.display_name}
+              onChange={(e) => set('display_name', e.target.value)}
+              className="input"
+              placeholder="e.g. CNBV"
+            />
+          </Field>
+        </div>
+        <p className="text-xs text-zinc-500 mt-3">
+          <strong className="text-zinc-300">regulator</strong> swaps the deck to the
+          generic &ldquo;el banco&rdquo; copy, hides the bank logo/app icon inside the
+          slides, and adds the keyboard-extension equivalence slide. Set{' '}
+          <strong className="text-zinc-300">Name</strong> to{' '}
+          <code className="text-zinc-400">el banco</code> and{' '}
+          <strong className="text-zinc-300">Display name</strong> to the regulator
+          (e.g. CNBV) shown in the header/footer.
+        </p>
+      </fieldset>
 
       <fieldset className="border border-zinc-800 rounded-md p-4">
         <legend className="text-xs uppercase tracking-wide text-zinc-400 px-2">Logo</legend>
