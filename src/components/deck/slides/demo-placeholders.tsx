@@ -197,7 +197,12 @@ export const KeyboardDemoSlide: SlideDef = {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
-    const chromeLabel = client.display_name ?? client.name;
+    // The keyboard switcher inside the demo shows "magic — {label}". For a
+    // regulator deck the label must read as a generic bank ("El Banco"), not
+    // the regulator itself (e.g. "CNBV") — they aren't the keyboard's owner.
+    const chromeLabel = isRegulator
+      ? t('kb_switch_bank')
+      : client.display_name ?? client.name;
     const brand = client.brand_color ?? '#306FF6';
     return (
       <div className="kb-frame">

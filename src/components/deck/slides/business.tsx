@@ -800,3 +800,199 @@ export const RegulatorySlide: SlideDef = {
     );
   }
 };
+
+// 17b — Technical equivalence (regulator deck only). Spells out, simply, why a
+// Keyboard Extension IS part of the bank app rather than a separate component —
+// the point a regulator (CNBV) is most likely to push back on. Inserted right
+// after the Regulatory slide for regulator decks; absent from client decks.
+export const RegulatorEquivalenceSlide: SlideDef = {
+  id: 'regulator-equivalence',
+  variant: 'light',
+  Body: ({index}) => {
+    const {t} = useI18n();
+    const facts = [
+      {icon: '📦', ttl: t('regeq_f1_title'), desc: t('regeq_f1_desc')},
+      {icon: '🔄', ttl: t('regeq_f2_title'), desc: t('regeq_f2_desc')},
+      {icon: '🔐', ttl: t('regeq_f3_title'), desc: t('regeq_f3_desc')},
+      {icon: '⚖️', ttl: t('regeq_f4_title'), desc: t('regeq_f4_desc')}
+    ];
+    const precedents = [
+      'Face ID',
+      'Apple Pay',
+      'Notification Extension',
+      t('regeq_p_widget'),
+      'Apple Watch'
+    ];
+    return (
+      <div className="regeq-frame">
+        <div className="regeq-head">
+          <p className="deck-eyebrow">{eyebrow(index, t('regeq_label'))}</p>
+          <p className="deck-kicker">{t('regeq_kicker')}</p>
+          <h1 className="deck-title-1">{t('regeq_title')}</h1>
+        </div>
+        <div className="regeq-grid">
+          {facts.map((f, i) => (
+            <div className="regeq-card" key={i}>
+              <div
+                className="regeq-icon"
+                style={{
+                  background:
+                    'color-mix(in srgb, var(--brand) 12%, var(--mp-white))',
+                  borderColor:
+                    'color-mix(in srgb, var(--brand) 25%, transparent)'
+                }}
+              >
+                {f.icon}
+              </div>
+              <div className="regeq-body">
+                <h3>{f.ttl}</h3>
+                <p>{f.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="regeq-precedents">
+          <span className="regeq-prec-label">{t('regeq_precedents_label')}</span>
+          <div className="regeq-chips">
+            {precedents.map((p) => (
+              <span className="regeq-chip" key={p}>
+                {p}
+              </span>
+            ))}
+          </div>
+        </div>
+        <p className="regeq-conclusion">{t('regeq_conclusion')}</p>
+        <style jsx>{`
+          .regeq-frame {
+            padding: clamp(28px, 3.5vh, 56px) var(--pad-x)
+              clamp(20px, 2.5vh, 36px);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(18px, 2.6vh, 30px);
+          }
+          .regeq-head {
+            display: flex;
+            flex-direction: column;
+          }
+          .regeq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(12px, 1.6vw, 20px);
+          }
+          .regeq-card {
+            display: flex;
+            gap: 16px;
+            padding: clamp(16px, 1.8vw, 22px);
+            border-radius: var(--mp-radius-lg);
+            background: var(--mp-grey);
+            border: 1px solid var(--mp-border-soft);
+            align-items: flex-start;
+          }
+          .regeq-icon {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            border: 1px solid;
+          }
+          .regeq-body h3 {
+            font: 500 clamp(16px, 1.4vw, 20px) / 1.2 var(--mp-font-display);
+            margin: 0 0 6px;
+            color: var(--mp-ink);
+          }
+          .regeq-body p {
+            font: 400 clamp(13px, 1.05vw, 15px) / 1.5 var(--mp-font-body);
+            color: var(--mp-fg-muted);
+            margin: 0;
+          }
+          .regeq-precedents {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: clamp(16px, 1.8vw, 22px);
+            border-radius: var(--mp-radius-lg);
+            background: color-mix(in srgb, var(--brand) 6%, var(--mp-white));
+            border: 1px solid color-mix(in srgb, var(--brand) 18%, transparent);
+          }
+          .regeq-prec-label {
+            font: 500 clamp(13px, 1.1vw, 16px) / 1.3 var(--mp-font-body);
+            color: var(--mp-ink);
+          }
+          .regeq-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+          }
+          .regeq-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 14px;
+            border-radius: var(--mp-radius-pill);
+            background: var(--mp-white);
+            border: 1px solid color-mix(in srgb, var(--brand) 22%, transparent);
+            color: var(--brand);
+            font: 500 clamp(12px, 1vw, 14px) / 1 var(--mp-font-body);
+            white-space: nowrap;
+          }
+          .regeq-conclusion {
+            font: 500 clamp(15px, 1.4vw, 20px) / 1.45 var(--mp-font-display);
+            color: var(--mp-ink);
+            margin: 0;
+            max-width: 1100px;
+          }
+          @media (max-width: 900px) {
+            .regeq-grid {
+              grid-template-columns: 1fr;
+            }
+          }
+          @media (max-width: 640px) {
+            .regeq-frame {
+              gap: 14px;
+            }
+            .regeq-grid {
+              gap: 8px;
+            }
+            .regeq-card {
+              gap: 12px;
+              padding: 14px;
+              border-radius: var(--mp-radius-md);
+            }
+            .regeq-icon {
+              width: 36px;
+              height: 36px;
+              font-size: 18px;
+              border-radius: 10px;
+            }
+            .regeq-body h3 {
+              font-size: 14px;
+              margin-bottom: 4px;
+            }
+            .regeq-body p {
+              font-size: 12px;
+              line-height: 1.45;
+            }
+            .regeq-precedents {
+              padding: 14px;
+              border-radius: var(--mp-radius-md);
+            }
+            .regeq-prec-label {
+              font-size: 12px;
+            }
+            .regeq-chip {
+              padding: 6px 11px;
+              font-size: 11px;
+            }
+            .regeq-conclusion {
+              font-size: 14px;
+              line-height: 1.45;
+            }
+          }
+        `}</style>
+      </div>
+    );
+  }
+};
