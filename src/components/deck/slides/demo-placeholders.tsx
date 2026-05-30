@@ -197,7 +197,12 @@ export const KeyboardDemoSlide: SlideDef = {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
-    const chromeLabel = client.display_name ?? client.name;
+    // The keyboard switcher inside the demo shows "magic — {label}". For a
+    // regulator deck the label must read as a generic bank ("El Banco"), not
+    // the regulator itself (e.g. "CNBV") — they aren't the keyboard's owner.
+    const chromeLabel = isRegulator
+      ? t('kb_switch_bank')
+      : client.display_name ?? client.name;
     const brand = client.brand_color ?? '#306FF6';
     return (
       <div className="kb-frame">
@@ -290,6 +295,10 @@ export const ClaimDemoSlide: SlideDef = {
   variant: 'light',
   Body: ({client, index}: SlideContext) => {
     const {t} = useI18n();
+    // Regulator decks keep the CNBV logo in the deck chrome only. Inside the
+    // payment-link mockup the logo would misread as a specific bank's brand,
+    // so we drop it and let the mock fall back to the generic "el banco" label.
+    const isRegulator = client.kind === 'regulator';
     return (
       <div className="claim-frame">
         <div className="claim-left">
@@ -325,8 +334,8 @@ export const ClaimDemoSlide: SlideDef = {
           <ClaimDemo
             brand={client.brand_color ?? '#306FF6'}
             clientName={client.name}
-            clientLogo={client.logo_url ?? undefined}
-            clientAppIcon={client.app_icon_url ?? undefined}
+            clientLogo={isRegulator ? undefined : client.logo_url ?? undefined}
+            clientAppIcon={isRegulator ? undefined : client.app_icon_url ?? undefined}
           />
         </div>
         <style jsx>{`

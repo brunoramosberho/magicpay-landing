@@ -1592,11 +1592,57 @@ export const WhatIsMagicSlide: SlideDef = {
               <p className="deck-kicker">{t('magic_kicker')}</p>
               <h1 className="deck-title-1">{t('magic_title')}</h1>
             </div>
-            {appIcon && (
+            {(isRegulator || appIcon) && (
               <div className="sdk-integration" aria-hidden>
                 <div className="si-stack">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={appIcon} alt="" className="si-app" />
+                  {isRegulator ? (
+                    // Regulator deck: we can't show the regulator's logo or a
+                    // specific bank's app icon here. Use a generic app tile so
+                    // the visual just reads "magic SDK lives inside the app".
+                    <span className="si-app si-app-generic">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+                        <rect
+                          x="3"
+                          y="2.5"
+                          width="18"
+                          height="19"
+                          rx="4"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <line
+                          x1="3"
+                          y1="7.5"
+                          x2="21"
+                          y2="7.5"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <circle cx="5.6" cy="5" r="0.9" fill="currentColor" />
+                        <rect
+                          x="6.5"
+                          y="11"
+                          width="11"
+                          height="2.2"
+                          rx="1.1"
+                          fill="currentColor"
+                          opacity="0.55"
+                        />
+                        <rect
+                          x="6.5"
+                          y="15"
+                          width="7"
+                          height="2.2"
+                          rx="1.1"
+                          fill="currentColor"
+                          opacity="0.35"
+                        />
+                      </svg>
+                    </span>
+                  ) : (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={appIcon!} alt="" className="si-app" />
+                  )}
                   <span className="si-magic-badge">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/deck/logos/icon.svg" alt="" />
@@ -1669,6 +1715,17 @@ export const WhatIsMagicSlide: SlideDef = {
             object-fit: cover;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
               0 2px 6px rgba(0, 0, 0, 0.06);
+          }
+          .si-app-generic {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #eef2f8, #dbe2ee);
+            color: var(--mp-fg-muted);
+          }
+          .si-app-generic :global(svg) {
+            width: 52%;
+            height: 52%;
           }
           .si-magic-badge {
             position: absolute;

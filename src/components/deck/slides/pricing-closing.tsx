@@ -200,8 +200,10 @@ export const ClosingSlide: SlideDef = {
   bare: true,
   Body: ({client}: SlideContext) => {
     const {t} = useI18n();
-    const appIcon = client.app_icon_url ?? client.logo_url;
     const isRegulator = client.kind === 'regulator';
+    // Regulator decks keep the CNBV logo in the deck chrome only — not as the
+    // decorative app icon here, where it reads as a bank's app icon.
+    const appIcon = isRegulator ? null : client.app_icon_url ?? client.logo_url;
     return (
       <div className="close-frame">
         <div className="close-glow" aria-hidden />
@@ -406,7 +408,8 @@ export const ShortRecapSlide: SlideDef = {
     const {t} = useI18n();
     const isRegulator = client.kind === 'regulator';
     const fillClient = (s: string) => s.replaceAll('{client}', client.name);
-    const appIcon = client.app_icon_url ?? client.logo_url;
+    // See ClosingSlide: regulator logo stays in the chrome, not the app-icon.
+    const appIcon = isRegulator ? null : client.app_icon_url ?? client.logo_url;
     const integrationLabel = isRegulator
       ? 'SDK integrado en el banco'
       : `SDK integrado en ${client.name}`;

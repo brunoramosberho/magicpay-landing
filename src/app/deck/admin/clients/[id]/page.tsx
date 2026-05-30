@@ -74,8 +74,18 @@ export default async function ClientDetailPage({params}: {params: Promise<Params
             />
           )}
           <div>
-            <h1 className="text-2xl font-semibold">{client.name}</h1>
-            <p className="text-xs text-zinc-500 mt-1 font-mono">/{client.slug}</p>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-semibold">{client.name}</h1>
+              {client.kind === 'regulator' && (
+                <span className="text-[10px] uppercase tracking-wide rounded px-2 py-0.5 bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                  regulator
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-zinc-500 mt-1 font-mono">
+              /{client.slug}
+              {client.display_name ? ` · ${client.display_name}` : ''}
+            </p>
           </div>
         </div>
       </header>

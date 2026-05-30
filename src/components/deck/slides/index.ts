@@ -18,7 +18,13 @@ import {
   VoiceDemoSlide,
   WhitelabelSlide
 } from './demo-placeholders';
-import {SecuritySlide, BenefitsSlide, ImplementationSlide, RegulatorySlide} from './business';
+import {
+  SecuritySlide,
+  BenefitsSlide,
+  ImplementationSlide,
+  RegulatorySlide,
+  RegulatorEquivalenceSlide
+} from './business';
 import {PricingSlide, ClosingSlide, ShortRecapSlide} from './pricing-closing';
 
 // Full deck. Keyboard story is two beats: a 17s ambient video that sets
@@ -46,6 +52,22 @@ export const deckSlides: SlideDef[] = [
   PricingSlide,           // 19
   ClosingSlide            // 20
 ];
+
+// Regulator decks (CNBV, Banxico, …) get one extra slide right after the
+// Regulatory slide: a technical-equivalence argument explaining why a Keyboard
+// Extension IS part of the bank app. It only makes sense for a regulator
+// audience, so client decks never see it. We locate the Regulatory slide by
+// reference identity (its `.id` reads as undefined across the server/client
+// boundary, but the object reference is stable) and splice in after it.
+export const regulatorDeckSlides: SlideDef[] = (() => {
+  const at = deckSlides.indexOf(RegulatorySlide);
+  if (at === -1) return [...deckSlides, RegulatorEquivalenceSlide];
+  return [
+    ...deckSlides.slice(0, at + 1),
+    RegulatorEquivalenceSlide,
+    ...deckSlides.slice(at + 1)
+  ];
+})();
 
 // Compact cold-share preview. Goal: give a flavour of what magic is without
 // revealing pricing, security details, or implementation depth. The

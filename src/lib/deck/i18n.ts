@@ -109,6 +109,9 @@ export const i18n = {
       'El teclado es parte del app de {client}. No requiere integración con WhatsApp ni con ninguna app de mensajería — funciona en todas.',
     kb_explanation_regulator:
       'El teclado es parte del app del banco. No requiere integración con WhatsApp ni con ninguna app de mensajería — funciona en todas.',
+    // Label shown in the iOS keyboard switcher inside the demo. On the
+    // regulator deck it must read as a generic bank, not the regulator.
+    kb_switch_bank: 'El Banco',
 
     // 08 Keyboard walkthrough — captions for each step (0..6)
     kbw_visitor_fallback: 'Bruno R',
@@ -263,6 +266,28 @@ export const i18n = {
     reg_4: 'Todo ocurre dentro del entorno seguro de tu banco.',
     reg_5: 'El cumplimiento regulatorio lo mantiene el banco; magic opera como capa de tecnología dentro de ese marco.',
     reg_6: 'Basado en la Ley Fintech. magic no es IFPE, transmisor de dinero ni agregador.',
+
+    // 17b Equivalencia técnica (solo deck regulador) — el Keyboard Extension
+    // ES parte del app del banco, no un componente separado.
+    regeq_label: 'Equivalencia técnica',
+    regeq_kicker: 'Por qué el teclado no es un componente independiente',
+    regeq_title: 'El teclado ES el app del banco',
+    regeq_f1_title: 'Mismo binario firmado',
+    regeq_f1_desc:
+      'Se distribuye dentro del mismo .ipa/.aab del banco, con el mismo Bundle ID, Team ID y certificado. No existe como app independiente en App Store o Google Play.',
+    regeq_f2_title: 'Mismo ciclo de vida',
+    regeq_f2_desc:
+      'Se instala, actualiza y desinstala únicamente con el app del banco. No tiene actualizaciones ni revisión de tienda separadas.',
+    regeq_f3_title: 'Mismo perímetro de seguridad',
+    regeq_f3_desc:
+      'Comparte App Group, Keychain y entitlements exclusivamente con el app del banco. Aislado del resto del sistema; no transmite datos a terceros.',
+    regeq_f4_title: 'Misma responsabilidad legal',
+    regeq_f4_desc:
+      'Hereda los Términos de Servicio, Aviso de Privacidad y atribución legal del banco titular de la cuenta de desarrollador.',
+    regeq_precedents_label: 'Misma arquitectura que precedentes que la CNBV ya acepta',
+    regeq_p_widget: 'Widget de saldo',
+    regeq_conclusion:
+      'Un Keyboard Extension es menos invasivo que estos precedentes — debe tratarse como un módulo más del app del banco, igual que un Widget o un Notification Extension.',
 
     // 18 Pricing
     price_label: '18 — Pricing',
@@ -426,6 +451,9 @@ export const i18n = {
       "The keyboard is part of {client}'s app. No WhatsApp integration needed — works in any messaging app.",
     kb_explanation_regulator:
       "The keyboard is part of the bank's app. No WhatsApp integration needed — works in any messaging app.",
+    // Label shown in the iOS keyboard switcher inside the demo. On the
+    // regulator deck it must read as a generic bank, not the regulator.
+    kb_switch_bank: 'The Bank',
 
     // 08 Keyboard walkthrough — captions for each step (0..6)
     kbw_visitor_fallback: 'Bruno R',
@@ -571,6 +599,28 @@ export const i18n = {
     reg_4: "Everything happens within your bank's secure environment.",
     reg_5: 'Regulatory compliance sits with the bank; magic operates as a technology layer within that framework.',
     reg_6: 'Based on the Fintech Law. magic is not an IFPE, money transmitter, or aggregator.',
+
+    // 17b Technical equivalence (regulator deck only) — the Keyboard
+    // Extension IS part of the bank app, not a separate component.
+    regeq_label: 'Technical equivalence',
+    regeq_kicker: 'Why the keyboard is not a standalone component',
+    regeq_title: 'The keyboard IS the bank app',
+    regeq_f1_title: 'Same signed binary',
+    regeq_f1_desc:
+      "Ships inside the bank's own .ipa/.aab, with the same Bundle ID, Team ID and certificate. It does not exist as a standalone app on the App Store or Google Play.",
+    regeq_f2_title: 'Same lifecycle',
+    regeq_f2_desc:
+      'Installed, updated and removed only with the bank app. It has no separate updates or store review.',
+    regeq_f3_title: 'Same security perimeter',
+    regeq_f3_desc:
+      'Shares App Group, Keychain and entitlements exclusively with the bank app. Isolated from the rest of the system; it sends no data to third parties.',
+    regeq_f4_title: 'Same legal responsibility',
+    regeq_f4_desc:
+      'Inherits the Terms of Service, Privacy Notice and legal attribution of the bank that owns the developer account.',
+    regeq_precedents_label: 'Same architecture as precedents the CNBV already accepts',
+    regeq_p_widget: 'Balance widget',
+    regeq_conclusion:
+      'A Keyboard Extension is less invasive than these precedents — it should be treated as one more module of the bank app, just like a Widget or a Notification Extension.',
 
     price_label: '18 — Pricing',
     price_kicker: 'Transparent. Scalable. Tailored to your needs.',

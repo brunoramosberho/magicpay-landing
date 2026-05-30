@@ -16,6 +16,8 @@ export async function PATCH(
 
   let body: Partial<{
     name: string;
+    display_name: string | null;
+    kind: string;
     brand_color: string | null;
     logo_url: string | null;
     app_icon_url: string | null;
@@ -36,6 +38,17 @@ export async function PATCH(
     const name = String(body.name).trim();
     if (!name) return NextResponse.json({error: 'Name cannot be empty'}, {status: 400});
     update.name = name;
+  }
+  if (body.display_name !== undefined)
+    update.display_name = String(body.display_name).trim() || null;
+  if (body.kind !== undefined) {
+    const kind = String(body.kind).trim();
+    if (kind !== 'client' && kind !== 'regulator')
+      return NextResponse.json(
+        {error: "kind must be 'client' or 'regulator'"},
+        {status: 400}
+      );
+    update.kind = kind;
   }
   if (body.brand_color !== undefined) update.brand_color = body.brand_color || null;
   if (body.logo_url !== undefined) update.logo_url = body.logo_url || null;
