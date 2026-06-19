@@ -117,6 +117,7 @@
         <li><a class="sidebar-link sub" data-target="ios-privacy" href="#ios-privacy">Privacy & PiP</a></li>
         <li><a class="sidebar-link sub" data-target="ios-extension" href="#ios-extension" data-en="Keyboard extension">Extensión teclado</a></li>
         <li><a class="sidebar-link sub" data-target="ios-init" href="#ios-init" data-en="Initialization">Inicialización</a></li>
+        <li><a class="sidebar-link sub" data-target="ios-quicksend" href="#ios-quicksend" data-en="Quick Send">Envío Rápido</a></li>
         <li><a class="sidebar-link sub" data-target="ios-checklist" href="#ios-checklist">Checklist</a></li>
       </ul>
     </div>
@@ -1053,6 +1054,163 @@ github.actor=digital</code></pre>
 MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
       </div>
 
+      <h3 id="ios-quicksend" data-en="7 · Quick Send">7 · Envío Rápido (Quick Send)</h3>
+      <p data-en="Quick Send opens the send flow <strong>without entering Magic's home</strong>: from a button on your app's login, from Siri / the Action Button, or from a Shortcut. All the logic lives in the SDK; you only <strong>place the button</strong> and, optionally, <strong>declare the shortcut</strong>.">Envío Rápido permite abrir el flujo de envío <strong>sin entrar al home de Magic</strong>: desde un botón en el login de tu app, desde Siri / el Botón de Acción, o desde un Atajo. Toda la lógica vive en el SDK; tú solo <strong>colocas el botón</strong> y, opcionalmente, <strong>declaras el atajo</strong>.</p>
+
+      <div class="callout note">
+        <span class="callout-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v5M12 16h.01"/></svg></span>
+        <div class="callout-body">
+          <strong data-en="When it shows">Cuándo se muestra</strong>
+          <p data-en="The button <strong>auto-hides</strong> if the user hasn't completed onboarding or if Quick Send isn't enabled for your app. You don't manage that logic: the SDK resolves it with <code>MagicPaySDK.isUserEnrolled</code> and <code>MagicPaySDK.isQuickSendEnabledForHost</code>. The user enables it from Settings (⚙) inside Magic, or you can turn it on in code.">El botón se <strong>auto-oculta</strong> si el usuario no completó el onboarding o si Envío Rápido no está activado para tu app. Tú no manejas esa lógica: el SDK la resuelve con <code>MagicPaySDK.isUserEnrolled</code> y <code>MagicPaySDK.isQuickSendEnabledForHost</code>. El usuario activa la opción desde Configuración (⚙) dentro de Magic, o la puedes prender por código.</p>
+        </div>
+      </div>
+
+      <h4 data-en="Button on your app's login">Botón en el login de tu app</h4>
+      <p data-en="Place it wherever you want (for example, on your login screen). Available styles: <code>.primary</code> (default), <code>.compact</code>, <code>.iconOnly</code>.">Colócalo donde quieras (por ejemplo, en tu pantalla de inicio de sesión). Estilos disponibles: <code>.primary</code> (default), <code>.compact</code>, <code>.iconOnly</code>.</p>
+
+      <p style="font-size:13px;color:var(--mp-pending,#6E7174);margin:4px 0 6px;" data-en="This is how it looks (with <code>label</code> = “Transferencia Magic”). The color is for reference: the button uses the <strong>brand color defined by the tenant</strong>.">Así se ve (con <code>label</code> = “Transferencia Magic”). El color es de referencia: el botón toma <strong>el color de marca definido por el tenant</strong>.</p>
+      <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end;padding:26px;background:var(--mp-grey,#F8F8F8);border:1px solid rgba(0,0,0,.06);border-radius:16px;margin:0 0 18px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div style="width:150px;padding:18px 18px;border-radius:18px;background:var(--mp-blue,#306FF6);box-shadow:0 10px 26px rgba(48,111,246,.30);display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <span style="color:#fff;font-weight:600;font-size:14px;text-align:center;line-height:1.2;">Transferencia Magic</span>
+          </div>
+          <code style="font-size:12px;">.primary</code>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div style="display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;background:var(--mp-blue,#306FF6);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <span style="color:#fff;font-weight:600;font-size:14px;">Transferencia Magic</span>
+          </div>
+          <code style="font-size:12px;">.compact</code>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div style="width:48px;height:48px;border-radius:999px;background:var(--mp-blue,#306FF6);display:flex;align-items:center;justify-content:center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </div>
+          <code style="font-size:12px;">.iconOnly</code>
+        </div>
+      </div>
+
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="qs-button" data-en="<span class=&quot;lang-dot dot-swift&quot;></span>Swift · Magic button"><span class="lang-dot dot-swift"></span>Swift · Botón de Magic</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="qs-button"><code><span class="tk-kw">import</span> SwiftUI
+<span class="tk-kw">import</span> MagicPaySDK
+
+<span class="tk-com" data-en="// Auto-hides if the user isn't enrolled or Quick Send is off.">// Se auto-oculta si el usuario no está enrolado o si Envío Rápido está apagado.</span>
+<span class="tk-fn">MagicPayQuickSendButton</span>(magicPay: magicPaySDK)
+
+<span class="tk-com" data-en="// Style and text variants:">// Variantes de estilo y texto:</span>
+<span class="tk-fn">MagicPayQuickSendButton</span>(magicPay: magicPaySDK, style: .compact, label: <span class="tk-str">"Enviar dinero"</span>)</code></pre>
+      </div>
+
+      <h4 data-en="Custom button (optional)">Botón a la medida (opcional)</h4>
+      <p data-en="If you prefer your own design, observe <code>MagicPayQuickSendAvailability.shared</code> so your button <strong>auto-hides and reappears on its own</strong> (like Magic's), and present <code>getQuickSendView</code> on tap.">Si prefieres tu propio diseño, observa <code>MagicPayQuickSendAvailability.shared</code> para que tu botón <strong>se auto-oculte y reaparezca solo</strong> (igual que el de Magic), y presenta <code>getQuickSendView</code> al tocarlo.</p>
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="qs-custom" data-en="<span class=&quot;lang-dot dot-swift&quot;></span>Swift · Custom button"><span class="lang-dot dot-swift"></span>Swift · Botón propio</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="qs-custom"><code><span class="tk-com" data-en="// In your View:">// En tu View:</span>
+@<span class="tk-typ">ObservedObject</span> <span class="tk-kw">private var</span> availability = <span class="tk-typ">MagicPayQuickSendAvailability</span>.shared
+@<span class="tk-typ">State</span> <span class="tk-kw">private var</span> showQuickSend = <span class="tk-kw">false</span>
+
+<span class="tk-kw">private var</span> isQuickSendAvailable: <span class="tk-typ">Bool</span> {
+    MagicPaySDK.isUserEnrolled &amp;&amp; MagicPaySDK.isQuickSendEnabledForHost
+}
+
+<span class="tk-com" data-en="// In your body:">// En tu body:</span>
+<span class="tk-kw">if</span> isQuickSendAvailable {
+    <span class="tk-fn">Button</span>(action: { showQuickSend = <span class="tk-kw">true</span> }) {
+        <span class="tk-fn">HStack</span>(spacing: <span class="tk-num">8</span>) {
+            <span class="tk-fn">Image</span>(systemName: <span class="tk-str">"bolt.fill"</span>)
+            <span class="tk-fn">Text</span>(<span class="tk-str">"Transferencia Magic"</span>)        <span class="tk-com" data-en="// your design, text and colors">// tu diseño, texto y colores</span>
+        }
+    }
+    .<span class="tk-fn">sheet</span>(isPresented: $showQuickSend) {
+        magicPaySDK.<span class="tk-fn">getQuickSendView</span>(onDismiss: { showQuickSend = <span class="tk-kw">false</span> })
+    }
+}</code></pre>
+      </div>
+
+      <h4 data-en="Shortcuts: Siri &amp; Action Button">Atajos: Siri y Botón de Acción</h4>
+      <p data-en="Create <strong>a new Swift file</strong> (e.g. <code>MagicShortcuts.swift</code>) in your <strong>main target</strong> — the app, <strong>not</strong> the keyboard extension — and declare the provider. iOS registers it <strong>automatically</strong>: no need to call it from anywhere or touch the Info.plist. It's the only step to enable Siri / Action Button / Shortcuts.">Crea <strong>un archivo Swift nuevo</strong> (p. ej. <code>MagicShortcuts.swift</code>) en tu <strong>target principal</strong> — la app, <strong>no</strong> la extensión de teclado — y declara el provider. iOS lo registra <strong>automáticamente</strong>: no hay que llamarlo desde ningún lado ni tocar el Info.plist. Es el único paso para habilitar Siri / Botón de Acción / Atajos.</p>
+
+      <div class="callout note">
+        <span class="callout-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v5M12 16h.01"/></svg></span>
+        <div class="callout-body">
+          <strong data-en="Ready to use">Listo para usar</strong>
+          <p data-en="Download the file and drag it into your <strong>main target</strong> in Xcode (make sure your app is checked under <em>Target Membership</em>). You don't need to modify it.">Descarga el archivo y arrástralo a tu <strong>target principal</strong> en Xcode (asegúrate de marcar tu app en <em>Target Membership</em>). No necesitas modificarlo.</p>
+          <p style="margin-top:10px;">
+            <a href="/docs/downloads/MagicShortcuts.swift" download style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:var(--mp-blue,#306FF6);color:#fff;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span data-en="Download MagicShortcuts.swift">Descargar MagicShortcuts.swift</span>
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <p style="font-size:13px;color:var(--mp-pending,#6E7174);margin:4px 0 6px;" data-en="Or copy it manually:">O cópialo manualmente:</p>
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="qs-shortcut" data-en="<span class=&quot;lang-dot dot-swift&quot;></span>Swift · MagicShortcuts.swift (main target)"><span class="lang-dot dot-swift"></span>Swift · MagicShortcuts.swift (target principal)</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="qs-shortcut"><code><span class="tk-kw">import</span> AppIntents
+<span class="tk-kw">import</span> MagicPaySDK
+
+@<span class="tk-fn">available</span>(iOS 16.0, *)
+<span class="tk-kw">struct</span> <span class="tk-typ">MagicShortcuts</span>: <span class="tk-typ">AppShortcutsProvider</span> {
+    <span class="tk-kw">static var</span> appShortcuts: [<span class="tk-typ">AppShortcut</span>] {
+        <span class="tk-fn">AppShortcut</span>(
+            intent: <span class="tk-fn">MagicPayQuickSendIntent</span>(),
+            phrases: [
+                <span class="tk-str">"Transferencia Magic con \(.applicationName)"</span>,
+                <span class="tk-str">"Magic Transfer with \(.applicationName)"</span>
+            ],
+            shortTitle: <span class="tk-str">"Transferencia Magic"</span>,
+            systemImageName: <span class="tk-str">"paperplane.fill"</span>
+        )
+    }
+}</code></pre>
+      </div>
+      <div class="callout note">
+        <span class="callout-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v5M12 16h.01"/></svg></span>
+        <div class="callout-body">
+          <strong data-en="How the user assigns it">Cómo lo asigna el usuario</strong>
+          <p data-en="In <strong>Settings → Action Button → Shortcut</strong>, “Transferencia Magic” appears (on iPhone 15 Pro and later), or from the Shortcuts app / Control Center. After installing the app, open it once so iOS indexes the shortcut.">En <strong>Ajustes → Botón de Acción → Atajo</strong> aparece “Transferencia Magic” (en iPhone 15 Pro y posteriores), o desde la app Atajos / el Centro de Control. Tras instalar la app, ábrela una vez para que iOS indexe el atajo.</p>
+        </div>
+      </div>
+
+      <h4 data-en="Listen for the external trigger">Escuchar el disparo externo</h4>
+      <p data-en="<strong>Only if you offer shortcuts.</strong> The on-screen button already opens the flow on tap — it doesn't need this. But when invoked from Siri / Action Button / Shortcuts, the SDK posts <code>.magicPayOpenQuickSend</code>."><strong>Solo si ofreces atajos.</strong> El botón en pantalla ya abre el flujo al tocarlo — no necesita esto. Pero al invocar desde Siri / Botón de Acción / Atajos, el SDK publica <code>.magicPayOpenQuickSend</code>.</p>
+      <p data-en="<strong>It's not a new file:</strong> it's two modifiers (<code>.onReceive</code> + <code>.sheet</code>) you add <strong>once</strong> on your <strong>root view</strong> (your <code>App</code> / <code>Scene</code> or the main view where your app lives). It's the minimal pattern."><strong>No es un archivo nuevo:</strong> son dos modificadores (<code>.onReceive</code> + <code>.sheet</code>) que agregas <strong>una sola vez</strong> sobre tu <strong>vista raíz</strong> (tu <code>App</code> / <code>Scene</code> o la vista principal donde vive tu app). Es el patrón mínimo.</p>
+      <div class="code-card">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="qs-listen"><span class="lang-dot dot-swift"></span>Swift · Listener + getQuickSendView</button>
+          <span class="code-tabs-spacer"></span>
+          <button class="copy-btn">Copiar</button>
+        </div>
+<pre class="code-pane active" data-pane="qs-listen"><code>@<span class="tk-typ">State</span> <span class="tk-kw">private var</span> showQuickSend = <span class="tk-kw">false</span>
+
+rootView
+    .<span class="tk-fn">onReceive</span>(NotificationCenter.default.<span class="tk-fn">publisher</span>(for: .magicPayOpenQuickSend)) { _ <span class="tk-kw">in</span>
+        showQuickSend = <span class="tk-kw">true</span>
+    }
+    .<span class="tk-fn">sheet</span>(isPresented: $showQuickSend) {
+        magicPaySDK.<span class="tk-fn">getQuickSendView</span>(
+            onDismiss: { showQuickSend = <span class="tk-kw">false</span> },
+            onUserNotEnrolled: { showQuickSend = <span class="tk-kw">false</span> } <span class="tk-com" data-en="// or open onboarding with getMainView()">// o abre el onboarding con getMainView()</span>
+        )
+    }</code></pre>
+      </div>
+
       <h3 id="ios-checklist" data-en="Validation checklist">Checklist de validación</h3>
       <p data-en="Before shipping to TestFlight, walk through every point. Check each item once you've confirmed it in your project.">Antes de enviar a TestFlight, recorre cada punto. Marca cada item al confirmarlo en tu proyecto.</p>
 
@@ -1077,6 +1235,12 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
         <div class="checklist-group">
           <div class="checklist-group-head" data-en="Capabilities (Main app)">Capabilities (App principal)</div>
           <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label" data-en="Background Modes with <em>Audio, AirPlay, and Picture in Picture</em> enabled (for PiP guide video).">Background Modes con <em>Audio, AirPlay, and Picture in Picture</em> habilitado (para video-guía PiP).</span><span class="checklist-status" data-en="Pending">Pendiente</span></div>
+        </div>
+        <div class="checklist-group">
+          <div class="checklist-group-head" data-en="Quick Send (optional)">Envío Rápido (opcional)</div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label" data-en="<code>MagicPayQuickSendButton</code> (or your own button) placed where you want the shortcut."><code>MagicPayQuickSendButton</code> (o un botón propio) colocado donde quieres ofrecer el acceso directo.</span><span class="checklist-status" data-en="Pending">Pendiente</span></div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label" data-en="<code>AppShortcutsProvider</code> declared in your app (if you use Siri / Action Button / Shortcuts)."><code>AppShortcutsProvider</code> declarado en tu app (si usas Siri / Botón de Acción / Atajos).</span><span class="checklist-status" data-en="Pending">Pendiente</span></div>
+          <div class="checklist-item"><span class="checklist-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span><span class="checklist-label" data-en="Listener for <code>.magicPayOpenQuickSend</code> at the app root that presents <code>getQuickSendView</code>.">Listener de <code>.magicPayOpenQuickSend</code> en la raíz de la app que presenta <code>getQuickSendView</code>.</span><span class="checklist-status" data-en="Pending">Pendiente</span></div>
         </div>
       </div>
     </section>
@@ -1258,6 +1422,7 @@ MagicPaySDK.<span class="tk-fn">logOut</span>()</code></pre>
       <li><a class="toc-h3" data-target="ios-privacy" href="#ios-privacy">Privacy & PiP</a></li>
       <li><a class="toc-h3" data-target="ios-extension" href="#ios-extension" data-en="Extension">Extensión</a></li>
       <li><a class="toc-h3" data-target="ios-init" href="#ios-init" data-en="Initialization">Inicialización</a></li>
+      <li><a class="toc-h3" data-target="ios-quicksend" href="#ios-quicksend" data-en="Quick Send">Envío Rápido</a></li>
       <li><a class="toc-h3" data-target="ios-checklist" href="#ios-checklist">Checklist</a></li>
       <li><a data-target="backend" href="#backend">Backend</a></li>
       <li><a data-target="faq" href="#faq">FAQ</a></li>
